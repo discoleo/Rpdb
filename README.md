@@ -3,7 +3,7 @@
 - Reanimated the Rpdb package from the CRAN archive;
 - Original author: Julien Idé;
 
-## Chamges
+## Changes
 
 - [fixed] deprecated rgl functions;
 - [fixed] some Roxygen bugs in centre.R;
