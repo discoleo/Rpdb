@@ -22,10 +22,10 @@
 #' @seealso \code{\link[base]{subset}}, \code{\link{pdb}}, \code{\link{atoms}}, \code{\link{reindex}}
 #' 
 #' @examples 
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
-#' y <- subset(x, x$atoms$eleid \%in\% sample(x$atoms$eleid, 10))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
+#' y <- subset(x, x$atoms$eleid %in% sample(x$atoms$eleid, 10))
 #' is(y)
-#' y <- subset(x$atoms, x$atoms$eleid \%in\% sample(x$atoms$eleid, 10))
+#' y <- subset(x$atoms, x$atoms$eleid %in% sample(x$atoms$eleid, 10))
 #' is(y)
 #' x <- coords(x)
 #' y <- subset(x, x < 0)

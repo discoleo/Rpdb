@@ -77,7 +77,7 @@ Then the element names are converted into element symbols using the \code{toSymb
 Finally the density is calculated using the sum of the atomic masses and the volume of the unit cell.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 cell.volume(x)
 cell.density(x)
 cell.coords(x)

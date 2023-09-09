@@ -39,11 +39,11 @@ elements
 
 # Get the mass of some elements
 symb <- c("C","O","H")
-elements[match(symb,elements[,"symb"]),"mass"]
+elements[match(symb, elements[,"symb"]),"mass"]
 
 # Get the van der Waals radii of some elements
 symb <- c("C","O","H")
-elements[match(symb,elements[,"symb"]),"rvdw"]
+elements[match(symb, elements[,"symb"]),"rvdw"]
 
 }
 \keyword{datasets}

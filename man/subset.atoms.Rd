@@ -36,10 +36,10 @@ First the \code{atoms} component is subsetted and then the \code{conect}
 component is filtered to keep only the conectivity for the subset.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
-y <- subset(x, x$atoms$eleid \\%in\\% sample(x$atoms$eleid, 10))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
+y <- subset(x, x$atoms$eleid \%in\% sample(x$atoms$eleid, 10))
 is(y)
-y <- subset(x$atoms, x$atoms$eleid \\%in\\% sample(x$atoms$eleid, 10))
+y <- subset(x$atoms, x$atoms$eleid \%in\% sample(x$atoms$eleid, 10))
 is(y)
 x <- coords(x)
 y <- subset(x, x < 0)

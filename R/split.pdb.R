@@ -34,8 +34,8 @@
 #' @examples 
 #' \dontrun{
 #' ## Split a pdb file by residue IDs and write them into separated files
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
-#' file.names <- paste0(x$atoms$resname,"_",x$atoms$resid,".pdb")
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
+#' file.names <- paste0(x$atoms$resname, "_", x$atoms$resid, ".pdb")
 #' file.names <- unique(file.names)
 #' pdb.resid <- split(x, x$atoms$resid)
 #' useless <- mapply(write.pdb, pdb.resid, file.names)

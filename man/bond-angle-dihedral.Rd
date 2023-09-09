@@ -75,12 +75,12 @@ atoms by \bold{right-clicing} on the current \sQuote{rgl} scene. To escape
 the active mode press the ESC key.
 }
 \examples{
-Pen <- read.pdb(system.file("examples/Pentacene.pdb",package="Rpdb"))
+Pen <- read.pdb(system.file("examples/Pentacene.pdb", package="Rpdb"))
 visualize(Pen, mode = NULL)
-text3d(coords(Pen), texts=Pen$atoms$eleid)
-bond(Pen,3:4,1:2)
-angle(Pen,3:4,1:2,5:6)
-dihedral(Pen,3:4,1:2,5:6,6:5)
+text3d(coords(Pen), texts = Pen$atoms$eleid)
+bond(Pen, 3:4, 1:2)
+angle(Pen, 3:4, 1:2, 5:6)
+dihedral(Pen, 3:4, 1:2, 5:6, 6:5)
 
 }
 \seealso{

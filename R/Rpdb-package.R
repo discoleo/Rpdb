@@ -23,7 +23,7 @@
 #' 
 #' @examples
 #' ## Read a PDB file included in the package
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' 
 #' ## Visualize the PDB file
 #' visualize(x, mode = NULL)
@@ -36,7 +36,7 @@
 #' centres(x)
 #' x <- abc2xyz(x)
 #' basis(x)
-#' natom(x,x$atoms$resid)
+#' natom(x, x$atoms$resid)
 #' range(x)
 #' centres(x)
 #' 

@@ -52,7 +52,7 @@
 #' \code{\link{basis}}
 #' 
 #' @examples 
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' is.coords(x)
 #' is.coords(x$atoms)
 #' 

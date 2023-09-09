@@ -90,7 +90,7 @@ error is returned.\cr When \code{basis!=NULL} it has to be equal to
 has a \dQuote{class} attribute equal to \code{coords}.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 is.coords(x)
 is.coords(x$atoms)
 
