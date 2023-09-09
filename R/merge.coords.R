@@ -37,8 +37,8 @@
 #' }
 #' 
 #' ## Prepare a Pentacene/C70 dimer
-#' C70 <- read.pdb(system.file("examples/C70.pdb",package="Rpdb"))
-#' Pen <- read.pdb(system.file("examples/Pentacene.pdb",package="Rpdb"))
+#' C70 <- read.pdb(system.file("examples/C70.pdb", package="Rpdb"))
+#' Pen <- read.pdb(system.file("examples/Pentacene.pdb", package="Rpdb"))
 #' x <- merge(Tz(C70, 3.5, thickness=0.5),Pen)
 #'   
 #' @keywords manip

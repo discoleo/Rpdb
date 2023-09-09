@@ -68,7 +68,7 @@ Add Labels to the current \sQuote{rgl} scene.
 only one label per residue is added at the centre of the residue. Otherwise, 
 residue labels are added at each atomic positions. \code{addEleLab} add 
 element labels to the scene at each atomic positions. \code{info3d} activate 
-an interactive mode to add labels by selecting atoms by \bold{right-clicing} 
+an interactive mode to add labels by selecting atoms by \bold{right-clicking} 
 on the current \sQuote{rgl} scene. To escape the interactive mode press the 
 ESC key. The labels are as follow: "ResidResname:EleidElename"
 }

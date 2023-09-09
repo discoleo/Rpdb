@@ -97,7 +97,7 @@ text3d(Ty(C60.centres, 2), text=paste0("PCB_", rownames(C60.centres)), cex=2)
 symb <- toSymbols(x$atoms$elename) # Convert elename into elemental symbols
 # Find the mass of the element in the periodic table
 w <- elements[match(symb, elements[,"symb"]), "mass"] 
-centres(x, weights =  w)
+centres(x, weights = w)
 
 }
 \seealso{

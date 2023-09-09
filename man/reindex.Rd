@@ -34,8 +34,8 @@ from 1 and avoiding gaps in the indexes. For objects of class \sQuote{pdb} their
 \code{conect} components are reindexed consistently.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
-x <- subset(x, x$atoms$eleid \\%in\\% sample(x$atoms$eleid, 10))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
+x <- subset(x, x$atoms$eleid \%in\% sample(x$atoms$eleid, 10))
 print(x)
 x <- reindex(x)
 print(x)

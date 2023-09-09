@@ -38,7 +38,7 @@ are determined from the \code{elename} component of the object (see
 \sQuote{pdb} the \code{atoms} component is used.
 }
 \examples{
-C70 <- read.pdb(system.file("examples/C70.pdb",package="Rpdb"))
+C70 <- read.pdb(system.file("examples/C70.pdb", package="Rpdb"))
 inertia(C70)
 visualize(C70, mode = NULL)
 viewXY()

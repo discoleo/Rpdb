@@ -29,7 +29,7 @@ Return a \code{\link{data.frame}} whose columns contain the range of
 Determines the range of atomic coordinates.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 range(x)
 range(range(x))
 
