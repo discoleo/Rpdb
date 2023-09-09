@@ -21,7 +21,7 @@ To write only a subset of a \sQuote{pdb} object see function \code{\link{subset.
 }
 \examples{
 ## Read a PDB file included with the package
-pdb <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+pdb <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 
 ## Write the pdb object in file "Rpdb.pdb" into the current directory
 write.pdb(pdb, file = "Rpdb.pdb")

@@ -55,11 +55,11 @@ tensor from atomic coordinates and masses (see \code{\link{inertia}}) and set
 the view to its eigen vectors basis set.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 visualize(x, mode = NULL)
 viewAB(x$cryst1)
 
-C70 <- read.pdb(system.file("examples/C70.pdb",package="Rpdb"))
+C70 <- read.pdb(system.file("examples/C70.pdb", package="Rpdb"))
 visualize(C70, mode = NULL)
 viewXY()
 viewInertia(C70)

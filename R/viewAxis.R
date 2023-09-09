@@ -23,11 +23,11 @@
 #' @seealso \code{\link{visualize}}, \code{\link{cell.coords}}, \code{\link[rgl]{par3d}}, \code{\link[rgl]{rgl.open}}
 #' 
 #' @examples 
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' visualize(x, mode = NULL)
 #' viewAB(x$cryst1)
 #' 
-#' C70 <- read.pdb(system.file("examples/C70.pdb",package="Rpdb"))
+#' C70 <- read.pdb(system.file("examples/C70.pdb", package="Rpdb"))
 #' visualize(C70, mode = NULL)
 #' viewXY()
 #' viewInertia(C70)

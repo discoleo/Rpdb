@@ -238,7 +238,7 @@ Two different interactive visualization modes are avalable:
 When \code{mode=NULL} the interactive mode is disabled. To escape the interactive mode press the ESC key.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 visualize(x, type = "l", mode = NULL)
 visualize(x, type = "s", radii = "rcov", mode = NULL)
 visualize(x, type = "s", radii = "rvdw", mode = NULL)

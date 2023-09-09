@@ -23,7 +23,7 @@
 #' \code{\link{pdb}}, \code{\link{cryst1}}
 #' 
 #' @examples 
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' basis(x)
 #' x <- xyz2abc(x)
 #' basis(x)
@@ -34,7 +34,7 @@
 #'   
 #'   # This example return an error because the coordinates stored
 #'   # into the PDB file are already Cartesian coordinates.
-#'   x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#'   x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #'   x <- abc2xyz(x)
 #' }
 #' 

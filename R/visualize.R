@@ -54,7 +54,7 @@
 #' @seealso \code{\link{addXYZ}}, \code{\link{addABC}}, \code{\link{addPBCBox}}, \code{par3d}, \code{select3d}, \code{measure}, \code{info3d}
 #' 
 #' @examples 
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' visualize(x, type = "l", mode = NULL)
 #' visualize(x, type = "s", radii = "rcov", mode = NULL)
 #' visualize(x, type = "s", radii = "rvdw", mode = NULL)

@@ -22,12 +22,12 @@
 #' \code{\link{cryst1}}, \code{\link{centres.pdb}}, \code{\link{xyz2abc}}
 #' 
 #' @examples 
-#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+#' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' 
-#' #  Translation of the atoms along x-axis
+#' # Translation of the atoms along x-axis
 #' x$atoms$x1 <- x$atoms$x1 + 10
 #' 
-#' #  Wrapping the structure
+#' # Wrapping the structure
 #' y <- wrap(x)
 #' 
 #' @keywords manip

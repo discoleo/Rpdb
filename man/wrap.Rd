@@ -41,12 +41,12 @@ translated by -1 or +1. Finally, if the original atomic coordinates were
 Cartesian coordinates their are reconverted into Cartesian coordinates.
 }
 \examples{
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 
-#  Translation of the atoms along x-axis
+# Translation of the atoms along x-axis
 x$atoms$x1 <- x$atoms$x1 + 10
 
-#  Wrapping the structure
+# Wrapping the structure
 y <- wrap(x)
 
 }
