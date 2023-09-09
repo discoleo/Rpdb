@@ -19,3 +19,7 @@
 Note:
 - the default visualize is broken;
 - the protein is NOT centered in the bounding box;
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/discoleo/Rpdb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/discoleo/Rpdb/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->

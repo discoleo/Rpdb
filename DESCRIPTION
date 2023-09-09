@@ -2,10 +2,12 @@ Package: Rpdb
 Type: Package
 Title: Read, Write, Visualize and Manipulate PDB Files
 Version: 2.3.1
-Date: 2014-02-25
+Date: 2023-09-09
 Authors@R:
-    person("Leonard", "Mada", "leo.mada@syonic.eu", role = c("cre"))
-    person("Julien", "Idé", "julien.ide.fr@gmail.com", role = c("aut"))
+	c(
+    person("Leonard", "Mada", email = "leo.mada@syonic.eu", role = c("cre")),
+    person("Julien", "Idé", email = "julien.ide.fr@gmail.com", role = c("aut"))
+	)
 Depends: rgl
 Description: Provides tools to read, write, visualize PDB files and perform some
     structural manipulations.
