@@ -8,7 +8,7 @@ Authors@R:
     person("Leonard", "Mada", email = "leo.mada@syonic.eu", role = c("cre")),
     person("Julien", "Idé", email = "julien.ide.fr@gmail.com", role = c("aut"))
 	)
-Depends: rgl
+Depends: rgl (>= 1.1.3)
 Description: Provides tools to read, write, visualize PDB files and perform some
     structural manipulations.
 License: GPL (>= 3)
