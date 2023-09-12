@@ -17,6 +17,5 @@ LazyData: true
 RoxygenNote: 7.2.3
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2017-09-25 17:46:43 UTC
 URL: https://github.com/discoleo/Rpdb
 BugReports: https://github.com/discoleo/Rpdb/issues
