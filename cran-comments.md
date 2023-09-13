@@ -4,10 +4,6 @@
 
 * This is a new release.
 
-
 ## GitHub check results
 
-- succeeds for Windows;
-- fails for Linux and Mac with:
-Warning: Found the following significant warnings:
-  Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.
+- succeeds now on all machines: Windows, Linux (3 versions) and Mac;
