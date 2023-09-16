@@ -2,7 +2,7 @@
 #' 
 #' Writes a Protein Data Bank (PDB) coordinate file from an object of class \sQuote{pdb}.
 #' 
-#' All data stored in the \sQuote{pdb} object are written on a PDB file. A list of object of class \sQuote{pdb} can be provided to write multiple MODEL into a single file. In this case, each \sQuote{pdb} object of the list have to have the same \code{cryst1} and \code{conect} components.
+#' All data stored in the \sQuote{pdb} object are written to a PDB file. A list of objects of class \sQuote{pdb} can be provided to write multiple MODEL data into a single file. In this case, each \sQuote{pdb} object of the list must have the same \code{cryst1} and \code{conect} components.
 #' \cr
 #' To write only a subset of a \sQuote{pdb} object see function \code{\link{subset.pdb}}.
 #' 
@@ -16,11 +16,14 @@
 #' @seealso \code{\link{read.pdb}}, \code{\link{pdb}}, \code{\link{cryst1}}, \code{\link{atoms}}, \code{\link{conect}}, \code{\link{subset.pdb}}
 #' 
 #' @examples 
-#' ## Read a PDB file included with the package
+#' # Read a PDB file included with the package
 #' pdb <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 #' 
-#' ## Write the pdb object in file "Rpdb.pdb" into the current directory
+#' # Write the pdb object to file "Rpdb.pdb" in the current directory
 #' write.pdb(pdb, file = "Rpdb.pdb")
+#'
+#' # Cleanup
+#' unlink("Rpdb.pdb")
 #' 
 #' @keywords IO
 #' 
