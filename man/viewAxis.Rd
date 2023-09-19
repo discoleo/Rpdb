@@ -38,21 +38,24 @@ viewInertia(x, m = NULL)
 
 \item{m}{a numeric vector containing atomic masses.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 Set the view of the current \sQuote{rgl} scene aligning one vector 
-perpendicularly to the screen and placing another in the horizontal plan.
+perpendicularly to the screen and placing another one in the horizontal plane.
 }
 \details{
 \code{viewAxis} set the view of the current rgl scene (by setting
-\code{UserMatrix}. See \code{\link[rgl]{par3d}} for more details) so that
+\code{UserMatrix}; see \code{\link[rgl]{par3d}} for more details) so that
 \code{V1} is perpendicular to the screen and \code{V2} is in the horizontal
-plan. The other functions documented here are helper functions calling
+plane. The other functions documented here are helper functions calling
 \code{viewAxis} to set the view using particular Cartesian or lattice
 vectors. For functions \code{viewAB}, \code{viewBC} and \code{viewCA} a
-\sQuote{cryst1} object has to be specifyed to defined the lattice vectors
+\sQuote{cryst1} object has to be specifyed to define the lattice vectors
 used to set the view. The function \code{viewInertia} computes the inertia
-tensor from atomic coordinates and masses (see \code{\link{inertia}}) and set
-the view to its eigen vectors basis set.
+tensor from the atomic coordinates and masses (see \code{\link{inertia}})
+and sets the view to its eigen vectors basis set.
 }
 \examples{
 x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))

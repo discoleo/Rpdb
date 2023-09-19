@@ -27,7 +27,8 @@ Determine the mass of chemical elements
 }
 \details{
 \code{masses} is a generic function to determine the mass of chemical 
-elements. \cr\cr For objects of class \sQuote{pdb}: \itemize{ \item First the
+elements. \cr\cr For objects of class \sQuote{pdb}:
+\itemize{ \item First the
 element names are converted into element symbols using the \code{toSymbols} 
 function. \item Then their masses are taken from the \code{elements} data 
 set. } \code{NA} values are returned for unrecognized elements.

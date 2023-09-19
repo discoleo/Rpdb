@@ -9,8 +9,10 @@
 #' @param x an object, or a list of objects, of class \sQuote{pdb}.
 #' @param file a single element character vector containing the name of the PDB file to be created.
 #' 
-#' @references 
-#' PDB format has been taken from:
+#' @return No return value, called for side effects.
+#'
+#' @references
+#' PDB format is described at:
 #' http://www.wwpdb.org/documentation/format33/v3.3.html
 #' 
 #' @seealso \code{\link{read.pdb}}, \code{\link{pdb}}, \code{\link{cryst1}}, \code{\link{atoms}}, \code{\link{conect}}, \code{\link{subset.pdb}}

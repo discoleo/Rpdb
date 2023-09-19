@@ -1,8 +1,13 @@
 
-# Rpdb 2.3.1
+# Rpdb 2.3.3
 
 - new maintainer;
 
 ## Updates of Existing Functions
 
-- code compliant with rgl >= 1.1.3;
+- code updated for rgl >= 1.1.3;
+
+## Documentation
+
+- corrected various bugs with Roxygen2;
+- improved compliance with CRAN-checks;

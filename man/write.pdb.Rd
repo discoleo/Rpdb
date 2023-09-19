@@ -11,6 +11,9 @@ write.pdb(x, file = "Rpdb.pdb")
 
 \item{file}{a single element character vector containing the name of the PDB file to be created.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 Writes a Protein Data Bank (PDB) coordinate file from an object of class \sQuote{pdb}.
 }
@@ -31,7 +34,7 @@ unlink("Rpdb.pdb")
 
 }
 \references{
-PDB format has been taken from:
+PDB format is described at:
 http://www.wwpdb.org/documentation/format33/v3.3.html
 }
 \seealso{

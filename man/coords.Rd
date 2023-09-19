@@ -42,7 +42,8 @@ is.coords(x)
 
 \item{x1, x2, x3}{numeric vectors containing the first, second and third coordinates.}
 
-\item{basis}{a single element character vector indicating the type of basis vector used to express the atomic coordinates.}
+\item{basis}{a single element character vector indicating the type of basis vector
+used to express the atomic coordinates.}
 }
 \value{
 The accessor function returns a data.frame of class \sQuote{coords}

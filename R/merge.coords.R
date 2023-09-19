@@ -13,7 +13,7 @@
 #' those of \code{x}. If \code{reindex==TRUE} the \code{\link{reindex}} function
 #' is called to reinitialize the indexing of the returned object.
 #' 
-#' @return Return a n object of the same class as \code{x} and \code{y} merging 
+#' @return Return an object of the same class as \code{x} and \code{y} merging 
 #'   \code{x} and \code{y}. If \code{x} and \code{y} have different \code{basis}
 #'   attributes an error is returned.
 #'   
@@ -30,10 +30,10 @@
 #' c2 <- coords(10:12, 13:15, 16:18, basis = "xyz")
 #' merge(c1,c2)
 #' 
-#' \dontrun{
-#' ## Merging objects with different basis sets return an error.
+#' \donttest{
+#' ## Merging objects with different basis sets returns an error.
 #' c2 <- coords(9:11, 12:14, 15:17, basis = "abc")
-#' merge(c1,c2)
+#' try(merge(c1,c2))
 #' }
 #' 
 #' ## Prepare a Pentacene/C70 dimer
