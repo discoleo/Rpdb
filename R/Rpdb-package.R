@@ -31,7 +31,7 @@
 #' ## From Cartesian to fractional coordinates and vice versa
 #' x <- xyz2abc(x)
 #' basis(x)
-#' natom(x,x$atoms$resid)
+#' natom(x, x$atoms$resid)
 #' range(x)
 #' centres(x)
 #' x <- abc2xyz(x)
@@ -54,7 +54,7 @@
 #' x <- replicate(x, a.ind = -1:1, b.ind = -1:1, c.ind = -1:1)
 #' x <- wrap(x)
 #' 
-#' ## Write the 'pdb' object 'x' in a temporary file.
+#' ## Write the 'pdb' object 'x' to a temporary file.
 #' write.pdb(x, file = tempfile())
 #' 
 #' @name Rpdb-package

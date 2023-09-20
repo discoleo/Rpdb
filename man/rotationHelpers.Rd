@@ -56,13 +56,14 @@ Cartesian vector. All of them call the \code{R} function.
 }
 \examples{
 # First lets read a pdb file
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 cell <- cell.coords(x)
 visualize(x, mode = NULL)
+
 # Rotation of the structure around the z-axis
 visualize(Rz(x, 90), mode = NULL)
 # Rotation of the residue 1 around the c-axis
-visualize(Rz(x, 90, mask=x$atoms$resid==1), mode = NULL)
+visualize(Rz(x, 90, mask = x$atoms$resid == 1), mode = NULL)
 
 }
 \seealso{

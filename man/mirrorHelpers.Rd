@@ -83,12 +83,13 @@ them call the \code{mirror} function.
 }
 \examples{
 # First lets read a pdb file
-x <- read.pdb(system.file("examples/PCBM_ODCB.pdb",package="Rpdb"))
-visualize(x,mode = NULL)
-# Mirror operation with respect to the ab-plan
+x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
+visualize(x, mode = NULL)
+
+# Mirror operation with respect to the ab-plane
 visualize(Mab(x), mode = NULL)
-# Mirror operation with respect to the ab-plan for residue 1
-visualize(Mab(x, mask=x$atoms$resid==1), mode = NULL)
+# Mirror operation with respect to the ab-plane for residue 1
+visualize(Mab(x, mask = x$atoms$resid == 1), mode = NULL)
 
 }
 \seealso{

@@ -28,10 +28,11 @@
 #'   
 #' @examples 
 #' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
+#'
 #' natom(x)
 #' natom(x, x$atoms$resid)
 #' natom(x, x$atoms$resname)
-#' natom(x, HETATM=FALSE)
+#' natom(x, HETATM = FALSE)
 #'   
 #' @keywords manip
 #' 

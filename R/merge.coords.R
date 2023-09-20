@@ -10,7 +10,7 @@
 #' the \code{cryst1} components of \code{x} is used to build the returned 
 #' object. \cr\cr For objects of class \sQuote{atoms} and \sQuote{pdb} the 
 #' residue and element IDs of \code{y} are shifted to avoid any confusion with 
-#' those of \code{x}. If \code{reindex==TRUE} the \code{\link{reindex}} function
+#' those of \code{x}. If \code{reindex == TRUE} the \code{\link{reindex}} function
 #' is called to reinitialize the indexing of the returned object.
 #' 
 #' @return Return an object of the same class as \code{x} and \code{y} merging 
@@ -39,7 +39,7 @@
 #' ## Prepare a Pentacene/C70 dimer
 #' C70 <- read.pdb(system.file("examples/C70.pdb", package="Rpdb"))
 #' Pen <- read.pdb(system.file("examples/Pentacene.pdb", package="Rpdb"))
-#' x <- merge(Tz(C70, 3.5, thickness=0.5),Pen)
+#' x <- merge(Tz(C70, 3.5, thickness=0.5), Pen)
 #'   
 #' @keywords manip
 #' 
