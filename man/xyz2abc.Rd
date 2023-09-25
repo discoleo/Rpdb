@@ -11,7 +11,7 @@
 \alias{abc2xyz.atoms}
 \alias{abc2xyz.pdb}
 \alias{abc2xyz.distances}
-\title{From Cartesian to Fractional Coordinates and Vis Versa}
+\title{From Cartesian to Fractional Coordinates and Vice Versa}
 \usage{
 xyz2abc(...)
 
@@ -66,12 +66,12 @@ basis(x)
 x <- abc2xyz(x)
 basis(x)
 
-\dontrun{
+\donttest{
   
-  # This example return an error because the coordinates stored
+  # This example returns an error because the coordinates stored
   # into the PDB file are already Cartesian coordinates.
   x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
-  x <- abc2xyz(x)
+  try(x <- abc2xyz(x))
 }
 
 }

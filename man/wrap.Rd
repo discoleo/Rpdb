@@ -23,10 +23,10 @@ wrap(x, ...)
 \item{cryst1}{an object of class \sQuote{cryst1} containing periodic boundary
 conditions used for wrapping.}
 
-\item{factor}{a factor used to wrap the atoms by groups}
+\item{factor}{a factor used to wrap the atoms by groups.}
 }
 \value{
-Return a object of class \sQuote{pdb} with wrapped atomic
+Return an object of class \sQuote{pdb} with wrapped atomic
   coordinates.
 }
 \description{

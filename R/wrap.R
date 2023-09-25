@@ -9,13 +9,13 @@
 #' translated by -1 or +1. Finally, if the original atomic coordinates were
 #' Cartesian coordinates their are reconverted into Cartesian coordinates.
 #' 
-#' @return Return a object of class \sQuote{pdb} with wrapped atomic
+#' @return Return an object of class \sQuote{pdb} with wrapped atomic
 #'   coordinates.
 #'   
 #' @param x an R object containing atomic coordinates to be wrapped.
 #' @param cryst1 an object of class \sQuote{cryst1} containing periodic boundary
 #'   conditions used for wrapping.
-#' @param factor a factor used to wrap the atoms by groups
+#' @param factor a factor used to wrap the atoms by groups.
 #' @param \dots further arguments passed to or from other methods.
 #'   
 #' @seealso \code{\link{coords}}, \code{\link{atoms}}, \code{\link{pdb}},

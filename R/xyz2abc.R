@@ -1,4 +1,4 @@
-#' From Cartesian to Fractional Coordinates and Vis Versa
+#' From Cartesian to Fractional Coordinates and Vice Versa
 #' 
 #' Converts Cartesian coordinates into fractional coordinates and vice versa.
 #' 
@@ -30,12 +30,12 @@
 #' x <- abc2xyz(x)
 #' basis(x)
 #' 
-#' \dontrun{
+#' \donttest{
 #'   
-#'   # This example return an error because the coordinates stored
+#'   # This example returns an error because the coordinates stored
 #'   # into the PDB file are already Cartesian coordinates.
 #'   x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
-#'   x <- abc2xyz(x)
+#'   try(x <- abc2xyz(x))
 #' }
 #' 
 #' @keywords manip

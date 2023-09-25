@@ -2,16 +2,16 @@
 #' 
 #' Provides tools to read, write, visualize PDB files, and perform structural manipulations.
 #' 
-#' This package has been developed for computational chemists wishing
-#' to manipulate molecular structures stored in PDB files. PDB files can easily be
-#' read, written, visualized and some basic structural manipulations can be achieved with the
-#' present package.
-#' Convertion of Cartesian coordinates into fractional coordinates.
+#' This package enables users, e.g. computational chemists,
+#' to manipulate molecular structures stored in PDB files.
+#' It enables users ro read, write and visualize PDB files.
+#' Various basic structural manipulations are also supported.
+#' Conversion of Cartesian coordinates into fractional coordinates.
 #' Spliting a molecular structure into fragments.
 #' Computation of centers-of-geometry and centers-of-mass.
 #' Wrapping molecular structure using periodical boundary conditions.
-#' Tranlation, rotation and reflection of atomic coordinates.
-#' Calculate atomic bond lengths, angles and dihedrals. 
+#' Translation, rotation and reflection of atomic coordinates.
+#' Calculate atomic bond lengths, angles and dihedrals.
 #'
 #' @author Julien Idé \email{julien.ide.fr@gmail.com}\cr
 #'
