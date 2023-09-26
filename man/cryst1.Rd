@@ -24,7 +24,7 @@ lattice vectors \eqn{\alpha}, \eqn{\beta} and \eqn{\gamma}.}
 \item{sgroup}{a character string giving the Hermann-Mauguin symbol of the
 space group.}
 
-\item{x}{an R obecjt to be tested.}
+\item{x}{an R object to be tested.}
 }
 \value{
 \code{cryst1} returns a list of class \sQuote{cryst1} with the
@@ -36,7 +36,7 @@ following components:
   lattice vectors \eqn{\alpha}, \eqn{\beta} and \eqn{\gamma}.}
 \item{sgroup}{a character string giving the Hermann-Mauguin symbol of the space group.}
 }
-\cr\cr
+\item{}{}
 \code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
   and FALSE otherwise.
 }

@@ -1,11 +1,11 @@
 
-# Rpdb 2.3.3
+# Rpdb 2.3.4
 
 - new maintainer;
 
 ## Updates of Existing Functions
 
-- code updated for rgl >= 1.1.3;
+- code updated to use rgl >= 1.1.3;
 
 ## Documentation
 
