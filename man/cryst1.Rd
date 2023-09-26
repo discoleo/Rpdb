@@ -27,17 +27,15 @@ space group.}
 \item{x}{an R object to be tested.}
 }
 \value{
-\code{cryst1} returns a list of class \sQuote{cryst1} with the
+Function \code{cryst1} returns a list of class \sQuote{cryst1} with the
 following components:
-\describe{
 \item{abc}{a numeric vector of length 3 containing the norms of the lattice
   vectors a, b and c.}
 \item{abg}{a numeric vector of length 3 containing the angles between the
   lattice vectors \eqn{\alpha}, \eqn{\beta} and \eqn{\gamma}.}
 \item{sgroup}{a character string giving the Hermann-Mauguin symbol of the space group.}
-}
-\item{}{}
-\code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
+
+Function \code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
   and FALSE otherwise.
 }
 \description{

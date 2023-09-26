@@ -14,17 +14,15 @@
 #' object is of class \sQuote{cryst1}, i.e. if it has a \dQuote{class} attribute 
 #' equal to \code{cryst1}.
 #' 
-#' @return \code{cryst1} returns a list of class \sQuote{cryst1} with the
+#' @return Function \code{cryst1} returns a list of class \sQuote{cryst1} with the
 #' following components:
-#' \describe{
 #' \item{abc}{a numeric vector of length 3 containing the norms of the lattice
 #'   vectors a, b and c.}
 #' \item{abg}{a numeric vector of length 3 containing the angles between the
 #'   lattice vectors \eqn{\alpha}, \eqn{\beta} and \eqn{\gamma}.}
 #' \item{sgroup}{a character string giving the Hermann-Mauguin symbol of the space group.}
-#' }
-#' \item{}{}
-#' \code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
+#' 
+#' Function \code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
 #'   and FALSE otherwise.
 #' 
 #' @param \dots further arguments passed to or from other methods.
