@@ -136,7 +136,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   trim <- function(str)
     sub(' +$', '', sub('^ +', '', str))
   
-  recname <- trim(substr(atoms,  1,  6))
+  recAtom <- trim(substr(atoms,  1,  6))
   eleid   <- trim(substr(atoms,  7, 11))
   elename <- trim(substr(atoms, 13, 16))
   alt     <- trim(substr(atoms, 17, 17))
@@ -151,14 +151,15 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   temp    <-      substr(atoms, 61, 66)
   segid   <- trim(substr(atoms, 73, 75))
 
-  atoms <- atoms.default(recname, eleid, elename, alt,
+  atoms <- atoms.default(recAtom, eleid, elename, alt,
                       resname, chainid, resid, insert,
                       x1, x2, x3, occ, temp, segid, basis = "xyz")
-
+  
+  # Crystal Structure:
   cryst1 <- NULL;
   # Note: could also use recname;
   # isCryst1 = grepl("^CRYST1", lines);
-  isCryst1 = (recname == "^CRYST1");
+  isCryst1 = (recname == "CRYST1");
   if(CRYST1 && any(isCryst1)) {
     cryst1 <- subset(lines, isCryst1);
 	if(length(cryst1) == 0) {
