@@ -26,6 +26,7 @@
 #' @param TITLE a single element logical vector indicating whether TITLE records have to be read.
 #' @param REMARK a single element logical vector indicating whether REMARK records have to be read.
 #' @param MODEL an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).
+#' @param verbose logical indicating wheter to print additional information, e.g. number of models.
 #' 
 #' @references 
 #' PDB format has been taken from:
@@ -52,7 +53,8 @@
 #' @name read.pdb
 #' @export
 read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
-                     CONECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1)
+                     CONECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
+					 verbose = TRUE)
 {
   if(!file.exists(file))
     stop("File '", file, "'' is missing")
@@ -79,10 +81,22 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   if(HETATM) is.hetatm <- recname == "HETATM"
   atoms <- subset(lines, is.atom | is.hetatm)
   if(length(atoms) == 0) stop("No atoms have been selected")
-
+  
+  # Models:
+  isNModels = (recname == "NUMMDL");
+  if(any(isNModels)) {
+    txtModels = subset(lines, isNModels);
+    if(length(txtModels) > 1) {
+      warning("Malformed pdb file: incorrect number of models!");
+	  txtModels = txtModels[1];
+	}
+	nModels = as.integer(substr(txtModels, 7, 80)); # TODO: 7, 11?
+  } else nModels = 0;
+  if(verbose) cat("Number of models: ", nModels, "\n");
+  #
   model.factor <- rep(0, length(recname))
   model.ids <- "MODEL.1"
-  model.start <- grep("MODEL ", recname)
+  model.start <- grep("^MODEL ", recname)
   model.end   <- grep("ENDMDL", recname)
   if(length(model.start) != length(model.end))
     stop("'Unterminated MODEL section'");
@@ -91,21 +105,29 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
     if(any(model.start >= model.end))
       stop("'Unterminated MODEL section'")
     if(is.null(MODEL)) {
-      model.ids <- as.integer(substr(lines[model.start],11,14))
+      model.ids <- as.integer(substr(lines[model.start], 11, 14))
       MODEL <- model.ids 
     }
     if(!is.na(MODEL[1])) {
-      model.ids   <- as.integer(substr(lines[model.start],11,14))
-      model.start <- model.start[model.ids %in% MODEL]
-      model.end   <- model.end  [model.ids %in% MODEL]
-      model.ids   <- model.ids  [model.ids %in% MODEL]
-      model.ids   <- paste("MODEL", model.ids, sep=".")
+      model.ids   <- as.integer(substr(lines[model.start], 11, 14));
+	  if(verbose) {
+        if(length(model.ids) > length(MODEL))
+		  cat("Note: loading only models: ",
+		    paste0(MODEL, collapse = ", "), ";\n", sep = "");
+	  }
+	  idModels = which(model.ids %in% MODEL);
+      model.start <- model.start[idModels]
+      model.end   <- model.end  [idModels]
+      model.ids   <- model.ids  [idModels]
+      model.ids   <- paste("MODEL", model.ids, sep=".");
       model.factor2 <- model.factor
       model.factor [model.start+1] <- model.start
       model.factor2[model.end    ] <- model.start
       model.factor <- cumsum(model.factor) - cumsum(model.factor2) ; rm(model.factor2)
       model.factor[model.factor == 0] <- NA
     }
+  } else if(verbose && nModels > 0) {
+    cat("Number of actual models: 0\n");
   }
   model.factor <- as.factor(model.factor)
   levels(model.factor) <- model.ids
@@ -135,7 +157,8 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
 
   cryst1 <- NULL;
   # Note: could also use recname;
-  isCryst1 = grepl("^CRYST1", lines);
+  # isCryst1 = grepl("^CRYST1", lines);
+  isCryst1 = (recname == "^CRYST1");
   if(CRYST1 && any(isCryst1)) {
     cryst1 <- subset(lines, isCryst1);
 	if(length(cryst1) == 0) {

@@ -12,7 +12,8 @@ read.pdb(
   CONECT = TRUE,
   TITLE = TRUE,
   REMARK = TRUE,
-  MODEL = 1
+  MODEL = 1,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ read.pdb(
 \item{REMARK}{a single element logical vector indicating whether REMARK records have to be read.}
 
 \item{MODEL}{an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).}
+
+\item{verbose}{logical indicating wheter to print additional information, e.g. number of models.}
 }
 \value{
 When a single MODEL section is read, this function returns an object of class  \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:

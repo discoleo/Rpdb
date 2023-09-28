@@ -5,7 +5,9 @@
 
 ## Updates to Existing Functions
 
-- fixed bug in read.pdb: process only fieldname CRYSTL1;
+- read.pdb:
+  - fixed bug: process only FieldName CRYSTL1;
+  - new arg: verbose = TRUE;
 
 
 
