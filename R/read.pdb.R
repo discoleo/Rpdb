@@ -1,6 +1,6 @@
 #' PDB File Reader
 #' 
-#' Reads a Protein Data Bank (PDB) coordinate file.
+#' Reads a Protein Data Bank (PDB) coordinates file.
 #' 
 #' The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYST1 and CONECT records from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 
 #' \itemize{
@@ -31,7 +31,7 @@
 #' PDB format has been taken from:
 #' http://www.wwpdb.org/documentation/format33/v3.3.html
 #' 
-#' @seealso 
+#' @seealso
 #' \code{\link{write.pdb}}, \code{\link{pdb}}, \code{\link{cryst1}}, \code{\link{atoms}}, \code{\link{conect}}
 #' 
 #' @examples 
@@ -61,29 +61,33 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
 
   recname <- substr(lines, 1, 6)
   
+  # Title:
   title <- NULL
   if(TITLE & any(recname == "TITLE "))
     title <- subset(lines, recname == "TITLE ")    
-
+  
+  # Remarks:
   remark <- NULL
   if(REMARK & any(recname == "REMARK"))
     remark <- subset(lines, recname == "REMARK")
-
+  
+  # Atoms:
   atom <- character(0)
   is.hetatm <- rep(FALSE, length(recname))
   is.atom   <- rep(FALSE, length(recname))
   if(ATOM  ) is.atom   <- recname == "ATOM  "
   if(HETATM) is.hetatm <- recname == "HETATM"
   atoms <- subset(lines, is.atom | is.hetatm)
-  if(length(atoms)==0) stop("No atoms have been selected")
+  if(length(atoms) == 0) stop("No atoms have been selected")
 
   model.factor <- rep(0, length(recname))
   model.ids <- "MODEL.1"
   model.start <- grep("MODEL ", recname)
   model.end   <- grep("ENDMDL", recname)
   if(length(model.start) != length(model.end))
-    stop("'Unterminated MODEL section'")
-  if(!(length(model.start) == 0 & length(model.end) == 0)) {
+    stop("'Unterminated MODEL section'");
+  hasModel = ! (length(model.start) == 0 && length(model.end) == 0);
+  if(hasModel) {
     if(any(model.start >= model.end))
       stop("'Unterminated MODEL section'")
     if(is.null(MODEL)) {
@@ -95,7 +99,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
       model.start <- model.start[model.ids %in% MODEL]
       model.end   <- model.end  [model.ids %in% MODEL]
       model.ids   <- model.ids  [model.ids %in% MODEL]
-      model.ids   <- paste("MODEL",model.ids,sep=".")
+      model.ids   <- paste("MODEL", model.ids, sep=".")
       model.factor2 <- model.factor
       model.factor [model.start+1] <- model.start
       model.factor2[model.end    ] <- model.start
@@ -108,7 +112,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   model.factor <- model.factor[is.atom | is.hetatm]
   
   trim <- function(str)
-    sub(' +$','',sub('^ +', '', str))
+    sub(' +$', '', sub('^ +', '', str))
   
   recname <- trim(substr(atoms,  1,  6))
   eleid   <- trim(substr(atoms,  7, 11))
@@ -129,12 +133,15 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
                       resname, chainid, resid, insert,
                       x1, x2, x3, occ, temp, segid, basis = "xyz")
 
-  cryst1 <- NULL
-  if(CRYST1 & any(grepl("CRYST1", lines)))
-  {
-    cryst1 <- subset(lines, grepl("CRYST1", lines))
-    if(length(cryst1) != 1)
-    {
+  cryst1 <- NULL;
+  # Note: could also use recname;
+  isCryst1 = grepl("^CRYST1", lines);
+  if(CRYST1 && any(isCryst1)) {
+    cryst1 <- subset(lines, isCryst1);
+	if(length(cryst1) == 0) {
+      warning("No 'CRYST1' record!");
+	  cryst1 = NULL; # TODO
+	} else if(length(cryst1) != 1) {
       warning("Multiple 'CRYST1' records have been found. Only the first record has been kept.")
       cryst1 <- cryst1[1]
     }
@@ -158,9 +165,9 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   }
   
   conect = NULL
-  if(CONECT & any(grepl("CONECT", lines)))
-  {
-    conect <- subset(lines, grepl("CONECT", lines))
+  isConnect = grepl("^CONECT", lines);
+  if(CONECT && any(isConnect)) {
+    conect <- subset(lines, isConnect);
     C0 <- as.integer(substr(conect,  7, 11))
     C1 <- as.integer(substr(conect, 12, 16))
     C2 <- as.integer(substr(conect, 17, 21))
@@ -172,7 +179,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
     C1 <- subset(C1, !is.na(C1))
     conect <- conect.default(eleid.1 = C0, eleid.2 = C1)
     tokeep <- conect$eleid.1 %in% atoms$eleid & conect$eleid.2 %in% atoms$eleid
-    conect <- subset(conect,tokeep)
+    conect <- subset(conect, tokeep)
   }
 
   to.return <- pdb(atoms, cryst1 , conect , remark , title )

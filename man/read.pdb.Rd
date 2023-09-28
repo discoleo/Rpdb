@@ -42,7 +42,7 @@ When a single MODEL section is read, this function returns an object of class  \
 When multiple MODEL sections are read, a list of object of class \sQuote{pdb} is returned.
 }
 \description{
-Reads a Protein Data Bank (PDB) coordinate file.
+Reads a Protein Data Bank (PDB) coordinates file.
 }
 \details{
 The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYST1 and CONECT records from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 

@@ -1,4 +1,14 @@
 
+# Rpdb 2.4.0
+
+> started work;
+
+## Updates to Existing Functions
+
+- fixed bug in read.pdb: process only fieldname CRYSTL1;
+
+
+
 # Rpdb 2.3.4
 
 - new maintainer;
