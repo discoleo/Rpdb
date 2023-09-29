@@ -82,7 +82,8 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   atoms <- subset(lines, is.atom | is.hetatm)
   if(length(atoms) == 0) stop("No atoms have been selected")
   
-  # Models:
+  ### Models:
+  # NUMMDL: is optional;
   isNModels = (recname == "NUMMDL");
   if(any(isNModels)) {
     txtModels = subset(lines, isNModels);
@@ -95,21 +96,21 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   if(verbose) cat("Number of models: ", nModels, "\n");
   #
   model.factor <- rep(0, length(recname))
-  model.ids <- "MODEL.1"
-  model.start <- grep("^MODEL ", recname)
-  model.end   <- grep("ENDMDL", recname)
+  model.ids   <- "MODEL.1"
+  model.start <- which(recname == "MODEL "); # grep("^MODEL ", recname)
+  model.end   <- which(recname == "ENDMDL"); # grep("^ENDMDL", recname)
   if(length(model.start) != length(model.end))
     stop("'Unterminated MODEL section'");
-  hasModel = ! (length(model.start) == 0 && length(model.end) == 0);
+  hasModel = ! (length(model.start) == 0);
   if(hasModel) {
     if(any(model.start >= model.end))
-      stop("'Unterminated MODEL section'")
+      stop("'Unterminated MODEL section'");
     if(is.null(MODEL)) {
       model.ids <- as.integer(substr(lines[model.start], 11, 14))
       MODEL <- model.ids 
     }
-    if(!is.na(MODEL[1])) {
-      model.ids   <- as.integer(substr(lines[model.start], 11, 14));
+    if( ! is.na(MODEL[1])) {
+      model.ids <- as.integer(substr(lines[model.start], 11, 14));
 	  if(verbose) {
         if(length(model.ids) > length(MODEL))
 		  cat("Note: loading only models: ",
@@ -133,6 +134,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   levels(model.factor) <- model.ids
   model.factor <- model.factor[is.atom | is.hetatm]
   
+  ### Atoms:
   trim <- function(str)
     sub(' +$', '', sub('^ +', '', str))
   
@@ -155,39 +157,20 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
                       resname, chainid, resid, insert,
                       x1, x2, x3, occ, temp, segid, basis = "xyz")
   
-  # Crystal Structure:
+  ### Crystal Cell:
   cryst1 <- NULL;
   # Note: could also use recname;
-  # isCryst1 = grepl("^CRYST1", lines);
-  isCryst1 = (recname == "CRYST1");
-  if(CRYST1 && any(isCryst1)) {
-    cryst1 <- subset(lines, isCryst1);
-	if(length(cryst1) == 0) {
-      warning("No 'CRYST1' record!");
-	  cryst1 = NULL; # TODO
-	} else if(length(cryst1) != 1) {
-      warning("Multiple 'CRYST1' records have been found. Only the first record has been kept.")
-      cryst1 <- cryst1[1]
-    }
-    abc <- c(
-      a = as.numeric(substr(cryst1,  7, 15)),
-      b = as.numeric(substr(cryst1, 16, 24)),
-      c = as.numeric(substr(cryst1, 25, 33))
-    )
-    abg <- c(
-      alpha = as.numeric(substr(cryst1, 34, 40)),
-      beta  = as.numeric(substr(cryst1, 41, 47)),
-      gamma = as.numeric(substr(cryst1, 48, 54))
-    )
-    sgroup <- substr(cryst1, 56, 66)
-    
-    if(any(is.na(abc))) warning("In 'cryst1': 'abc' contains NA values")
-    if(any(is.na(abg))) warning("In 'cryst1': 'abg' contains NA values")
-    if(sgroup == "") sgroup <- NULL
-
-    cryst1 <- cryst1.default(abc, abg, sgroup)
+  # isCrystal = grepl("^CRYST1", lines);
+  isCrystal = (recname == "CRYST1");
+  if(CRYST1 && any(isCrystal)) {
+    cryst1 <- subset(lines, isCrystal);
+    cryst1 <- as.crystal.character(cryst1);
+  } else if(CRYST1) {
+    warning("No 'CRYSTAL' record!");
+	cryst1 = NULL; # TODO
   }
   
+  ### Connections:
   conect = NULL
   isConnect = grepl("^CONECT", lines);
   if(CONECT && any(isConnect)) {
@@ -206,7 +189,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
     conect <- subset(conect, tokeep)
   }
 
-  to.return <- pdb(atoms, cryst1 , conect , remark , title )
+  to.return <- pdb(atoms, cryst1, conect, remark, title );
   to.return <- split(to.return, model.factor)
   if(length(to.return) == 1) to.return <- to.return[[1]]
 

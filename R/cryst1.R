@@ -66,3 +66,30 @@ is.cryst1 <- function(x)
   to.return <- any(attr(x,which="class") == "cryst1")
   return(to.return)
 }
+
+
+# Note: not yet exported;
+as.crystal.character = function(x) {
+	if(length(x) != 1) {
+      warning("Multiple 'CRYST1' records have been found. Only the first record has been kept.")
+      x <- x[1];
+    }
+    abc <- c(
+      a = as.numeric(substr(x,  7, 15)),
+      b = as.numeric(substr(x, 16, 24)),
+      c = as.numeric(substr(x, 25, 33))
+    )
+    abg <- c(
+      alpha = as.numeric(substr(x, 34, 40)),
+      beta  = as.numeric(substr(x, 41, 47)),
+      gamma = as.numeric(substr(x, 48, 54))
+    )
+    sgroup <- substr(x, 56, 66)
+    
+    if(any(is.na(abc))) warning("In 'crystal': 'abc' contains NA values");
+    if(any(is.na(abg))) warning("In 'crystal': 'abg' contains NA values");
+    if(sgroup == "") sgroup <- NULL
+
+    crystal <- cryst1.default(abc, abg, sgroup);
+	return(crystal);
+}
