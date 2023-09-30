@@ -63,17 +63,29 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
 
   recname <- substr(lines, 1, 6)
   
-  # Title:
-  title <- NULL
-  if(TITLE & any(recname == "TITLE "))
-    title <- subset(lines, recname == "TITLE ")    
+  trim <- function(str)
+    sub(' +$', '', sub('^ +', '', str))
   
-  # Remarks:
-  remark <- NULL
-  if(REMARK & any(recname == "REMARK"))
-    remark <- subset(lines, recname == "REMARK")
+  ### Title:
+  title = NULL;
+  isTitle = (recname == "TITLE ");
+  if(TITLE & any(isTitle)) {
+    title = subset(lines, isTitle);
+	if(length(title) == 1) {
+	  title = substr(title, 7, 80);
+	} else {
+	  title = substr(title, 11, 80);
+	}
+	title = trim(title);
+  }
   
-  # Atoms:
+  ### Remarks:
+  remark = NULL;
+  isRemark = (recname == "REMARK");
+  if(REMARK & any(isRemark))
+    remark = subset(lines, isRemark);
+  
+  ### Atoms:
   atom <- character(0)
   is.hetatm <- rep(FALSE, length(recname))
   is.atom   <- rep(FALSE, length(recname))
@@ -135,9 +147,6 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   model.factor <- model.factor[is.atom | is.hetatm]
   
   ### Atoms:
-  trim <- function(str)
-    sub(' +$', '', sub('^ +', '', str))
-  
   recAtom <- trim(substr(atoms,  1,  6))
   eleid   <- trim(substr(atoms,  7, 11))
   elename <- trim(substr(atoms, 13, 16))
