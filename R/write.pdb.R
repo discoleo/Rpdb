@@ -34,25 +34,26 @@
 write.pdb <- function(x, file="Rpdb.pdb")
 {
   if(is.pdb(x)) x <- list(x)
-  if(!all(unlist(lapply(x, is.pdb))))
-      stop("'x' must be an object of class 'pdb'")
+  if( ! all(sapply(x, is.pdb)))
+      stop("'x' must be an object of class 'pdb'");
 
-  lines <- NULL
+  lines <- NULL;
+  
+  ### Title
+  title = unique(unlist(lapply(x, function(y) return(y$title))));
+  title = format.title.pdb.character(title);
+  lines = c(lines, title);
 
-  title <- unique(unlist(lapply(x, function(y) return(y$title))))
-  if(!is.null(title))
-  {
-    title[ substr(title, 1, 6) != "TITLE " ] <- paste0("TITLE ",title[ substr(title, 1, 6) != "TITLE " ])
-    lines <- c(lines,title)
-  }
-
+  ### Remarks
   remark <- unique(unlist(lapply(x, function(y) return(y$remark))))
-  if(!is.null(remark))
+  if( ! is.null(remark))
   {
-    remark[ substr(remark, 1, 6) != "REMARK" ] <- paste0("REMARK",remark[ substr(remark, 1, 6) != "REMARK" ])
-    lines <- c(lines,remark)
+    noHeader = (substr(remark, 1, 6) != "REMARK");
+    remark[noHeader] <- paste0("REMARK", remark[noHeader]);
+    lines <- c(lines, remark)
   }
 
+  ### Crystal
   if(!is.null(x[[1]]$cryst1))
   {
     abc <- paste(format(x[[1]]$cryst1$abc,width=9,nsmall=3,justify="right"),collapse="")
@@ -97,5 +98,40 @@ write.pdb <- function(x, file="Rpdb.pdb")
     conect <- paste("CONECT",eleid.1,eleid.2,sep="")
     lines <- c(lines,conect)    
   }
-  writeLines(lines,file)
+  #
+  writeLines(lines, file);
+}
+
+# Not yet exported
+format.title.pdb.character = function(x) {
+	if( ! is.null(x)) {
+		noHeader = substr(x, 1, 6) != "TITLE ";
+		idHeader = which(noHeader);
+		if(length(idHeader) > 0) {
+			if(idHeader[1] == 1) {
+				x[1] = format80(x[1], name = "TITLE    ");
+				idHeader = idHeader[-1];
+			}
+			len = length(idHeader);
+			if(len > 0) {
+				id = as.character(idHeader);
+				sp = sapply(nchar(id), function(len) {
+					paste0(rep(" ", 4 - len), collapse = "");
+				});
+				x[idHeader] = paste0("TITLE", sp, id, " ", x[idHeader]);
+				x[idHeader] = format80(x[idHeader]);
+			}
+		}
+	} else {
+		# Field is mandatory!
+		x = format80("TITLE    NULL");
+	}
+	return(x);
+}
+
+format80 = function(x, name = "") {
+	len = 80 - nchar(x) - nchar(name);
+	sp  = if(len == 0) "" else
+		sapply(len, function(len) paste0(rep(" ", len), collapse = ""));
+	paste0(name, x, sp);
 }
