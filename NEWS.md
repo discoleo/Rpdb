@@ -10,6 +10,7 @@
   - New arg: verbose = TRUE;
   - Warn if obsolete pdb;
   - Multiline titles: import only the text;
+  - Extract resolution from pdb;
 
 
 

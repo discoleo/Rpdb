@@ -13,6 +13,7 @@ read.pdb(
   TITLE = TRUE,
   REMARK = TRUE,
   MODEL = 1,
+  resolution = TRUE,
   verbose = TRUE
 )
 }
@@ -32,6 +33,8 @@ read.pdb(
 \item{REMARK}{a single element logical vector indicating whether REMARK records have to be read.}
 
 \item{MODEL}{an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).}
+
+\item{resolution}{logical indicating wheter to extract the resolution (see details).}
 
 \item{verbose}{logical indicating wheter to print additional information, e.g. number of models.}
 }
@@ -54,6 +57,8 @@ The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYST1 and C
   \item When \code{MODEL == NULL}, all MODEL sections are read.
   \item When \code{MODEL == NA}, MODEL records are ignored to read all ATOM and/or HETATM records together to return a single object.
 }
+If the \code{resolution} parameter is set, the functions attempts to extract the resolution
+  from the REMARKS field. The resolution is only meaningfull for X-ray crystallography.
 }
 \examples{
 # Read a PDB file included with the package

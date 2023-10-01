@@ -8,6 +8,8 @@
 #'   \item When \code{MODEL == NULL}, all MODEL sections are read.
 #'   \item When \code{MODEL == NA}, MODEL records are ignored to read all ATOM and/or HETATM records together to return a single object.
 #' }
+#' If the \code{resolution} parameter is set, the functions attempts to extract the resolution
+#'   from the REMARKS field. The resolution is only meaningfull for X-ray crystallography.
 #' 
 #' @return 
 #' When a single MODEL section is read, this function returns an object of class  \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:
@@ -26,6 +28,7 @@
 #' @param TITLE a single element logical vector indicating whether TITLE records have to be read.
 #' @param REMARK a single element logical vector indicating whether REMARK records have to be read.
 #' @param MODEL an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).
+#' @param resolution logical indicating wheter to extract the resolution (see details).
 #' @param verbose logical indicating wheter to print additional information, e.g. number of models.
 #' 
 #' @references 
@@ -54,7 +57,7 @@
 #' @export
 read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
                      CONECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
-					 verbose = TRUE)
+					 resolution = TRUE, verbose = TRUE)
 {
 	if(!file.exists(file))
 		stop("File '", file, "'' is missing");
@@ -95,11 +98,19 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
 	title = trim(title);
   }
   
-  ### Remarks:
-  remark = NULL;
-  isRemark = (recname == "REMARK");
-  if(REMARK & any(isRemark))
-    remark = subset(lines, isRemark);
+	### Remarks:
+	remark = NULL;
+	isRemark  = (recname == "REMARK");
+	hasRemark = any(isRemark);
+	if(REMARK && hasRemark)
+		remark = subset(lines, isRemark);
+	### Resolution:
+	dfResolution = NULL;
+	if(resolution && hasRemark) {
+		tmp = if(is.null(remark)) subset(lines, isRemark) else remark;
+		# can start both at +11 & + 12;
+		dfResolution = extract.pdb.Resolution(tmp);
+	}
   
   ### Atoms:
   atom <- character(0)
@@ -214,9 +225,62 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
     conect <- subset(conect, tokeep)
   }
 
-  to.return <- pdb(atoms, cryst1, conect, remark, title );
+  to.return <- pdb(atoms, cryst1, conect, remark, title,
+    resolution = dfResolution);
   to.return <- split(to.return, model.factor)
   if(length(to.return) == 1) to.return <- to.return[[1]]
 
   return(to.return)
+}
+
+### Helper
+
+trim = function(x)
+	sub(' +$', '', sub('^ +', '', x));
+
+extract.regex = function(x, pattern, gr=0, perl=TRUE, simplify=TRUE, verbose=FALSE) {
+	if(inherits(x, "data.frame")) stop("x should be an array!");
+	r = regexec(pattern, x, perl=perl);
+	if(verbose) cat("Finished Regex.\nStarting extraction.\n");
+	gr  = gr + 1;
+	len = length(gr);
+	if(len > 1) {
+		s = lapply(seq(length(x)), function(id) {
+			tmp = r[[id]];
+			if(tmp[1] == -1) return(rep("", len));
+			LEN = attr(tmp, "match.length");
+			sapply(seq(len), function(idGr) {
+				gr = gr[idGr];
+				nStart = tmp[gr];
+				substr(x[id], nStart, nStart - 1 + LEN[gr]);
+			})
+		});
+		if(simplify) s = do.call("rbind", s);
+	} else {
+		s = lapply(seq(length(x)), function(id) {
+			tmp = r[[id]];
+			if(tmp[1] == -1) return("");
+			nStart = tmp[gr];
+			substr(x[id], nStart, nStart - 1 + attr(tmp, "match.length")[gr]);
+		});
+		if(simplify) s = unlist(s);
+	}
+	return(s)
+}
+
+extract.pdb.Resolution = function(x) {
+	# can start both at +11 & + 12;
+	strRes = trim(substr(x, 11, 22));
+	isRes  = (strRes == "RESOLUTION.");
+	if(any(isRes)) {
+			x = x[isRes];
+			x = trim(substr(x, 23, 80));
+			res  = extract.regex(x, "([0-9.]+) ([A-Z]+)", gr = c(1,2));
+			unit = res[,2];
+			res  = as.numeric(res[,1]);
+			isNA = is.na(res);
+			unit[isNA] = x[isNA];
+			attr(res, "Unit") = unit;
+	} else res = NULL;
+	return(res);
 }

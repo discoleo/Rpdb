@@ -56,7 +56,7 @@ split.pdb <- function(x, f, drop = FALSE, ...)
   
   atoms <- split(x$atoms, f, drop)
 
-  to.return <- lapply(atoms,pdb, x$cryst1, x$conect, x$remark, x$title)
+  to.return <- lapply(atoms, pdb, x$cryst1, x$conect, x$remark, x$title, x$Resolution);
   to.return <- lapply(to.return,
                    function(x){
                      r <-     x$conect$eleid.1 %in% x$atoms$eleid
@@ -80,6 +80,7 @@ unsplit.pdb <- function(value, f, drop = FALSE, ...)
   title  <- value[[1]]$title
   remark <- value[[1]]$remark
   cryst1 <- value[[1]]$cryst1
+  resolution = value[[1]]$resolution;
   
   atoms <- lapply(value, function(x) return(x$atoms))
   atoms <- unsplit(atoms, f, drop)
@@ -88,7 +89,8 @@ unsplit.pdb <- function(value, f, drop = FALSE, ...)
   conect <- do.call(rbind, conect)
   rownames(conect) <- 1:nrow(conect)
   
-  to.return <- pdb(atoms, cryst1, conect, remark, title)
+  to.return <- pdb(atoms, cryst1, conect, remark, title,
+    resolution = resolution)
   
   return(to.return)
 }

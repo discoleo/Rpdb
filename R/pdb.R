@@ -26,7 +26,8 @@
 #' @param conect a data.frame of class \code{conect} containing CONECT records use to create the \code{pdb} object.
 #' @param remark a character vector containing some REMARK records to be added to the \code{pdb} object.
 #' @param title a character vector containing some TITLE records to be added to the \code{pdb} object.
-#' @param x an R object to be tested
+#' @param resolution numeric value specifying the resolution; the unit should be specified as an attribute.
+#' @param x an R object to be tested.
 #' @param \dots further arguments passed to or from other methods.
 #' 
 #' @seealso 
@@ -53,23 +54,25 @@ pdb <- function(...)
 
 #' @rdname pdb
 #' @export
-pdb.default <- function(atoms, cryst1 = NULL, conect = NULL, remark = NULL, title = NULL, ...)
+pdb.default <- function(atoms, cryst1 = NULL, conect = NULL, remark = NULL, title = NULL,
+		resolution = NULL, ...)
 {
   if(missing(atoms)) stop("Please specify at least an 'atoms' object")
   if(!is.atoms(atoms)) stop("'atoms' must be an object of class 'atoms'")
   
-  if(!is.null(cryst1) & !is.cryst1(cryst1)) stop("'cryst1' must be an object of class 'cryst1'")
-  if(!is.null(conect) & !is.conect(conect)) stop("'conect' must be an object of class 'conect'")
+  if( ! is.null(cryst1) & ! is.cryst1(cryst1)) stop("'cryst1' must be an object of class 'cryst1'")
+  if( ! is.null(conect) & ! is.conect(conect)) stop("'conect' must be an object of class 'conect'")
   
-  if(is.list(title ) | !is.null(dim(title ))) stop("'title' must be a vector of character strings")
-  if(is.list(remark) | !is.null(dim(remark))) stop("'remark' must be a vector of character strings")
+  if(is.list(title ) | ! is.null(dim(title ))) stop("'title' must be a vector of character strings")
+  if(is.list(remark) | ! is.null(dim(remark))) stop("'remark' must be a vector of character strings")
   
-  if(!is.character(title ) & !is.null(title )) title  <- as.character(title )
-  if(!is.character(remark) & !is.null(remark)) remark <- as.character(remark)
+  if(! is.character(title ) & ! is.null(title )) title  <- as.character(title )
+  if(! is.character(remark) & ! is.null(remark)) remark <- as.character(remark)
   
   to.return <- list(title = title, remark = remark, cryst1 = cryst1, atoms = atoms, conect = conect)
+  if( ! is.null(resolution)) to.return$Resolution = resolution;
   
-  class(to.return) <- c("pdb","list")
+  class(to.return) <- c("pdb", "list")
   return(to.return)
 }
 

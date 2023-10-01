@@ -8,7 +8,15 @@
 \usage{
 pdb(...)
 
-\method{pdb}{default}(atoms, cryst1 = NULL, conect = NULL, remark = NULL, title = NULL, ...)
+\method{pdb}{default}(
+  atoms,
+  cryst1 = NULL,
+  conect = NULL,
+  remark = NULL,
+  title = NULL,
+  resolution = NULL,
+  ...
+)
 
 is.pdb(x)
 }
@@ -25,7 +33,9 @@ is.pdb(x)
 
 \item{title}{a character vector containing some TITLE records to be added to the \code{pdb} object.}
 
-\item{x}{an R object to be tested}
+\item{resolution}{numeric value specifying the resolution; the unit should be specified as an attribute.}
+
+\item{x}{an R object to be tested.}
 }
 \value{
 \code{pdb} returns a list of class \sQuote{pdb} with the following components:
