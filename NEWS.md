@@ -5,9 +5,11 @@
 
 ## Updates to Existing Functions
 
-- read.pdb:
-  - fixed bug: process only FieldName CRYSTL1;
-  - new arg: verbose = TRUE;
+- Function read.pdb:
+  - Bug fixed: process only FieldName CRYST1;
+  - New arg: verbose = TRUE;
+  - Warn if obsolete pdb;
+  - Multiline titles: import only the text;
 
 
 

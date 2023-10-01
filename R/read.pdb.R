@@ -56,15 +56,30 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
                      CONECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
 					 verbose = TRUE)
 {
-  if(!file.exists(file))
-    stop("File '", file, "'' is missing")
-  
-  lines <- readLines(file)
-
-  recname <- substr(lines, 1, 6)
-  
-  trim <- function(str)
-    sub(' +$', '', sub('^ +', '', str))
+	if(!file.exists(file))
+		stop("File '", file, "'' is missing");
+	
+	lines = readLines(file);
+	
+	recname = substr(lines, 1, 6);
+	
+	trim = function(str)
+		sub(' +$', '', sub('^ +', '', str));
+	
+	### Obsolete:
+	if(verbose) {
+		isObsolete = (recname == "OBSLTE");
+		idObsolete = which(isObsolete);
+		if(length(idObsolete) > 0) {
+			warning("Obsolete pdb!");
+			txtObsolete = lines[idObsolete];
+			txt = trim(substr(txtObsolete, 22, 80));
+			txt[1] = paste0("PDB ",
+				substr(txt[1],  1,  4), " replaced by: ",
+				substr(txt[1], 11, 59));
+			cat(txt, sep = "\n");
+		}
+	}
   
   ### Title:
   title = NULL;
@@ -72,6 +87,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   if(TITLE & any(isTitle)) {
     title = subset(lines, isTitle);
 	if(length(title) == 1) {
+	  # Text starts actually at npos = 11 as well;
 	  title = substr(title, 7, 80);
 	} else {
 	  title = substr(title, 11, 80);
