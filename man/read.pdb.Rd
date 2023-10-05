@@ -8,11 +8,12 @@ read.pdb(
   file,
   ATOM = TRUE,
   HETATM = TRUE,
-  CRYST1 = TRUE,
+  CRYSTAL = TRUE,
   CONECT = TRUE,
   TITLE = TRUE,
   REMARK = TRUE,
   MODEL = 1,
+  CRYST1 = NULL,
   resolution = TRUE,
   verbose = TRUE
 )
@@ -20,23 +21,25 @@ read.pdb(
 \arguments{
 \item{file}{a single element character vector containing the name of the PDB file to be read.}
 
-\item{ATOM}{a single element logical vector indicating whether ATOM records have to be read.}
+\item{ATOM}{a logical value indicating whether to read the ATOM records.}
 
-\item{HETATM}{a single element logical vector indicating whether HETATM records have to be read.}
+\item{HETATM}{a logical value indicating whether to read the HETATM records.}
 
-\item{CRYST1}{a single element logical vector indicating whether CRYST1 records have to be read.}
+\item{CRYSTAL}{a logical value indicating whether to read the crystal cell parameters (from the CRYST1 pdb record).}
 
-\item{CONECT}{a single element logical vector indicating whether CONECT records have to be read.}
+\item{CONECT}{a logical value indicating whether to read the CONECT records.}
 
-\item{TITLE}{a single element logical vector indicating whether TITLE records have to be read.}
+\item{TITLE}{a logical value indicating whether to read the TITLE records.}
 
-\item{REMARK}{a single element logical vector indicating whether REMARK records have to be read.}
+\item{REMARK}{a logical value indicating whether to read the REMARK records.}
 
 \item{MODEL}{an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).}
 
-\item{resolution}{logical indicating wheter to extract the resolution (see details).}
+\item{CRYST1}{will be replaced by the CRYSTAL argument; existing code should be migrated to use the CRYSTAL argument.}
 
-\item{verbose}{logical indicating wheter to print additional information, e.g. number of models.}
+\item{resolution}{logical value indicating wheter to extract the resolution (see details).}
+
+\item{verbose}{logical value indicating wheter to print additional information, e.g. number of models.}
 }
 \value{
 When a single MODEL section is read, this function returns an object of class  \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:

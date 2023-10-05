@@ -41,7 +41,7 @@ write.pdb <- function(x, file="Rpdb.pdb")
   
   ### Title
   title = unique(unlist(lapply(x, function(y) return(y$title))));
-  title = format.title.pdb.character(title);
+  title = format.pdb.title.character(title);
   lines = c(lines, title);
 
   ### Remarks
@@ -103,7 +103,7 @@ write.pdb <- function(x, file="Rpdb.pdb")
 }
 
 # Not yet exported
-format.title.pdb.character = function(x) {
+format.pdb.title.character = function(x) {
 	if( ! is.null(x)) {
 		noHeader = substr(x, 1, 6) != "TITLE ";
 		idHeader = which(noHeader);
@@ -131,7 +131,7 @@ format.title.pdb.character = function(x) {
 
 format80 = function(x, name = "") {
 	len = 80 - nchar(x) - nchar(name);
-	sp  = if(len == 0) "" else
+	sp  = if(len <= 0) "" else
 		sapply(len, function(len) paste0(rep(" ", len), collapse = ""));
 	paste0(name, x, sp);
 }

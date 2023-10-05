@@ -21,15 +21,16 @@
 #' When multiple MODEL sections are read, a list of object of class \sQuote{pdb} is returned.
 #' 
 #' @param file a single element character vector containing the name of the PDB file to be read.
-#' @param ATOM a single element logical vector indicating whether ATOM records have to be read.
-#' @param HETATM a single element logical vector indicating whether HETATM records have to be read.
-#' @param CRYST1 a single element logical vector indicating whether CRYST1 records have to be read.
-#' @param CONECT a single element logical vector indicating whether CONECT records have to be read.
-#' @param TITLE a single element logical vector indicating whether TITLE records have to be read.
-#' @param REMARK a single element logical vector indicating whether REMARK records have to be read.
+#' @param ATOM a logical value indicating whether to read the ATOM records.
+#' @param HETATM a logical value indicating whether to read the HETATM records.
+#' @param CRYSTAL a logical value indicating whether to read the crystal cell parameters (from the CRYST1 pdb record).
+#' @param CONECT a logical value indicating whether to read the CONECT records.
+#' @param TITLE a logical value indicating whether to read the TITLE records.
+#' @param REMARK a logical value indicating whether to read the REMARK records.
 #' @param MODEL an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).
-#' @param resolution logical indicating wheter to extract the resolution (see details).
-#' @param verbose logical indicating wheter to print additional information, e.g. number of models.
+#' @param CRYST1 will be replaced by the CRYSTAL argument; existing code should be migrated to use the CRYSTAL argument.
+#' @param resolution logical value indicating wheter to extract the resolution (see details).
+#' @param verbose logical value indicating wheter to print additional information, e.g. number of models.
 #' 
 #' @references 
 #' PDB format has been taken from:
@@ -55,10 +56,19 @@
 #' 
 #' @name read.pdb
 #' @export
-read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
+read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
                      CONECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
-					 resolution = TRUE, verbose = TRUE)
+					 CRYST1 = NULL, resolution = TRUE, verbose = TRUE)
 {
+	if( ! is.null(CRYST1)) {
+		if(CRYSTAL) {
+			# Temporary:
+			CRYSTAL = CRYST1;
+		} else {
+			stop("Please provide only a logical value for CRYSTAL!",
+			"Argument CRYST1 will be deprecated!");
+		}
+	}
 	if(!file.exists(file))
 		stop("File '", file, "'' is missing");
 	
@@ -83,21 +93,21 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
 			cat(txt, sep = "\n");
 		}
 	}
-  
-  ### Title:
-  title = NULL;
-  isTitle = (recname == "TITLE ");
-  if(TITLE & any(isTitle)) {
-    title = subset(lines, isTitle);
-	if(length(title) == 1) {
-	  # Text starts actually at npos = 11 as well;
-	  title = substr(title, 7, 80);
-	} else {
-	  title = substr(title, 11, 80);
+	
+	### Title:
+	title = NULL;
+	isTitle = (recname == "TITLE ");
+	if(TITLE & any(isTitle)) {
+		title = subset(lines, isTitle);
+		if(length(title) == 1) {
+		# Text starts actually at npos = 11 as well;
+		title = substr(title, 7, 80);
+		} else {
+			title = substr(title, 11, 80);
+		}
+		title = trim(title);
 	}
-	title = trim(title);
-  }
-  
+	
 	### Remarks:
 	remark = NULL;
 	isRemark  = (recname == "REMARK");
@@ -198,10 +208,10 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYST1 = TRUE,
   # Note: could also use recname;
   # isCrystal = grepl("^CRYST1", lines);
   isCrystal = (recname == "CRYST1");
-  if(CRYST1 && any(isCrystal)) {
+  if(CRYSTAL && any(isCrystal)) {
     cryst1 <- subset(lines, isCrystal);
     cryst1 <- as.crystal.character(cryst1);
-  } else if(CRYST1) {
+  } else if(CRYSTAL) {
     warning("No 'CRYSTAL' record!");
 	cryst1 = NULL; # TODO
   }

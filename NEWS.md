@@ -8,9 +8,10 @@
 - Function read.pdb:
   - Bug fixed: process only FieldName CRYST1;
   - New arg: verbose = TRUE;
-  - Warn if obsolete pdb;
+  - Warn if pdb is marked as obsolete;
   - Multiline titles: import only the text;
   - Extract resolution from pdb;
+  - Renaming arg CRYST1 to CRYSTAL;
 
 
 
