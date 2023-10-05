@@ -58,10 +58,12 @@ The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYST1 and C
 \itemize{
   \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers match these integers are read.
   \item When \code{MODEL == NULL}, all MODEL sections are read.
-  \item When \code{MODEL == NA}, MODEL records are ignored to read all ATOM and/or HETATM records together to return a single object.
+  \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records are merged together to return a single object.
 }
-If the \code{resolution} parameter is set, the functions attempts to extract the resolution
-  from the REMARKS field. The resolution is only meaningfull for X-ray crystallography.
+When multiple models are specified, each of the models is actually stored
+  as a separate pdb molecule in a list of pdb molecules.
+If the \code{resolution} parameter is set, the function attempts to extract the resolution
+  from the REMARKS field. Note: The resolution is only meaningfull for X-ray crystallography.
 }
 \examples{
 # Read a PDB file included with the package

@@ -6,10 +6,12 @@
 #' \itemize{
 #'   \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers match these integers are read.
 #'   \item When \code{MODEL == NULL}, all MODEL sections are read.
-#'   \item When \code{MODEL == NA}, MODEL records are ignored to read all ATOM and/or HETATM records together to return a single object.
+#'   \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records are merged together to return a single object.
 #' }
-#' If the \code{resolution} parameter is set, the functions attempts to extract the resolution
-#'   from the REMARKS field. The resolution is only meaningfull for X-ray crystallography.
+#' When multiple models are specified, each of the models is actually stored
+#'   as a separate pdb molecule in a list of pdb molecules.
+#' If the \code{resolution} parameter is set, the function attempts to extract the resolution
+#'   from the REMARKS field. Note: The resolution is only meaningfull for X-ray crystallography.
 #' 
 #' @return 
 #' When a single MODEL section is read, this function returns an object of class  \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:
@@ -79,8 +81,8 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	trim = function(str)
 		sub(' +$', '', sub('^ +', '', str));
 	
-	### Obsolete:
 	if(verbose) {
+		### Obsolete:
 		isObsolete = (recname == "OBSLTE");
 		idObsolete = which(isObsolete);
 		if(length(idObsolete) > 0) {
@@ -91,6 +93,16 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 				substr(txt[1],  1,  4), " replaced by: ",
 				substr(txt[1], 11, 59));
 			cat(txt, sep = "\n");
+			rm(txtObsolete);
+		}
+		### Caveat:
+		isCaveat = (recname == "CAVEAT");
+		idCaveat = which(isCaveat);
+		if(length(idCaveat) > 0) {
+			warning("The pdb contains a Caveat record!");
+			txtCaveat = lines[idCaveat];
+			txt = trim(substr(txtCaveat, 20, 80));
+			# TODO
 		}
 	}
 	
@@ -154,6 +166,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
   if(hasModel) {
     if(any(model.start >= model.end))
       stop("'Unterminated MODEL section'");
+	# All models:
     if(is.null(MODEL)) {
       model.ids <- as.integer(substr(lines[model.start], 11, 14))
       MODEL <- model.ids 
@@ -170,11 +183,15 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
       model.end   <- model.end  [idModels]
       model.ids   <- model.ids  [idModels]
       model.ids   <- paste("MODEL", model.ids, sep=".");
-      model.factor2 <- model.factor
-      model.factor [model.start+1] <- model.start
-      model.factor2[model.end    ] <- model.start
-      model.factor <- cumsum(model.factor) - cumsum(model.factor2) ; rm(model.factor2)
-      model.factor[model.factor == 0] <- NA
+      # model.factorE = model.factor; # just rep(0, ...)
+      # model.factor [model.start + 1] = model.start;
+      # model.factorE[model.end      ] = model.start;
+      # model.factor = cumsum(model.factor) - cumsum(model.factorE);
+	  # rm(model.factorE);
+		model.factor [model.start + 1] = model.start;
+		model.factor [model.end      ] = - model.start;
+		model.factor = cumsum(model.factor);
+		model.factor[model.factor == 0] <- NA
     }
   } else if(verbose && nModels > 0) {
     cat("Number of actual models: 0\n");
