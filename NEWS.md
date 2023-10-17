@@ -9,10 +9,10 @@
   - Bug fixed: process only FieldName CRYST1;
   - New arg: verbose = TRUE;
   - Warn if pdb is marked as obsolete;
-  - Multiline titles: import only the text;
+  - Multi-line titles: import only the text;
   - Extract resolution from pdb;
   - Renaming arg CRYST1 to CRYSTAL;
-
+- Function is.crystal: as replacement to is.cryst1;
 
 
 # Rpdb 2.3.4

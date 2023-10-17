@@ -40,6 +40,7 @@
 #' @examples 
 #' x <- cryst1(abc = c(10, 10, 10), abg = c(90,90,90), sgroup = "P1")
 #' is.cryst1(x)
+#' is.crystal(x)
 #'  
 #' @keywords classes
 #'  
@@ -52,18 +53,30 @@ cryst1 <- function(...)
 #' @export
 cryst1.default <- function(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
 {
-  if(missing(abc)) stop("Please provide at leat 'abc'")
-  to.return <- list(abc = abc, abg = abg, sgroup = sgroup)
-  
-  class(to.return) <- "cryst1"
-  return(to.return)
+	if(missing(abc)) stop("Please provide at leat 'abc'");
+	if(is.crystal(abc)) {
+		# TODO: What should be the default action?
+		abc = abc$abc;
+	}
+	#
+	to.return <- list(abc = abc, abg = abg, sgroup = sgroup)
+	
+	class(to.return) <- "cryst1";
+	return(to.return)
 }
 
 #' @rdname cryst1
 #' @export
 is.cryst1 <- function(x)
 {
-  to.return <- any(attr(x,which="class") == "cryst1")
+  to.return <- inherits(x, c("cryst1", "crystal"));
+  return(to.return)
+}
+#' @rdname cryst1
+#' @export
+is.crystal <- function(x)
+{
+  to.return <- inherits(x, c("cryst1", "crystal"));
   return(to.return)
 }
 

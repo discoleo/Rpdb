@@ -10,12 +10,13 @@ pdb(...)
 
 \method{pdb}{default}(
   atoms,
-  cryst1 = NULL,
+  crystal = NULL,
   conect = NULL,
   remark = NULL,
   title = NULL,
   resolution = NULL,
-  ...
+  ...,
+  cryst1 = NULL
 )
 
 is.pdb(x)
@@ -25,7 +26,7 @@ is.pdb(x)
 
 \item{atoms}{a data.frame of class \code{atoms} containing ATOM and HETATM records use to create the \code{pdb} object.}
 
-\item{cryst1}{a list of class \code{cryst1} containing the periodical bondary conditions and space group use to create the \code{pdb} object.}
+\item{crystal}{a list of class \code{cryst1} containing the periodical boundary conditions and space group used to create the \code{pdb} object.}
 
 \item{conect}{a data.frame of class \code{conect} containing CONECT records use to create the \code{pdb} object.}
 
@@ -34,6 +35,8 @@ is.pdb(x)
 \item{title}{a character vector containing some TITLE records to be added to the \code{pdb} object.}
 
 \item{resolution}{numeric value specifying the resolution; the unit should be specified as an attribute.}
+
+\item{cryst1}{will be deprecated and replaced by argument crystal.}
 
 \item{x}{an R object to be tested.}
 }

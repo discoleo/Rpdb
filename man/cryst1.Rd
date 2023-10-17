@@ -4,6 +4,7 @@
 \alias{cryst1}
 \alias{cryst1.default}
 \alias{is.cryst1}
+\alias{is.crystal}
 \title{Create \sQuote{cryst1} Object}
 \usage{
 cryst1(...)
@@ -11,6 +12,8 @@ cryst1(...)
 \method{cryst1}{default}(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
 
 is.cryst1(x)
+
+is.crystal(x)
 }
 \arguments{
 \item{\dots}{further arguments passed to or from other methods.}
@@ -57,6 +60,7 @@ equal to \code{cryst1}.
 \examples{
 x <- cryst1(abc = c(10, 10, 10), abg = c(90,90,90), sgroup = "P1")
 is.cryst1(x)
+is.crystal(x)
  
 }
 \seealso{
