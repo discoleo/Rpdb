@@ -72,24 +72,26 @@ visualize <- function(...)
 #' @rdname visualize
 #' @export
 visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, mode = NULL,
-                              type = "l", xyz = NULL, abc = NULL, pbc.box = NULL, lwd = 2,
-                              lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                              cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-                              add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...){
+                              type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+							  lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+                              cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
+							  radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+							  userMatrix = diag(4), ...){
   
   if(!is.coords(x)) stop("'x' must be an object of class coords.")
   
   if(basis(x) == "abc") x <- abc2xyz(x, cryst1)
 
-# Unrecognized elements are considered as dummy atoms
+  # Unrecognized elements are considered as dummy atoms
   if(is.null(elename)){
     warning("'elename' was not specifyed. All atom have been considered as dummy atoms.")
     elename <- rep("Xx", natom(x))
   }
   
-  symb <- toSymbols(elename)
-  symb[is.na(symb)] <- "Xx"
-  M <- match(symb, Rpdb::elements[, "symb"])
+  # symb <- toSymbols(elename, na = "Xx");
+  # symb[is.na(symb)] <- "Xx"
+  # M <- match(symb, Rpdb::elements[, "symb"])
+  M = match.element.character(elename, na = 1);
   
   if(is.null(col)){
     col <- Rpdb::elements[M, c("red","green","blue")]
@@ -105,12 +107,12 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   ids <- rgl::ids3d()
   par.save <- rgl::par3d(skipRedraw=TRUE)
   
-  if(is.null(xyz) & is.null(cryst1))
+  if(is.null(xyz) && is.null(cryst1))
     xyz <- TRUE
   else
     xyz <- FALSE
   
-  if(is.null(abc) & is.null(cryst1))
+  if(is.null(abc) && is.null(cryst1))
     abc <- FALSE
   else
     abc <- TRUE
@@ -134,8 +136,7 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   if(pbc.box) ids <- rbind(ids, addPBCBox(cryst1, lwd = lwd.pbc.box))
   # print(str(ids))
   
-  if(type == "l")
-  {
+  if(type == "l") {
     if(is.null(conect)){
       warning("Undefined connectivity: Computing connectivity from coordinates...")
       conect <- conect(x)
@@ -149,9 +150,7 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
     )
     seg.id <- data.frame(id = seg.id, type = "atom.seg")
     ids <- rbind(ids, seg.id)
-  }
-  
-  if(type == "p"){
+  } else if(type == "p") {
     pts.id <- rgl::points3d(
       x$x1,
       x$x2,
@@ -165,7 +164,7 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
     if(is.character(radii[1])){
       if(! radii[1] %in% c("rcov", "rbo", "rvdw") )
         stop("'radii' must be one of 'rcov', 'rbo', 'rvdw' or a numerical vector")
-      radii <- Rpdb::elements[M,radii[1]]
+      radii <- Rpdb::elements[M, radii[1]]
     }
     if(all(radii == 0)){
       warning("All atoms are dummy atoms. 'radii' have been set to 1")
@@ -176,7 +175,7 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
       x$x2,
       x$x3,
       color = col, radius = radii, ...)
-    sph.id <- data.frame(id = sph.id, type= "atom.sph")
+    sph.id <- data.frame(id = sph.id, type = "atom.sph")
     ids <- rbind(ids, sph.id)
   }
 
@@ -194,7 +193,6 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   }
   
   invisible(ids)
-  
 }
 
 #' @rdname visualize
@@ -243,7 +241,7 @@ visualize.atoms <- function( x, cryst1 = NULL, conect = NULL, mode = NULL,
   
   ids <- visualize(coords(x), x$elename, cryst1, conect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
-            cex.xyz, cex.abc, col, bg,  radii, add, windowRect, FOV, userMatrix, ...)
+            cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
   
   if(!is.null(mode)){
     if(mode == "measure"){
@@ -262,14 +260,15 @@ visualize.atoms <- function( x, cryst1 = NULL, conect = NULL, mode = NULL,
 
 #' @rdname visualize
 #' @export
-visualize.pdb <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL, lwd = 2,
-                          lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                          cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-                          add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...){
+visualize.pdb <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+				lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+				cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2", radii = "rvdw",
+				add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...) {
   
+  # calls visualize.atoms;
   ids <- visualize(x$atoms, cryst1 = x$cryst1, conect = x$conect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
-            cex.xyz, cex.abc, col, bg,  radii, add, windowRect, FOV, userMatrix, ...)
+            cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
   
   if(!is.null(mode)){
     if(mode == "measure"){
