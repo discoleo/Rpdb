@@ -53,7 +53,7 @@ function return an array, with the same dimensions as the \code{dx1},
 \code{dx2}, \code{dx3} components of the \sQuote{distances} object for which
 the norms have to be computed, containing the norm of the distance vectors. 
 \cr\cr \code{is.distances} returns TRUE if x is an object of class
-\sQuote{distances} and FALSE otherwise
+\sQuote{distances} and FALSE otherwise.
 }
 \description{
 Computes inter-atomic distance vectors.

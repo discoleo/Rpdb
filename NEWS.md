@@ -3,6 +3,13 @@
 
 > started work;
 
+## TODO
+
+- Extract all useful code and ideas from the discussion thread:
+  - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
+  - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
+
+
 ## Updates to Existing Functions
 
 - Function read.pdb:

@@ -38,7 +38,7 @@
 #' \code{dx2}, \code{dx3} components of the \sQuote{distances} object for which
 #' the norms have to be computed, containing the norm of the distance vectors. 
 #' \cr\cr \code{is.distances} returns TRUE if x is an object of class
-#' \sQuote{distances} and FALSE otherwise
+#' \sQuote{distances} and FALSE otherwise.
 #' 
 #' @param dx1,dx2,dx3 numeric arrays containing the first, second and third components of the distance vectors.
 #' @param basis a single element character vector indicating the type of basis vector used to express the coordinates.
@@ -77,12 +77,11 @@ distances.default <- function(dx1 = numeric(0), dx2 = numeric(0), dx3 = numeric(
     if(length(dx1) != length(dx2) | length(dx1 != length(dx3)))
       stop("'dx1', 'dx2' and 'dx3' must have the same dimensions")
   }
-  else{
+  else {
     if(any(dim(dx1) != dim(dx2)) | any(dim(dx1) != dim(dx3)))
       stop("'dx1', 'dx2' and 'dx3' must have the same dimensions")    
   }
-  if(!basis %in% c("xyz","abc"))
-    stop("'basis' must be equal to 'xyz' or 'abc'")
+  check.basis(basis);
   
   to.return <- list(dx1 = dx1, dx2 = dx2, dx3 = dx3)
   class(to.return) <- c("distances", "list")
@@ -95,17 +94,11 @@ distances.default <- function(dx1 = numeric(0), dx2 = numeric(0), dx3 = numeric(
 distances.coords <- function(x, sel1, sel2, ...){
   if(missing(sel1) | missing(sel2))
     stop("Please specify 'sel1' and 'sel2'")
-  if(is.numeric(sel1)){
-    if(any(round(sel1) != sel1))
-      stop("'sel1' must be a logical or integer vector")
-    if(any(sel1 > natom(x)))
-      stop("'sel1' contains indices out of range")
+  if(is.numeric(sel1)) {
+    check.idOrLogical(sel1, natom(x), "'sel1'");
   }
-  if(is.numeric(sel2)){
-    if(any(round(sel2) != sel2))
-      stop("'sel2' must be a logical or integer vector")
-    if(any(sel2 > natom(x)))
-      stop("'sel2' contains indices out of range")
+  if(is.numeric(sel2)) {
+    check.idOrLogical(sel2, natom(x), "'sel2'");
   }
   if(is.logical(sel1) & length(sel1) != natom(x))
     stop("'sel1' length must be equal to natom(x)")
@@ -140,7 +133,8 @@ distances.pdb <- function(x, sel1, sel2, ...)
 #' @rdname distances
 #' @export
 is.distances <- function(x)
-  any(class(x) == "distances")
+	inherits(x, "distances");
+	# any(class(x) == "distances")
 
 #' @rdname distances
 #' @export
@@ -157,10 +151,10 @@ norm.distances <- function(x, type = "xyz", ...){
     x   = x$dx1,
     y   = x$dx2,
     z   = x$dx3,
-    xy  = sqrt(x$dx1^2+x$dx2^2),
-    yz  = sqrt(x$dx2^2+x$dx3^2),
-    zx  = sqrt(x$dx3^2+x$dx1^2),
-    xyz = sqrt(x$dx1^2+x$dx2^2+x$dx3^2))
+    xy  = sqrt(x$dx1^2 + x$dx2^2),
+    yz  = sqrt(x$dx2^2 + x$dx3^2),
+    zx  = sqrt(x$dx3^2 + x$dx1^2),
+    xyz = sqrt(x$dx1^2 + x$dx2^2 + x$dx3^2))
 
   return(to.return)
 }
