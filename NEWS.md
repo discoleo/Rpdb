@@ -9,6 +9,9 @@
   - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
   - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
 
+## New Functions
+
+- dist.point: distances to a given point;
 
 ## Updates to Existing Functions
 

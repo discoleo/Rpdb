@@ -11,21 +11,25 @@
 #' to create a \sQuote{coords} object from its different components, i.e.: 
 #' \code{x1}, \code{x2}, \code{x3}, and \code{basis}. All the arguments have to 
 #' be specified except 'basis' which by default is set to "xyz" (Cartesian 
-#' coordinates). \cr\cr For an object of class \sQuote{atoms}, the accessor 
-#' function extracts its \code{x1}, \code{x2} and \code{x3} components as well 
+#' coordinates). \cr\cr
+#' For an object of class \sQuote{atoms}, the accessor function
+#' extracts its \code{x1}, \code{x2} and \code{x3} components as well 
 #' as its \code{basis} attribute to create a \sQuote{coords} object. The 
 #' replacement function set its \code{x1}, \code{x2} and \code{x3} components as
-#' well as its \code{basis} attribute. \cr\cr For an object of class 
-#' \sQuote{pdb}, the accessor function extracts the \code{x1}, \code{x2} and 
-#' \code{x3} components as well as the \code{basis} attribute of its 
+#' well as its \code{basis} attribute. \cr\cr
+#' For an object of class \sQuote{coords}, the accessor function
+#' returns the \sQuote{coords} object as is.
+#' For an object of class \sQuote{pdb}, the accessor function extracts the \code{x1},
+#' \code{x2} and \code{x3} components, as well as the \code{basis} attribute of its 
 #' \code{atoms} component to create a \sQuote{coords} object. The replacement 
-#' function set the \code{x1}, \code{x2} and \code{x3} components as well as the
-#' \code{basis} attribute of its \code{atoms} component. \cr\cr For 
-#' \sQuote{matrix} and \sQuote{data.frame} objects, when \code{basis==NULL} this
-#' function search x, y, z or a, b, c columns in \code{x}.\cr If x, y, z columns
-#' are found they are used to a set the first, second and third coordinates of 
-#' the returned \sQuote{coords} object. In that case the basis set of \code{x} 
-#' is set to \code{"xyz"}.\cr If a, b, c columns are found they are used to a 
+#' function sets the \code{x1}, \code{x2} and \code{x3} components as well as the
+#' \code{basis} attribute of its \code{atoms} component. \cr\cr
+#' For \sQuote{matrix} and \sQuote{data.frame} objects, when \code{basis == NULL}
+#' this function searches x, y, z or a, b, c columns in \code{x}.\cr
+#' If x, y, z columns are found, they are used to set the first, second and
+#' third coordinates of the returned \sQuote{coords} object.
+#' In that case the basis set of \code{x} is set to \code{"xyz"}.\cr
+#' If a, b, c columns are found they are used to a 
 #' set the first, second and third coordinates of the returned \sQuote{coords} 
 #' object. In that case the basis set of \code{x} is set to \code{"abc"}.\cr If 
 #' the function doesn't found neither the x, y, z nor the a, b, c columns an 
@@ -95,8 +99,8 @@ coords.data.frame <- function(x, basis = NULL, ...)
   
   if(is.null(basis)){
     if(all(c("x","y","z") %in% names(x))){
-      x <- x[,c("x","y","z")]
-      basis <- "xyz"
+      x <- x[, c("x","y","z")];
+      basis <- "xyz";
     }
     else if(all(c("a","b","c") %in% names(x))){
       x <- x[,c("a","b","c")]
@@ -104,7 +108,7 @@ coords.data.frame <- function(x, basis = NULL, ...)
     }
     else stop("Can not convert this 'data.frame' into 'coords': Coordinates not found")
   }
-  else if(!basis %in% c("xyz","abc")) stop("Unrecognized 'basis'")
+  else if( ! basis %in% c("xyz","abc")) stop("Unrecognized 'basis'");
   if(ncol(x) != 3L) stop("'x' must be a three-columns data.frame")
 
   to.return <- coords.default(x[,1], x[,2], x[,3], basis = basis)
@@ -115,10 +119,17 @@ coords.data.frame <- function(x, basis = NULL, ...)
 #' @rdname coords
 #' @export
 coords.matrix <- function(x, basis = NULL, ...){
-  if(!is.matrix(x)) stop("'x' must be a 'matrix'")
+  if( ! is.matrix(x)) stop("'x' must be a 'matrix'");
   
   to.return <- coords.data.frame(as.data.frame(x), basis = basis, ...)
   return(to.return)
+}
+
+#' @rdname coords
+#' @export
+coords.coords <- function(x, ...) {
+  if( ! is.coords(x)) stop("'x' must be a 'coords'-object");
+  return(x);
 }
 
 #' @rdname coords
@@ -158,10 +169,13 @@ coords.pdb <- function(x, ...)
 #' @export
 'coords<-.pdb' <- function(x, value)
 {
-  if(!is.pdb(x)) stop("'x' must be an object of class 'pdb'")
+  if( ! is.pdb(x)) stop("'x' must be an object of class 'pdb'");
   
-  if(!is.coords(value)) stop("'value' must be an object of class 'coords'")
-  if(nrow(x$atoms) != nrow(value)) stop(paste("arguments imply different number of rows: ",nrow(x$atoms),", ",nrow(value),sep=""))
+  if( ! is.coords(value)) stop("'value' must be an object of class 'coords'");
+  if(nrow(x$atoms) != nrow(value)) {
+		stop(paste("arguments imply different number of rows: ",
+			nrow(x$atoms), ", ", nrow(value), sep=""));
+	}
   coords(x$atoms) <- value
   
   return(x)
@@ -171,6 +185,6 @@ coords.pdb <- function(x, ...)
 #' @export
 is.coords <- function(x)
 {
-  to.return <- any(class(x) == "coords")
+  to.return <- inherits(x, "coords");
   return(to.return)
 }
