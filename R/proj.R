@@ -30,15 +30,17 @@
 #' @keywords classes manip
 #' 
 #' @name proj.line3d
-# #' @importFrom stats proj
 #' @export proj.line3d
 #' @export
 proj.line3d <- function(p, x, y, z, ...)
   UseMethod("proj.line3d")
 
 #' @rdname proj.line3d
-#' @export
-proj.line3d.numeric = function(p, x, y, z, ...) {
+#' @exportS3Method  proj.line3d numeric
+proj.line3d.numeric = function(p, x, y = NULL, z = NULL, ...) {
+	if(is.null(y)) {
+		y = x[,2]; z = x[,3]; x = x[,1];
+	}
 	dx = x[2] - x[1]; dx0 = p[1] - x[1];
 	dy = y[2] - y[1]; dy0 = p[2] - y[1];
 	dz = z[2] - z[1]; dz0 = p[3] - z[1];
@@ -54,8 +56,11 @@ proj.line3d.numeric = function(p, x, y, z, ...) {
 }
 
 #' @rdname proj.line3d
-#' @export
+#' @exportS3Method  proj.line3d matrix
 proj.line3d.matrix = function(p, x, y, z, ...) {
+	if(is.null(y)) {
+		y = x[,2]; z = x[,3]; x = x[,1];
+	}
 	dx = x[2] - x[1]; dx0 = p[, 1] - x[1];
 	dy = y[2] - y[1]; dy0 = p[, 2] - y[1];
 	dz = z[2] - z[1]; dz0 = p[, 3] - z[1];
