@@ -57,7 +57,7 @@ proj.line3d.numeric = function(p, x, y = NULL, z = NULL, ...) {
 
 #' @rdname proj.line3d
 #' @exportS3Method  proj.line3d matrix
-proj.line3d.matrix = function(p, x, y, z, ...) {
+proj.line3d.matrix = function(p, x, y = NULL, z = NULL, ...) {
 	if(is.null(y)) {
 		y = x[,2]; z = x[,3]; x = x[,1];
 	}

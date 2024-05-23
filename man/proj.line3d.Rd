@@ -10,7 +10,7 @@ proj.line3d(p, x, y, z, ...)
 
 \method{proj}{line3d.numeric}(p, x, y = NULL, z = NULL, ...)
 
-\method{proj}{line3d.matrix}(p, x, y, z, ...)
+\method{proj}{line3d.matrix}(p, x, y = NULL, z = NULL, ...)
 }
 \arguments{
 \item{p}{numeric array or matrix with the x,y,z coordinates of the point or collection of points.}
