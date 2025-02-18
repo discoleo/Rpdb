@@ -31,7 +31,6 @@
 #' 
 #' @name proj.line3d
 #' @export proj.line3d
-#' @export
 proj.line3d <- function(p, x, y, z, ...)
   UseMethod("proj.line3d")
 

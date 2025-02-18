@@ -101,37 +101,3 @@ write.pdb <- function(x, file="Rpdb.pdb")
   #
   writeLines(lines, file);
 }
-
-# Not yet exported
-format.pdb.title.character = function(x) {
-	if( ! is.null(x)) {
-		noHeader = substr(x, 1, 6) != "TITLE ";
-		idHeader = which(noHeader);
-		if(length(idHeader) > 0) {
-			if(idHeader[1] == 1) {
-				x[1] = format80(x[1], name = "TITLE    ");
-				idHeader = idHeader[-1];
-			}
-			len = length(idHeader);
-			if(len > 0) {
-				id = as.character(idHeader);
-				sp = sapply(nchar(id), function(len) {
-					paste0(rep(" ", 4 - len), collapse = "");
-				});
-				x[idHeader] = paste0("TITLE", sp, id, " ", x[idHeader]);
-				x[idHeader] = format80(x[idHeader]);
-			}
-		}
-	} else {
-		# Field is mandatory!
-		x = format80("TITLE    NULL");
-	}
-	return(x);
-}
-
-format80 = function(x, name = "") {
-	len = 80 - nchar(x) - nchar(name);
-	sp  = if(len <= 0) "" else
-		sapply(len, function(len) paste0(rep(" ", len), collapse = ""));
-	paste0(name, x, sp);
-}

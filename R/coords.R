@@ -5,25 +5,29 @@
 #' 
 #' The purpose of the \sQuote{coords} class is to store the coordinates of a 
 #' molecular system and facilitate their manipulation when passing from the 
-#' Cartesian to fractional coordinates and vice versa.\cr \code{coords} and 
-#' \code{coords<-} are generic accessor and replacement functions.\cr The 
-#' default method of the \code{coords} function is actually a builder allowing 
+#' Cartesian to fractional coordinates and vice versa.\cr
+#' \code{coords} and \code{coords<-} are generic accessor and replacement
+#' functions. \code{as.coords} is an alias to \code{coords}.\cr
+#' The default method of the \code{coords} function is actually a builder allowing 
 #' to create a \sQuote{coords} object from its different components, i.e.: 
 #' \code{x1}, \code{x2}, \code{x3}, and \code{basis}. All the arguments have to 
 #' be specified except 'basis' which by default is set to "xyz" (Cartesian 
 #' coordinates). \cr\cr
 #' For an object of class \sQuote{atoms}, the accessor function
 #' extracts its \code{x1}, \code{x2} and \code{x3} components as well 
-#' as its \code{basis} attribute to create a \sQuote{coords} object. The 
-#' replacement function set its \code{x1}, \code{x2} and \code{x3} components as
-#' well as its \code{basis} attribute. \cr\cr
+#' as its \code{basis} attribute to create a \sQuote{coords} object.
+#'
+#' The replacement function sets \code{x1}, \code{x2} and \code{x3} components,
+#' as well as the \code{basis} attribute. \cr\cr
 #' For an object of class \sQuote{coords}, the accessor function
 #' returns the \sQuote{coords} object as is.
+#'
 #' For an object of class \sQuote{pdb}, the accessor function extracts the \code{x1},
 #' \code{x2} and \code{x3} components, as well as the \code{basis} attribute of its 
 #' \code{atoms} component to create a \sQuote{coords} object. The replacement 
 #' function sets the \code{x1}, \code{x2} and \code{x3} components as well as the
 #' \code{basis} attribute of its \code{atoms} component. \cr\cr
+#'
 #' For \sQuote{matrix} and \sQuote{data.frame} objects, when \code{basis == NULL}
 #' this function searches x, y, z or a, b, c columns in \code{x}.\cr
 #' If x, y, z columns are found, they are used to set the first, second and
@@ -74,8 +78,14 @@ coords <- function(...)
 
 #' @rdname coords
 #' @export
-'coords<-' <- function(x, value)
+'coords<-' = function(x, value)
   UseMethod("coords<-", x)
+
+#' @rdname coords
+#' @export
+'as.coords' = function(...) {
+	UseMethod("coords");
+}
 
 #' @rdname coords
 #' @export
@@ -86,7 +96,7 @@ coords.default <- function(x1, x2, x3, basis = "xyz", ...)
   to.return <- data.frame(x1,x2,x3)
   attr(to.return, which = "basis") <- basis
   
-  class(to.return) <- c("coords","data.frame")
+  class(to.return) <- c("coords", "data.frame")
   
   return(to.return)
 }
