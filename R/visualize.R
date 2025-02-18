@@ -77,10 +77,10 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
                               cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
 							  radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
 							  userMatrix = diag(4), ...){
-  
+  crystal = cryst1;
   if(!is.coords(x)) stop("'x' must be an object of class coords.")
   
-  if(basis(x) == "abc") x <- abc2xyz(x, cryst1)
+  if(basis(x) == "abc") x <- abc2xyz(x, crystal);
 
   # Unrecognized elements are considered as dummy atoms
   if(is.null(elename)){
@@ -107,33 +107,43 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   ids <- rgl::ids3d()
   par.save <- rgl::par3d(skipRedraw=TRUE)
   
-  if(is.null(xyz) && is.null(cryst1))
+  if(is.null(xyz) && is.null(crystal))
     xyz <- TRUE
   else
     xyz <- FALSE
   
-  if(is.null(abc) && is.null(cryst1))
-    abc <- FALSE
-  else
-    abc <- TRUE
+	if(is.null(abc)) {
+		if(is.null(crystal))
+			abc <- FALSE
+		else
+			abc <- TRUE
+	} else if(! is.logical(abc)) {
+		warning("Invalid abc-parameter!");
+		abc = FALSE;
+	}
+	
+	if(is.null(pbc.box)) {
+		if(is.null(crystal))
+			pbc.box <- FALSE
+		else
+			pbc.box <- TRUE
+	} else if(! is.logical(pbc.box)) {
+		warning("Invalid abc-parameter!");
+		pbc.box = FALSE;
+	}
   
-  if(is.null(pbc.box) & is.null(cryst1))
-    pbc.box <- FALSE
-  else
-    pbc.box <- TRUE
-  
-  if(abc & is.null(cryst1)) {
+  if(abc & is.null(crystal)) {
     warning("Cannot find periodical boundary conditions")
     abc <- FALSE
   }
-  if(pbc.box & is.null(cryst1)) {
+  if(pbc.box & is.null(crystal)) {
     warning("Cannot find periodical boundary conditions")
     pbc.box <- FALSE
   }
   
   if(xyz) ids <- rbind(ids, addXYZ(lwd = lwd.xyz, cex = cex.xyz))
-  if(abc) ids <- rbind(ids, addABC(cryst1, lwd = lwd.abc, cex = cex.abc))
-  if(pbc.box) ids <- rbind(ids, addPBCBox(cryst1, lwd = lwd.pbc.box))
+  if(abc) ids <- rbind(ids, addABC(crystal, lwd = lwd.abc, cex = cex.abc))
+  if(pbc.box) ids <- rbind(ids, addPBCBox(crystal, lwd = lwd.pbc.box))
   # print(str(ids))
   
   if(type == "l") {
