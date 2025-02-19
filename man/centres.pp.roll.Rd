@@ -4,6 +4,7 @@
 \alias{centres.pp.roll}
 \alias{centres.pp.roll.default}
 \alias{centres.pp.roll.atoms}
+\alias{centres.pp.roll.pdb}
 \title{Centres-of-Geometry: Rolling Window}
 \usage{
 centres.pp.roll(x, window, ...)
@@ -11,6 +12,8 @@ centres.pp.roll(x, window, ...)
 \method{centres}{pp.roll.default}(x, window = 34, na.rm = TRUE, ...)
 
 \method{centres.pp.roll}{atoms}(x, window = 34, chain = NULL, na.rm = TRUE, ...)
+
+\method{centres.pp.roll}{pdb}(x, window = 34, chain = NULL, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{an R object containing atomic coordinates.}
@@ -29,12 +32,33 @@ Return an object of class \sQuote{coords} containing the coordinates
   of the centres.
 }
 \description{
-Computes centres-of-geometry using a rolling window on a polypeptide chain
+Computes the geometric centres using a rolling window on a polypeptide chain
 }
 \details{
-\sQuote{centres.pp.roll} is a generic function to compute the centres-of-geometry
+\sQuote{centres.pp.roll} is a generic function to compute the geometric centres
 using a rolling window on an object containing atomic coordinates for
 a polypeptide chain.
+
+The function may be useful to visualize the overall protein structure,
+but in a less cluttered way. Unlike the protein backbone, the centres
+may capture better the bulk of the protein.
+}
+\examples{
+### Example 1: Toll-Like Receptor 2
+# Download pdb file for TLR2: 2Z81;
+# Read the pdb-file:
+# x = read.pdb("pdb2z81.ent")
+
+# Compute the centres:
+# tmp = centres.pp.roll(x)
+
+# Visualize the structure:
+# visualize(x, type="p", pbc.box = FALSE)
+# lines3d(tmp, lwd = 5, col = "red")
+
+# Another "strand":
+# tmp = centres.pp.roll(x, window = 8)
+# lines3d(tmp, lwd = 5, col = "#FA3296")
 }
 \seealso{
 \code{\link{coords}}, \code{\link{atoms}}, \code{\link{pdb}}.

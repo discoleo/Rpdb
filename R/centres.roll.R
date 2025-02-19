@@ -1,10 +1,14 @@
 #' Centres-of-Geometry: Rolling Window
 #' 
-#' Computes centres-of-geometry using a rolling window on a polypeptide chain
+#' Computes the geometric centres using a rolling window on a polypeptide chain
 #' 
-#' \sQuote{centres.pp.roll} is a generic function to compute the centres-of-geometry
+#' \sQuote{centres.pp.roll} is a generic function to compute the geometric centres
 #' using a rolling window on an object containing atomic coordinates for
 #' a polypeptide chain.
+#'
+#' The function may be useful to visualize the overall protein structure,
+#' but in a less cluttered way. Unlike the protein backbone, the centres
+#' may capture better the bulk of the protein.
 #'
 #'
 #' @usage centres.pp.roll(x, window, ...)
@@ -21,6 +25,23 @@
 #' @return Return an object of class \sQuote{coords} containing the coordinates
 #'   of the centres.
 #' 
+#' @examples
+#' ### Example 1: Toll-Like Receptor 2
+#' # Download pdb file for TLR2: 2Z81;
+#' # Read the pdb-file:
+#' # x = read.pdb("pdb2z81.ent")
+#' 
+#' # Compute the centres:
+#' # tmp = centres.pp.roll(x)
+#'
+#' # Visualize the structure:
+#' # visualize(x, type="p", pbc.box = FALSE)
+#' # lines3d(tmp, lwd = 5, col = "red")
+#'
+#' # Another "strand":
+#' # tmp = centres.pp.roll(x, window = 8)
+#' # lines3d(tmp, lwd = 5, col = "#FA3296")
+
 
 #' @name centres.pp.roll
 #' @export centres.pp.roll
@@ -76,4 +97,15 @@ centres.pp.roll.atoms = function(x, window = 34, chain = NULL, na.rm = TRUE, ...
 	xyz = lapply(chain, FUN);
 	xyz = do.call(rbind, xyz);
 	invisible(xyz);
+}
+
+
+#' @rdname centres.pp.roll
+#' @method centres.pp.roll pdb
+#' @exportS3Method centres.pp.roll pdb
+centres.pp.roll.pdb = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
+	tmp = centres.pp.roll.atoms(x$atoms, window=window, chain=chain,
+		na.rm = na.rm, ...);
+	if(nrow(tmp) <= 2) return(tmp);
+	invisible(tmp);
 }
