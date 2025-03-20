@@ -10,6 +10,11 @@
 #' @param \dots currently not used;
 #' 
 #' @return properly formatted text string.
+#'
+#' @seealso \code{\link{write.pdb}}
+#'
+#' @examples
+#' format.pdb.title(c("Molecule 1", "is just an example"))
 
 #' @name format.pdb.title
 #' @export format.pdb.title
@@ -21,27 +26,27 @@ format.pdb.title = function(x, ...) {
 #' @method format.pdb.title character
 #' @exportS3Method format.pdb.title character
 format.pdb.title.character = function(x, ...) {
-	if( ! is.null(x)) {
-		noHeader = substr(x, 1, 6) != "TITLE ";
-		idHeader = which(noHeader);
-		if(length(idHeader) > 0) {
-			if(idHeader[1] == 1) {
-				x[1] = format80(x[1], name = "TITLE    ");
-				idHeader = idHeader[-1];
-			}
-			len = length(idHeader);
-			if(len > 0) {
-				id = as.character(idHeader);
-				sp = sapply(nchar(id), function(len) {
-					paste0(rep(" ", 4 - len), collapse = "");
-				});
-				x[idHeader] = paste0("TITLE", sp, id, " ", x[idHeader]);
-				x[idHeader] = format80(x[idHeader]);
-			}
-		}
-	} else {
+	if(is.null(x)) {
 		# Field is mandatory!
 		x = format80("TITLE    NULL");
+		return(x);
+	}
+	noHeader = substr(x, 1, 6) != "TITLE ";
+	idHeader = which(noHeader);
+	if(length(idHeader) > 0) {
+		if(idHeader[1] == 1) {
+			x[1] = format80(x[1], name = "TITLE    ");
+			idHeader = idHeader[-1];
+		}
+		len = length(idHeader);
+		if(len > 0) {
+			id = as.character(idHeader);
+			sp = sapply(nchar(id), function(len) {
+				paste0(rep(" ", 4 - len), collapse = "");
+			});
+			x[idHeader] = paste0("TITLE", sp, id, " ", x[idHeader]);
+			x[idHeader] = format80(x[idHeader]);
+		}
 	}
 	return(x);
 }

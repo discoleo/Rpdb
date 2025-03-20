@@ -24,3 +24,9 @@ Formats the title field of a Protein Data Bank (PDB) file.
 This function is mostly used internally, e.g. by \code{\link{write.pdb}},
 but may be useful in other instances as well.
 }
+\examples{
+format.pdb.title(c("Molecule 1", "is just an example"))
+}
+\seealso{
+\code{\link{write.pdb}}
+}
