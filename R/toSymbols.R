@@ -104,13 +104,14 @@ match.element.character = function(x, nletters = 3, na = NA) {
 }
 
 # Note: not yet exported;
-split.symbol.character = function(x, rm.digits = TRUE) {
+split.symbol.character = function(x, f, drop, rm.digits = TRUE, ...) {
 	# Perl is partly broken in R 4.3, but this works:
 	regex = "(?<=[A-Z])(?![a-z]|$)|(?<=.)(?=[A-Z])|(?<=[a-z])(?=[^a-z])";
 	# stringi::stri_split(x, regex = regex);
 	s = strsplit(x, regex, perl = TRUE);
 	if(rm.digits) {
 		s = lapply(s, function(s) {
+			# TODO
 			isNotD = is.na(suppressWarnings(as.numeric(s)));
 			s = s[isNotD];
 		});

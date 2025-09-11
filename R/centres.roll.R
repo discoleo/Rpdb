@@ -2,7 +2,7 @@
 #' 
 #' Computes the geometric centres using a rolling window on a polypeptide chain
 #' 
-#' \sQuote{centres.pp.roll} is a generic function to compute the geometric centres
+#' \sQuote{centres.ppRoll} is a generic function to compute the geometric centres
 #' using a rolling window on an object containing atomic coordinates for
 #' a polypeptide chain.
 #'
@@ -11,7 +11,7 @@
 #' may capture better the bulk of the protein.
 #'
 #'
-#' @usage centres.pp.roll(x, window, ...)
+#' @usage centres.ppRoll(x, window, ...)
 #'   
 #' @param x an R object containing atomic coordinates.
 #' @param window size of the rolling window, specified as number of amino-acids;
@@ -32,26 +32,26 @@
 #' # x = read.pdb("pdb2z81.ent")
 #' 
 #' # Compute the centres:
-#' # tmp = centres.pp.roll(x)
+#' # tmp = centres.ppRoll(x)
 #'
 #' # Visualize the structure:
 #' # visualize(x, type="p", pbc.box = FALSE)
 #' # lines3d(tmp, lwd = 5, col = "red")
 #'
 #' # Another "strand":
-#' # tmp = centres.pp.roll(x, window = 8)
+#' # tmp = centres.ppRoll(x, window = 8)
 #' # lines3d(tmp, lwd = 5, col = "#FA3296")
 
 
-#' @name centres.pp.roll
-#' @export centres.pp.roll
-centres.pp.roll <- function(x, window, ...) {
-	UseMethod("centres.pp.roll");
+#' @name centres.ppRoll
+#' @export centres.ppRoll
+centres.ppRoll <- function(x, window, ...) {
+	UseMethod("centres.ppRoll");
 }
 
-#' @rdname centres.pp.roll
-#' @exportS3Method centres.pp.roll default
-centres.pp.roll.default = function(x, window = 34, na.rm = TRUE, ...) {
+#' @rdname centres.ppRoll
+#' @exportS3Method centres.ppRoll default
+centres.ppRoll.default = function(x, window = 34, na.rm = TRUE, ...) {
 	ids = unique(x$resid[x$elename == "CA"]);
 	len = length(ids);
 	if(len == 0) {
@@ -80,17 +80,16 @@ centres.pp.roll.default = function(x, window = 34, na.rm = TRUE, ...) {
 	return(invisible(as.coords(xyz)));
 }
 
-#' @rdname centres.pp.roll
-#' @method centres.pp.roll atoms
-#' @exportS3Method centres.pp.roll atoms
-centres.pp.roll.atoms = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
+#' @rdname centres.ppRoll
+#' @exportS3Method centres.ppRoll atoms
+centres.ppRoll.atoms = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
 	if(is.null(chain)) {
 		chain = unique(x$chainid);
 	}
 	FUN = function(chain) {
 		xyz = x[x$chainid == chain, c("x1","x2","x3", "elename", "resid"),
 			drop = FALSE];
-		xyz = centres.pp.roll.default(xyz, window=window, na.rm=na.rm, ...);
+		xyz = centres.ppRoll.default(xyz, window=window, na.rm=na.rm, ...);
 		if(nrow(xyz) > 0) xyz$chainid = chain;
 		return(xyz);	
 	}
@@ -100,11 +99,10 @@ centres.pp.roll.atoms = function(x, window = 34, chain = NULL, na.rm = TRUE, ...
 }
 
 
-#' @rdname centres.pp.roll
-#' @method centres.pp.roll pdb
-#' @exportS3Method centres.pp.roll pdb
-centres.pp.roll.pdb = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
-	tmp = centres.pp.roll.atoms(x$atoms, window=window, chain=chain,
+#' @rdname centres.ppRoll
+#' @exportS3Method centres.ppRoll pdb
+centres.ppRoll.pdb = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
+	tmp = centres.ppRoll.atoms(x$atoms, window=window, chain=chain,
 		na.rm = na.rm, ...);
 	if(nrow(tmp) <= 2) return(tmp);
 	invisible(tmp);
