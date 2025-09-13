@@ -12,7 +12,7 @@
 ## New Functions
 
 - dist.point: distances to a given point;
-- centres.pp.roll: centres computed using a rolling window over a peptide chain;
+- centres.ppRoll: centres computed using a rolling window over a peptide chain;
 
 
 ## Updates to Existing Functions

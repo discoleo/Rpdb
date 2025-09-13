@@ -5,7 +5,7 @@
 \alias{format.pdb.title.character}
 \title{Format "Title" Field of PDB File}
 \usage{
-format.pdb.title(x, ...)
+\method{format.pdb}{title}(x, ...)
 
 \method{format.pdb.title}{character}(x, ...)
 }

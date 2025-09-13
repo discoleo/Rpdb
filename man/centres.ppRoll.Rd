@@ -7,16 +7,16 @@
 \alias{centres.ppRoll.pdb}
 \title{Centres-of-Geometry: Rolling Window}
 \usage{
-centres.ppRoll(x, window, ...)
+\method{centres}{ppRoll}(x, window, ...)
 
-\method{centres}{ppRoll.default}(x, window = 34, na.rm = TRUE, ...)
+\method{centres.ppRoll}{default}(x, window = 34, na.rm = TRUE, ...)
 
-\method{centres}{ppRoll.atoms}(x, window = 34, chain = NULL, na.rm = TRUE, ...)
+\method{centres.ppRoll}{atoms}(x, window = 34, chain = NULL, na.rm = TRUE, ...)
 
-\method{centres}{ppRoll.pdb}(x, window = 34, chain = NULL, na.rm = TRUE, ...)
+\method{centres.ppRoll}{pdb}(x, window = 34, chain = NULL, na.rm = TRUE, ...)
 }
 \arguments{
-\item{x}{an R object containing atomic coordinates.}
+\item{x}{an R object containing atomic coordinates (with additional class \code{ppRoll}).}
 
 \item{window}{size of the rolling window, specified as number of amino-acids;}
 
@@ -37,7 +37,8 @@ Computes the geometric centres using a rolling window on a polypeptide chain
 \details{
 \sQuote{centres.ppRoll} is a generic function to compute the geometric centres
 using a rolling window on an object containing atomic coordinates for
-a polypeptide chain.
+a polypeptide chain. Due to limitations by CRAN check, the function is further
+referred as \sQuote{centres}.
 
 The function may be useful to visualize the overall protein structure,
 but in a less cluttered way. Unlike the protein backbone, the centres
@@ -56,7 +57,7 @@ may capture better the bulk of the protein.
 # visualize(x, type="p", pbc.box = FALSE)
 # lines3d(tmp, lwd = 5, col = "red")
 
-# Another "strand":
+# Add Another "strand":
 # tmp = centres.ppRoll(x, window = 8)
 # lines3d(tmp, lwd = 5, col = "#FA3296")
 }

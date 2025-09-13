@@ -4,16 +4,16 @@
 #' 
 #' \sQuote{centres.ppRoll} is a generic function to compute the geometric centres
 #' using a rolling window on an object containing atomic coordinates for
-#' a polypeptide chain.
+#' a polypeptide chain. Due to limitations by CRAN check, the function is further
+#' referred as \sQuote{centres}.
 #'
 #' The function may be useful to visualize the overall protein structure,
 #' but in a less cluttered way. Unlike the protein backbone, the centres
 #' may capture better the bulk of the protein.
 #'
 #'
-#' @usage centres.ppRoll(x, window, ...)
 #'   
-#' @param x an R object containing atomic coordinates.
+#' @param x an R object containing atomic coordinates (with additional class \code{ppRoll}).
 #' @param window size of the rolling window, specified as number of amino-acids;
 #' @param chain apply only to the respective chains, by default all chains;
 #' @param na.rm a logical value indicating whether NA values should be stripped
@@ -38,18 +38,20 @@
 #' # visualize(x, type="p", pbc.box = FALSE)
 #' # lines3d(tmp, lwd = 5, col = "red")
 #'
-#' # Another "strand":
+#' # Add Another "strand":
 #' # tmp = centres.ppRoll(x, window = 8)
 #' # lines3d(tmp, lwd = 5, col = "#FA3296")
 
 
 #' @name centres.ppRoll
-#' @export centres.ppRoll
+#' @method centres ppRoll
+#' @exportS3Method centres ppRoll
 centres.ppRoll <- function(x, window, ...) {
 	UseMethod("centres.ppRoll");
 }
 
 #' @rdname centres.ppRoll
+#' @method centres.ppRoll default
 #' @exportS3Method centres.ppRoll default
 centres.ppRoll.default = function(x, window = 34, na.rm = TRUE, ...) {
 	ids = unique(x$resid[x$elename == "CA"]);
@@ -81,6 +83,7 @@ centres.ppRoll.default = function(x, window = 34, na.rm = TRUE, ...) {
 }
 
 #' @rdname centres.ppRoll
+#' @method centres.ppRoll atoms
 #' @exportS3Method centres.ppRoll atoms
 centres.ppRoll.atoms = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
 	if(is.null(chain)) {
@@ -100,6 +103,7 @@ centres.ppRoll.atoms = function(x, window = 34, chain = NULL, na.rm = TRUE, ...)
 
 
 #' @rdname centres.ppRoll
+#' @method centres.ppRoll pdb
 #' @exportS3Method centres.ppRoll pdb
 centres.ppRoll.pdb = function(x, window = 34, chain = NULL, na.rm = TRUE, ...) {
 	tmp = centres.ppRoll.atoms(x$atoms, window=window, chain=chain,

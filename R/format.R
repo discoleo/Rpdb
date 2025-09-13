@@ -17,6 +17,7 @@
 #' format.pdb.title(c("Molecule 1", "is just an example"))
 
 #' @name format.pdb.title
+#' @method format.pdb title
 #' @export format.pdb.title
 format.pdb.title = function(x, ...) {
 	UseMethod("format.pdb.title");

@@ -83,7 +83,7 @@
 #' 
 #' @name centres
 #' @export
-centres <- function(...)
+centres <- function(x, ...)
   UseMethod("centres")
 
 #' @rdname centres
