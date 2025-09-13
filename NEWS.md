@@ -27,6 +27,7 @@
 - Function is.crystal: as replacement to is.cryst1;
 - Function visualize.coords: starting some refactoring / optimization;
 - Function toSymbols: started refactoring;
+- [started] Renaming function cryst1 to crystal;
 
 
 # Rpdb 2.3.4

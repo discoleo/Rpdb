@@ -1,8 +1,8 @@
-#' Create \sQuote{cryst1} Object
+#' Create \sQuote{crystal} Object
 #' 
-#' Create an object of class \sQuote{cryst1} containing the unit cell parameters
+#' Create an object of class \sQuote{crystal} containing the unit cell parameters
 #' and the name of the space group to associate with an object of class 
-#' \sQuote{pdb}.
+#' \sQuote{pdb}. Note: the \sQuote{cryst1} class will be deprecated.
 #' 
 #' \code{cryst1} is a generic function to create objects of class 
 #' \sQuote{cryst1}. The purpose of this class is to store CRYST1 records from 
@@ -38,20 +38,23 @@
 #' \code{\link{cell.coords}}, \code{\link{pdb}}
 #' 
 #' @examples 
-#' x <- cryst1(abc = c(10, 10, 10), abg = c(90,90,90), sgroup = "P1")
+#' x <- crystal(abc = c(10, 10, 10), abg = c(90,90,90), sgroup = "P1")
 #' is.cryst1(x)
 #' is.crystal(x)
 #'  
 #' @keywords classes
 #'  
-#' @name cryst1
+#' @name crystal
 #' @export
 cryst1 <- function(...)
-  UseMethod("cryst1")
-
-#' @rdname cryst1
+  UseMethod("crystal")
 #' @export
-cryst1.default <- function(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
+crystal <- function(...)
+  UseMethod("crystal")
+
+#' @rdname crystal
+#' @export
+crystal.default <- function(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
 {
 	if(missing(abc)) stop("Please provide at leat 'abc'");
 	if(is.crystal(abc)) {
@@ -65,14 +68,14 @@ cryst1.default <- function(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
 	return(to.return)
 }
 
-#' @rdname cryst1
+#' @rdname crystal
 #' @export
 is.cryst1 <- function(x)
 {
   to.return <- inherits(x, c("cryst1", "crystal"));
   return(to.return)
 }
-#' @rdname cryst1
+#' @rdname crystal
 #' @export
 is.crystal <- function(x)
 {
@@ -103,6 +106,6 @@ as.crystal.character = function(x) {
     if(any(is.na(abg))) warning("In 'crystal': 'abg' contains NA values");
     if(sgroup == "") sgroup <- NULL
 
-    crystal <- cryst1.default(abc, abg, sgroup);
+    crystal <- crystal.default(abc, abg, sgroup);
 	return(crystal);
 }
