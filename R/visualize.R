@@ -15,7 +15,7 @@
 #'     \item   When \code{radii} is a numeric vector: The numeric values are used to assign to each atom a radius. If \code{length(radii) != natom(pdb)} \code{radii} is recycled.
 #'   }
 #' }
-#' When \code{xyz}, \code{abc} or \code{pbc.box} are \code{NULL}, the axis or pbc box are are added depending if a \sQuote{cryst1} object can be found.\cr
+#' When \code{xyz}, \code{abc} or \code{pbc.box} are \code{NULL}, the axis or pbc box are are added depending if a \sQuote{crystal} object can be found.\cr
 #' Two different interactive visualization modes are avalable:
 #'   \itemize{
 #'     \item When \code{mode="measure"}: bond lengths, angles and dihedrals can be measured by \bold{right-clicing} on the atoms.
@@ -29,7 +29,7 @@
 #' 
 #' @param x an object or the name of a PDB file containing the molecular structure to visualize.
 #' @param elename a character vector containing the atomic names used to chose atom colors and radii.
-#' @param cryst1 an object of class \sQuote{cryst1}. See \code{\link{cryst1}}
+#' @param cryst1 an object of class \sQuote{crystal}. See \code{\link{crystal}}
 #' @param conect an object of class \sQuote{conect}. See \code{\link{conect}}
 #' @param mode a single element character vector indicating the visualization mode (See details).
 #' @param type a character string indicating the visualization style (See details).
@@ -276,7 +276,7 @@ visualize.pdb <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL, pb
 				add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...) {
   
   # calls visualize.atoms;
-  ids <- visualize(x$atoms, cryst1 = x$cryst1, conect = x$conect, mode=NULL, type,
+  ids <- visualize(x$atoms, cryst1 = x$crystal, conect = x$conect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
   

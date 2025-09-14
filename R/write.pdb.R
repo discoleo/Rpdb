@@ -2,7 +2,7 @@
 #' 
 #' Writes a Protein Data Bank (PDB) coordinate file from an object of class \sQuote{pdb}.
 #' 
-#' All data stored in the \sQuote{pdb} object are written to a PDB file. A list of objects of class \sQuote{pdb} can be provided to write multiple MODEL data into a single file. In this case, each \sQuote{pdb} object of the list must have the same \code{cryst1} and \code{conect} components.
+#' All data stored in the \sQuote{pdb} object are written to a PDB file. A list of objects of class \sQuote{pdb} can be provided to write multiple MODEL data into a single file. In this case, each \sQuote{pdb} object of the list must have the same \code{crystal} and \code{conect} components.
 #' \cr
 #' To write only a subset of a \sQuote{pdb} object see function \code{\link{subset.pdb}}.
 #' 
@@ -15,7 +15,7 @@
 #' PDB format is described at:
 #' http://www.wwpdb.org/documentation/format33/v3.3.html
 #' 
-#' @seealso \code{\link{read.pdb}}, \code{\link{pdb}}, \code{\link{cryst1}}, \code{\link{atoms}}, \code{\link{conect}}, \code{\link{subset.pdb}}
+#' @seealso \code{\link{read.pdb}}, \code{\link{pdb}}, \code{\link{crystal}}, \code{\link{atoms}}, \code{\link{conect}}, \code{\link{subset.pdb}}
 #' 
 #' @examples 
 #' # Read a PDB file included with the package
@@ -53,13 +53,14 @@ write.pdb <- function(x, file="Rpdb.pdb")
     lines <- c(lines, remark)
   }
 
-  ### Crystal
-  if(!is.null(x[[1]]$cryst1))
-  {
-    abc <- paste(format(x[[1]]$cryst1$abc,width=9,nsmall=3,justify="right"),collapse="")
-    abg <- paste(format(x[[1]]$cryst1$abg,width=7,nsmall=2,justify="right"),collapse="")
-    lines <- c(lines,paste("CRYST1",abc,abg,sep=""))
-  }
+	### Crystal
+	if(! is.null(x[[1]]$crystal))
+	{
+		cryst = x[[1]]$crystal;
+		abc   = paste(format(cryst$abc, width=9, nsmall=3, justify="right"), collapse="")
+		abg   = paste(format(cryst$abg, width=7, nsmall=2, justify="right"), collapse="")
+		lines = c(lines, paste("CRYST1", abc, abg, sep=""));
+	}
 
   for(model in seq_along(x)) {
     if(length(x) > 1) lines <- c(lines, paste0("MODEL ",format(model, width = 4)))

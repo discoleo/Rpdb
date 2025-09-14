@@ -29,6 +29,10 @@
 - Function toSymbols: started refactoring;
 - [started] Renaming function cryst1 to crystal;
 
+## Deprecated
+
+- Class cryst1: replaced by class crystal;
+
 
 # Rpdb 2.3.4
 

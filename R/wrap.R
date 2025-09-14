@@ -13,13 +13,13 @@
 #'   coordinates.
 #'   
 #' @param x an R object containing atomic coordinates to be wrapped.
-#' @param cryst1 an object of class \sQuote{cryst1} containing periodic boundary
+#' @param cryst1 an object of class \sQuote{crystal} containing periodic boundary
 #'   conditions used for wrapping.
 #' @param factor a factor used to wrap the atoms by groups.
 #' @param \dots further arguments passed to or from other methods.
-#'   
+#' 
 #' @seealso \code{\link{coords}}, \code{\link{atoms}}, \code{\link{pdb}},
-#' \code{\link{cryst1}}, \code{\link{centres.pdb}}, \code{\link{xyz2abc}}
+#' \code{\link{crystal}}, \code{\link{centres.pdb}}, \code{\link{xyz2abc}}
 #' 
 #' @examples 
 #' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
@@ -76,7 +76,7 @@ wrap.atoms <- function(x, cryst1= NULL, factor = NULL, ...)
 
 #' @rdname wrap
 #' @export
-wrap.pdb <- function(x, cryst1 = x$cryst1, factor = NULL, ...)
+wrap.pdb <- function(x, cryst1 = x$crystal, factor = NULL, ...)
 {
   if(is.null(factor)) factor <- x$atoms$resid
   

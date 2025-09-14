@@ -31,7 +31,7 @@ space group.}
 \item{x}{an R object to be tested.}
 }
 \value{
-Function \code{cryst1} returns a list of class \sQuote{cryst1} with the
+Function \code{crystal} returns a list of class \sQuote{crystal} with the
 following components:
 \item{abc}{a numeric vector of length 3 containing the norms of the lattice
   vectors a, b and c.}
@@ -48,11 +48,11 @@ and the name of the space group to associate with an object of class
 \sQuote{pdb}. Note: the \sQuote{cryst1} class will be deprecated.
 }
 \details{
-\code{cryst1} is a generic function to create objects of class 
-\sQuote{cryst1}. The purpose of this class is to store CRYST1 records from 
+\code{crystal} is a generic function to create objects of class 
+\sQuote{crystal}. The purpose of this class is to store CRYST1 records from 
 PDB files which contain the unit cell parameters and the name of the space 
 group of a molecular system stored in a PDB file. The default method of the 
-\code{cryst1} function creates an object of class \sQuote{cryst1} from its 
+\code{crystal} function creates an object of class \sQuote{crystal} from its 
 different components, i.e.: \code{abc}, \code{abg} and \code{sgroup}. At 
 least \code{abc} has to be specified. \cr\cr \code{is.crystal} tests if an 
 object is of class \sQuote{crystal}, i.e. if it has a \dQuote{class} attribute 

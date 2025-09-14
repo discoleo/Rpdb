@@ -43,8 +43,8 @@ Conditions of a molecular system.
 x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))
 visualize(x, type = "l", xyz = FALSE, abc = FALSE, pbc.box = FALSE, mode = NULL)
 addXYZ()
-addABC(x$cryst1)
-addPBCBox(x$cryst1)
+addABC(x$crystal)
+addPBCBox(x$crystal)
 
 }
 \seealso{
