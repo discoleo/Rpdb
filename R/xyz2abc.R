@@ -49,15 +49,15 @@ xyz2abc <- function(...)
 #' @export
 xyz2abc.coords <- function(x, cryst1, ...)
 {
-  if(missing(cryst1)) stop("Please specify a 'cryst1' object")
-  if(!is.coords(x)) stop("'x' must be an object of class 'coords'")
-  if(!is.cryst1(cryst1)) stop("'cryst1' must be an object of class 'cryst1'")
+  if(missing(cryst1)) stop("Please specify a 'crystal' object")
+  if(! is.coords(x)) stop("'x' must be an object of class 'coords'");
+  if(! is.crystal(cryst1)) stop("'crystal' must be an object of class 'crystal'");
   
   if(basis(x) != "xyz") stop("Coordinates are not Cartesian coordinates")
   
   cell <- cell.coords(cryst1)
   to.return <- solve(cell)%*%t(x)
-  to.return <- coords.default(to.return["a",],to.return["b",],to.return["c",],"abc")
+  to.return <- coords.default(to.return["a",], to.return["b",], to.return["c",], "abc")
 
   return(to.return)
   
@@ -112,9 +112,9 @@ abc2xyz <- function(...)
 #' @export
 abc2xyz.coords <- function(x, cryst1, ...)
 {
-  if(missing(cryst1)) stop("Please specify a 'cryst1' object")
-  if(!is.coords(x)) stop("'x' must be an object of class 'coords'")
-  if(!is.cryst1(cryst1)) stop("'cryst1' must be an object of class 'cryst1'")
+  if(missing(cryst1)) stop("Please specify a 'crystal' object")
+  if(! is.coords(x)) stop("'x' must be an object of class 'coords'");
+  if(! is.crystal(cryst1)) stop("'crystal' must be an object of class 'crystal'");
   
   if(basis.default(x) != "abc") stop("Coordinates are not fractional coordinates")
   

@@ -83,8 +83,8 @@ viewZX <- function()
 #' @export
 viewAB <- function(cryst1){
   if(missing(cryst1))
-    stop("Please specify 'cryst1' to defined the lattice vectors used to set the view")
-  cell <- cell.coords.cryst1(cryst1)
+    stop("Please specify 'crystal' to define the lattice vectors used to set the view");
+  cell <- cell.coords.crystal(cryst1)
   viewAxis(cell[,"a"],cell[,"b"])
 }
 
@@ -92,8 +92,8 @@ viewAB <- function(cryst1){
 #' @export
 viewBC <- function(cryst1){
   if(missing(cryst1))
-    stop("Please specify 'cryst1' to defined the lattice vectors used to set the view")
-  cell <- cell.coords.cryst1(cryst1)
+    stop("Please specify 'crystal' to define the lattice vectors used to set the view");
+  cell <- cell.coords.crystal(cryst1)
   viewAxis(cell[,"b"],cell[,"c"])
 }
 
@@ -101,8 +101,8 @@ viewBC <- function(cryst1){
 #' @export
 viewCA <- function(cryst1){
   if(missing(cryst1))
-    stop("Please specify 'cryst1' to defined the lattice vectors used to set the view")
-  cell <- cell.coords.cryst1(cryst1)
+    stop("Please specify 'crystal' to define the lattice vectors used to set the view");
+  cell <- cell.coords.crystal(cryst1)
   viewAxis(cell[,"c"],cell[,"a"])
 }
 

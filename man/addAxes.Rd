@@ -14,7 +14,7 @@ addXYZ(lwd = 2, labels = TRUE, cex = 2)
 addPBCBox(x, lwd = 2)
 }
 \arguments{
-\item{x}{an object of class \sQuote{cryst1} containing unit cell parameters.}
+\item{x}{an object of class \sQuote{crystal} containing unit cell parameters.}
 
 \item{lwd}{a numeric value indicating the line width used to draw the axes or
 the PBC box.}

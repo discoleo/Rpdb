@@ -77,7 +77,7 @@ mirror.coords <- function(x, p1, p2 = NULL, p3 = NULL, mask = TRUE, cryst1 = NUL
   basis.ori <- basis(x)
   if(basis.ori != "xyz"){
     if(is.null(cryst1))
-      stop("Please specify a 'cryst1' obj to convert your fractional into Cartesian coordinates")
+      stop("Please specify a 'crystal' obj to convert your fractional coordinates into Cartesian");
     x <- abc2xyz(x, cryst1 = cryst1)
   }
   v12 <- p2 - p1  

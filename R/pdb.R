@@ -71,7 +71,7 @@ pdb.default <- function(atoms, crystal = NULL, conect = NULL, remark = NULL, tit
 		}
 	}
 	if( ! is.null(crystal) & ! is.crystal(crystal))
-		stop("'crystal' must be an object of class 'cryst1'");
+		stop("'crystal' must be an object of class 'crystal'");
 	if( ! is.null(conect) & ! is.conect(conect))
 		stop("'conect' must be an object of class 'conect'");
   

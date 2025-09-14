@@ -72,9 +72,9 @@ cell.coords.default <- function(abc, abg = c(90,90,90), digits = 3, ...)
 
 #' @rdname cellProperties
 #' @export
-cell.coords.cryst1 <- function(x, digits = 3, ...)
+cell.coords.crystal <- function(x, digits = 3, ...)
 {
-  if(!is.cryst1(x)) stop("'x' must be an object of class 'cryst1'")
+  if(! is.crystal(x)) stop("'x' must be an object of class 'crystal'")
   
   M <- cell.coords.default(x$abc, x$abg, digits)
   return(M)
@@ -85,9 +85,9 @@ cell.coords.cryst1 <- function(x, digits = 3, ...)
 cell.coords.pdb <- function(x, digits = 3, ...)
 {
   if(!is.pdb(x)) stop("'x' must be an object of class 'atoms'")
-  if(is.null(x$cryst1)) stop("'x' must contained a 'cryst1' object")
+  if(is.null(x$cryst1)) stop("'x' must contained a 'crystal' object")
   
-  M <- cell.coords.cryst1(x$cryst1, digits = 3)
+  M <- cell.coords.crystal(x$cryst1, digits = 3)
   return(M)
 }
 
@@ -98,11 +98,12 @@ cell.volume <- function(...)
 
 #' @rdname cellProperties
 #' @export
-cell.volume.cryst1 <- function(x, ...)
+cell.volume.crystal <- function(x, ...)
 {
-  if(!is.cryst1(x)) stop("'x' must be an object of class 'cryst1'")
+  if(! is.crystal(x)) stop("'x' must be an object of class 'crystal'")
   
-  V <-  prod(x$abc)*sqrt(1 - sum(cos(x$abg*pi/180)^2) + 2*prod(cos(x$abg*pi/180)))
+  alpha = x$abg*pi/180;
+  V = prod(x$abc) * sqrt(1 - sum(cos(alpha)^2) + 2*prod(cos(alpha)));
   #   attr(V, "unit") <- "AngtromCube"
   return(V)
 }
@@ -112,9 +113,9 @@ cell.volume.cryst1 <- function(x, ...)
 cell.volume.pdb <- function(x, ...)
 {
   if(!is.pdb(x)) stop("'x' must be an object of class 'atoms'")
-  if(is.null(x$cryst1)) stop("'x' must contained a 'cryst1' object")
+  if(is.null(x$cryst1)) stop("'x' must contain a 'crystal' object");
   
-  V <- cell.volume.cryst1(x$cryst1)
+  V <- cell.volume.crystal(x$cryst1)
   return(V)
 }
 

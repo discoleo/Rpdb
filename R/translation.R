@@ -78,7 +78,7 @@ Txyz.coords <- function(obj, x = 0, y = 0, z = 0, mask = TRUE, thickness = NULL,
   T <- coords(0,0,0, basis = "xyz")
   if(basis(obj) != "xyz"){
     if(is.null(cryst1))
-      stop("Please specify a 'cryst1' obj to convert your fractional into Cartesian coordinates")
+      stop("Please specify a 'crystal' obj to convert the fractional coordinates into Cartesian")
     v <- xyz2abc(v, cryst1 = cryst1)
     T <- xyz2abc(T, cryst1 = cryst1)
   }
@@ -129,7 +129,7 @@ Tabc.coords <- function(obj, a = 0, b = 0, c = 0, mask = TRUE, thickness = NULL,
   T <- coords(0,0,0, basis = "abc")
   if(basis(obj) != "abc"){
     if(is.null(cryst1))
-      stop("Please specify a 'cryst1' obj to convert your Cartesian into fractional coordinates")
+      stop("Please specify a 'crystal' obj to convert the Cartesian into fractional coordinates")
     v <- abc2xyz(v, cryst1 = cryst1)
     T <- abc2xyz(T, cryst1 = cryst1)
   }

@@ -39,7 +39,7 @@ following components:
   lattice vectors \eqn{\alpha}, \eqn{\beta} and \eqn{\gamma}.}
 \item{sgroup}{a character string giving the Hermann-Mauguin symbol of the space group.}
 
-Function \code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
+Function \code{is.crystal} returns TRUE if \code{x} is an object of class \sQuote{crystal}
   and FALSE otherwise.
 }
 \description{
@@ -54,13 +54,12 @@ PDB files which contain the unit cell parameters and the name of the space
 group of a molecular system stored in a PDB file. The default method of the 
 \code{cryst1} function creates an object of class \sQuote{cryst1} from its 
 different components, i.e.: \code{abc}, \code{abg} and \code{sgroup}. At 
-least \code{abc} has to be specified. \cr\cr \code{is.cryst1} tests if an 
-object is of class \sQuote{cryst1}, i.e. if it has a \dQuote{class} attribute 
-equal to \code{cryst1}.
+least \code{abc} has to be specified. \cr\cr \code{is.crystal} tests if an 
+object is of class \sQuote{crystal}, i.e. if it has a \dQuote{class} attribute 
+equal to \code{crystal}.
 }
 \examples{
 x <- crystal(abc = c(10, 10, 10), abg = c(90,90,90), sgroup = "P1")
-is.cryst1(x)
 is.crystal(x)
  
 }

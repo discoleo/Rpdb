@@ -10,9 +10,9 @@
 #' group of a molecular system stored in a PDB file. The default method of the 
 #' \code{cryst1} function creates an object of class \sQuote{cryst1} from its 
 #' different components, i.e.: \code{abc}, \code{abg} and \code{sgroup}. At 
-#' least \code{abc} has to be specified. \cr\cr \code{is.cryst1} tests if an 
-#' object is of class \sQuote{cryst1}, i.e. if it has a \dQuote{class} attribute 
-#' equal to \code{cryst1}.
+#' least \code{abc} has to be specified. \cr\cr \code{is.crystal} tests if an 
+#' object is of class \sQuote{crystal}, i.e. if it has a \dQuote{class} attribute 
+#' equal to \code{crystal}.
 #' 
 #' @return Function \code{cryst1} returns a list of class \sQuote{cryst1} with the
 #' following components:
@@ -22,7 +22,7 @@
 #'   lattice vectors \eqn{\alpha}, \eqn{\beta} and \eqn{\gamma}.}
 #' \item{sgroup}{a character string giving the Hermann-Mauguin symbol of the space group.}
 #' 
-#' Function \code{is.cryst1} returns TRUE if \code{x} is an object of class \sQuote{cryst1}
+#' Function \code{is.crystal} returns TRUE if \code{x} is an object of class \sQuote{crystal}
 #'   and FALSE otherwise.
 #' 
 #' @param \dots further arguments passed to or from other methods.
@@ -39,7 +39,6 @@
 #' 
 #' @examples 
 #' x <- crystal(abc = c(10, 10, 10), abg = c(90,90,90), sgroup = "P1")
-#' is.cryst1(x)
 #' is.crystal(x)
 #'  
 #' @keywords classes
@@ -64,7 +63,7 @@ crystal.default <- function(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
 	#
 	to.return <- list(abc = abc, abg = abg, sgroup = sgroup)
 	
-	class(to.return) <- "cryst1";
+	class(to.return) = c("crystal", "cryst1");
 	return(to.return)
 }
 
@@ -72,14 +71,14 @@ crystal.default <- function(abc, abg = c(90, 90, 90), sgroup = "P1", ...)
 #' @export
 is.cryst1 <- function(x)
 {
-  to.return <- inherits(x, c("cryst1", "crystal"));
+  to.return <- inherits(x, c("crystal", "cryst1"));
   return(to.return)
 }
 #' @rdname crystal
 #' @export
 is.crystal <- function(x)
 {
-  to.return <- inherits(x, c("cryst1", "crystal"));
+  to.return <- inherits(x, c("crystal", "cryst1"));
   return(to.return)
 }
 

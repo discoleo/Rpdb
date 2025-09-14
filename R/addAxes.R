@@ -11,7 +11,7 @@
 #' @return Return (using invisible) a two-column data.frame containing the IDs 
 #'   and type indicators of the objects added to the scene.
 #'   
-#' @param x an object of class \sQuote{cryst1} containing unit cell parameters.
+#' @param x an object of class \sQuote{crystal} containing unit cell parameters.
 #' @param lwd a numeric value indicating the line width used to draw the axes or
 #'   the PBC box.
 #' @param labels a logical value indicating whether the labels of the axes have 
@@ -34,8 +34,8 @@
 #' @name addAxes
 #' @export
 addABC <- function(x, lwd = 2, labels = TRUE, cex = 2){
-  if(missing(x)) stop("Please specify a 'cryst1' object")
-  if(!is.cryst1(x)) stop("'x' must be an object of class 'cryst1")
+  if(missing(x)) stop("Please specify a 'crystal' object")
+  if(! is.crystal(x)) stop("'x' must be an object of class 'crystal")
   
   cell <- cell.coords(x)
   
@@ -111,8 +111,8 @@ addXYZ <- function(lwd = 2, labels= TRUE, cex = 2){
 #' @rdname addAxes
 #' @export
 addPBCBox <- function(x, lwd = 2){
-  if(missing(x)) stop("Please specify a 'cryst1' object")
-  if(!is.cryst1(x)) stop("'x' must be an object of class 'cryst1'")
+  if(missing(x)) stop("Please specify a 'crystal' object")
+  if(! is.crystal(x)) stop("'x' must be an object of class 'crystal'")
   
   cell <- cell.coords(x)
   

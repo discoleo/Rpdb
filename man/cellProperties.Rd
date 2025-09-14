@@ -4,10 +4,10 @@
 \alias{cellProperties}
 \alias{cell.coords}
 \alias{cell.coords.default}
-\alias{cell.coords.cryst1}
+\alias{cell.coords.crystal}
 \alias{cell.coords.pdb}
 \alias{cell.volume}
-\alias{cell.volume.cryst1}
+\alias{cell.volume.crystal}
 \alias{cell.volume.pdb}
 \alias{cell.density}
 \alias{cell.density.default}
@@ -18,13 +18,13 @@ cell.coords(...)
 
 \method{cell.coords}{default}(abc, abg = c(90, 90, 90), digits = 3, ...)
 
-\method{cell.coords}{cryst1}(x, digits = 3, ...)
+\method{cell.coords}{crystal}(x, digits = 3, ...)
 
 \method{cell.coords}{pdb}(x, digits = 3, ...)
 
 cell.volume(...)
 
-\method{cell.volume}{cryst1}(x, ...)
+\method{cell.volume}{crystal}(x, ...)
 
 \method{cell.volume}{pdb}(x, ...)
 

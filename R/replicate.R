@@ -50,8 +50,8 @@ replicate.coords <- function(x, cryst1 = NULL, a.ind = 0, b.ind = 0, c.ind = 0, 
   b <- basis(x)
   if(b == "xyz")
   {
-    if( is.null(cryst1))   stop("Please specify a 'cryst1' object")
-    if(!is.cryst1(cryst1)) stop("'cryst1' must be an object of class 'cryst1'")
+    if(is.null(cryst1))   stop("Please specify a 'crystal' object")
+    if(! is.crystal(cryst1)) stop("'crystal' must be an object of class 'crystal'")
     x <- xyz2abc(x, cryst1) 
   }
   
@@ -85,8 +85,8 @@ replicate.atoms <- function(x, cryst1 = NULL, a.ind = 0, b.ind = 0, c.ind = 0, .
   basis <- basis(x)
   if(basis == "xyz")
   {
-    if( is.null(cryst1))   stop("Please specify a 'cryst1' object")
-    if(!is.cryst1(cryst1)) stop("'cryst1' must be an object of class 'cryst1'")
+    if(is.null(cryst1))      stop("Please specify a 'crystal' object");
+    if(! is.crystal(cryst1)) stop("'crystal' must be an object of class 'crystal'")
     x <- xyz2abc(x, cryst1) 
   }
   

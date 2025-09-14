@@ -61,7 +61,7 @@ R.coords <- function(obj, angle = 0, x = 0, y = 0, z = 1, mask = TRUE, cryst1 = 
   basis.ori <- basis(obj)
   if(basis.ori != "xyz"){
     if(is.null(cryst1))
-      stop("Please specify a 'cryst1' obj to convert your fractional into Cartesian coordinates")
+      stop("Please specify a 'crystal' obj to convert the fractional coordinates into Cartesian")
     obj <- abc2xyz(obj, cryst1 = cryst1)
   }
   M <- rgl::rotationMatrix(angle=angle*pi/180, x = x, y = y, z = z)[1:3,1:3]
