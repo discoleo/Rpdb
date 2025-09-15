@@ -96,7 +96,7 @@ Translation of Cartesian or fractional coordinates.
 class \sQuote{coords} first convert the coordinates into Cartesian or 
 fractional coordinates using \code{crystal} if needed to performed the 
 translation. Once translated, the coordinates are reconverted back to the 
-orginal basis set using again \code{crystal}. Method for objects of class 
+original basis set using again \code{crystal}. Method for objects of class 
 \sQuote{pdb} first extract coordinates from the object using the function 
 \code{coords}, perform the translation, and update the coordinates of the 
 \sQuote{pdb} object using the function \code{coords<-}. The \code{thickness} 
