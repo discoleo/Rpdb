@@ -1,7 +1,7 @@
 Package: Rpdb
 Type: Package
 Title: Read, Write, Visualize and Manipulate PDB Files
-Version: 2.4.1
+Version: 2.4.2
 Date: 2025-09-15
 Authors@R:
 	c(
