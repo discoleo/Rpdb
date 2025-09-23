@@ -15,7 +15,7 @@ visualize(...)
 \method{visualize}{coords}(
   x,
   elename = NULL,
-  cryst1 = NULL,
+  crystal = NULL,
   conect = NULL,
   mode = NULL,
   type = "l",
@@ -41,7 +41,7 @@ visualize(...)
 \method{visualize}{data.frame}(
   x,
   elename = NULL,
-  cryst1 = NULL,
+  crystal = NULL,
   conect = NULL,
   mode = NULL,
   type = "l",
@@ -67,7 +67,7 @@ visualize(...)
 \method{visualize}{matrix}(
   x,
   elename = NULL,
-  cryst1 = NULL,
+  crystal = NULL,
   conect = NULL,
   mode = NULL,
   type = "l",
@@ -92,7 +92,7 @@ visualize(...)
 
 \method{visualize}{atoms}(
   x,
-  cryst1 = NULL,
+  crystal = NULL,
   conect = NULL,
   mode = NULL,
   type = "l",
@@ -168,7 +168,7 @@ visualize(...)
 
 \item{elename}{a character vector containing the atomic names used to chose atom colors and radii.}
 
-\item{cryst1}{an object of class \sQuote{crystal}. See \code{\link{crystal}}}
+\item{crystal}{an object of class \sQuote{crystal}. See \code{\link{crystal}}}
 
 \item{conect}{an object of class \sQuote{conect}. See \code{\link{conect}}}
 
@@ -176,9 +176,9 @@ visualize(...)
 
 \item{type}{a character string indicating the visualization style (See details).}
 
-\item{xyz}{a logical value indicating whether the x, y and z axes have to be added to the scene. See details}
+\item{xyz}{a logical value indicating whether the x, y and z axes have to be added to the scene. See details.}
 
-\item{abc}{a logical value indicating whether the a, b and c axes have to be added to the scene. See details}
+\item{abc}{a logical value indicating whether the a, b and c axes have to be added to the scene. See details.}
 
 \item{pbc.box}{a logical value indicating whether the pbc box has to be added to the scene. See details}
 

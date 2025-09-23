@@ -29,12 +29,12 @@
 #' 
 #' @param x an object or the name of a PDB file containing the molecular structure to visualize.
 #' @param elename a character vector containing the atomic names used to chose atom colors and radii.
-#' @param cryst1 an object of class \sQuote{crystal}. See \code{\link{crystal}}
+#' @param crystal an object of class \sQuote{crystal}. See \code{\link{crystal}}
 #' @param conect an object of class \sQuote{conect}. See \code{\link{conect}}
 #' @param mode a single element character vector indicating the visualization mode (See details).
 #' @param type a character string indicating the visualization style (See details).
-#' @param xyz a logical value indicating whether the x, y and z axes have to be added to the scene. See details
-#' @param abc a logical value indicating whether the a, b and c axes have to be added to the scene. See details
+#' @param xyz a logical value indicating whether the x, y and z axes have to be added to the scene. See details.
+#' @param abc a logical value indicating whether the a, b and c axes have to be added to the scene. See details.
 #' @param pbc.box a logical value indicating whether the pbc box has to be added to the scene. See details
 #' @param lwd a numeric value indication the line width used to plot the axes, the pbc box and atomic bonds when \code{type = "l"} (see details).
 #' @param lwd.xyz a numeric value indicating the line width used to plot the x, y and z axes.
@@ -71,13 +71,12 @@ visualize <- function(...)
 
 #' @rdname visualize
 #' @export
-visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, mode = NULL,
-                              type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
-							  lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                              cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
-							  radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
-							  userMatrix = diag(4), ...){
-  crystal = cryst1;
+visualize.coords <- function(x, elename = NULL, crystal = NULL, conect = NULL, mode = NULL,
+		type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
+		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		userMatrix = diag(4), ...) {
   if(!is.coords(x)) stop("'x' must be an object of class coords.")
   
   if(basis(x) == "abc") x <- abc2xyz(x, crystal);
@@ -93,12 +92,14 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   # M <- match(symb, Rpdb::elements[, "symb"])
   M = match.element.character(elename, na = 1);
   
+  # RGB:
   if(is.null(col)){
     col <- Rpdb::elements[M, c("red","green","blue")]
     col <- do.call(rgb, col)
   }
   if(length(col) != natom(x)) col <- rep(col, length = natom(x))
   
+  # RGL:
   if(!add){
     rgl::open3d()
     rgl::par3d(windowRect = windowRect, userMatrix=userMatrix, FOV = FOV, ...)
@@ -106,11 +107,13 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   }
   ids <- rgl::ids3d()
   par.save <- rgl::par3d(skipRedraw=TRUE)
-  
-  if(is.null(xyz) && is.null(crystal))
-    xyz <- TRUE
-  else
-    xyz <- FALSE
+	
+	### Axis & PBC-Box
+	# Auto-selection:
+	if(is.null(xyz) && is.null(crystal))
+		xyz <- TRUE
+	else
+		xyz <- FALSE
   
 	if(is.null(abc)) {
 		if(is.null(crystal))
@@ -146,6 +149,7 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
   if(pbc.box) ids <- rbind(ids, addPBCBox(crystal, lwd = lwd.pbc.box))
   # print(str(ids))
   
+  ### Molecule
   if(type == "l") {
     if(is.null(conect)){
       warning("Undefined connectivity: Computing connectivity from coordinates...")
@@ -207,49 +211,52 @@ visualize.coords <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, m
 
 #' @rdname visualize
 #' @export
-visualize.data.frame <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, mode = NULL,
-                                  type = "l", xyz = NULL, abc = NULL, pbc.box = NULL, lwd = 2,
-                                  lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                                  cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-                                 add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...){
+visualize.data.frame <- function(x, elename = NULL, crystal = NULL, conect = NULL, mode = NULL,
+		type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2", 
+		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		userMatrix = diag(4), ...) {
   
   if(is.null(basis(x))){
     basis(x) <- "xyz"
     warning("No basis attribute were found. Coordinates are assumed to Cartesian.")
   }
   
-  visualize(coords(x), elename, cryst1, conect, mode, type,
+  visualize(coords(x), elename, crystal, conect, mode, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg,  radii, add, windowRect, FOV, userMatrix, ...)
 }
 
 #' @rdname visualize
 #' @export
-visualize.matrix <- function( x, elename = NULL, cryst1 = NULL, conect = NULL, mode = NULL,
-                              type = "l", xyz = NULL, abc = NULL, pbc.box = NULL, lwd = 2,
-                              lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                              cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-                              add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...){
+visualize.matrix <- function(x, elename = NULL, crystal = NULL, conect = NULL,
+		mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
+		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		userMatrix = diag(4), ...){
   
   if(is.null(basis(x))){
     basis(x) <- "xyz"
     warning("No basis attribute were found. Coordinates are assumed to Cartesian.")
   }
   
-  visualize(coords(x), elename, cryst1, conect, mode, type,
+  visualize(coords(x), elename, crystal, conect, mode, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg,  radii, add, windowRect, FOV, userMatrix, ...)
 }
 
 #' @rdname visualize
 #' @export
-visualize.atoms <- function( x, cryst1 = NULL, conect = NULL, mode = NULL,
-                             type = "l", xyz = NULL, abc = NULL, pbc.box = NULL, lwd = 2,
-                             lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                             cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-                             add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...){
+visualize.atoms <- function(x, crystal = NULL, conect = NULL,
+		mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2", 
+		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		userMatrix = diag(4), ...) {
   
-  ids <- visualize(coords(x), x$elename, cryst1, conect, mode=NULL, type,
+  ids <- visualize(coords(x), x$elename, crystal, conect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
   
@@ -270,13 +277,15 @@ visualize.atoms <- function( x, cryst1 = NULL, conect = NULL, mode = NULL,
 
 #' @rdname visualize
 #' @export
-visualize.pdb <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
-				lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-				cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2", radii = "rvdw",
-				add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...) {
+visualize.pdb <- function(x, mode = NULL, type = "l",
+		xyz = NULL, abc = NULL, pbc.box = NULL,
+		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
+		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		userMatrix = diag(4), ...) {
   
   # calls visualize.atoms;
-  ids <- visualize(x$atoms, cryst1 = x$crystal, conect = x$conect, mode=NULL, type,
+  ids <- visualize(x$atoms, crystal = x$crystal, conect = x$conect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
   
@@ -297,10 +306,11 @@ visualize.pdb <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL, pb
 
 #' @rdname visualize
 #' @export
-visualize.character <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL, lwd = 2,
-                                lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
-                                cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-                                add = FALSE, windowRect = c(0,0,800,600), FOV = 0, userMatrix=diag(4), ...){
+visualize.character <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL,
+		pbc.box = NULL, lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
+		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
+		add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		userMatrix = diag(4), ...) {
   x <- read.pdb(x)
   visualize.pdb(x, mode = mode, type = type, xyz = xyz, abc = abc, pbc.box = pbc.box, lwd = lwd,
            lwd.xyz = lwd.xyz, lwd.abc = lwd.abc, lwd.pbc.box = lwd.pbc.box,
