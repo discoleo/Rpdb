@@ -110,10 +110,13 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, conect = NULL, m
 	
 	### Axis & PBC-Box
 	# Auto-selection:
-	if(is.null(xyz) && is.null(crystal))
-		xyz <- TRUE
-	else
-		xyz <- FALSE
+	# TODO: Refactor
+	if(is.null(xyz)) {
+		if(is.null(crystal))
+			xyz = TRUE
+		else
+			xyz = FALSE
+	} # ELSE IF(! LOGICAL) ...
   
 	if(is.null(abc)) {
 		if(is.null(crystal))
