@@ -53,18 +53,8 @@ replicate.coords <- function(x, crystal = NULL, a.ind = 0, b.ind = 0, c.ind = 0,
 		x = xyz2abc(x, crystal);
 	}
   
-  abc.ind <- expand.grid(a.ind, b.ind, c.ind)
-  
-  L <- apply(abc.ind, 1,
-             function(abc, x)
-             {
-               x$x1 <- x$x1 + abc[1]
-               x$x2 <- x$x2 + abc[2]
-               x$x3 <- x$x3 + abc[3]
-               return(x)
-             }, x)
-  
-	x = do.call(rbind, L);
+	abc.ind <- expand.grid(a.ind, b.ind, c.ind);
+	x = add.abc(x, abc = abc.ind);
 	if(b == "xyz") x = abc2xyz(x, crystal);
 	
 	return(x);
@@ -85,29 +75,22 @@ replicate.atoms <- function(x, crystal = NULL, a.ind = 0, b.ind = 0, c.ind = 0, 
 		check.crystal(crystal);
 		x = xyz2abc(x, crystal);
 	}
-  
-  abc.ind <- expand.grid(a.ind, b.ind, c.ind)
-  
-  L <- apply(abc.ind, 1,
-             function(abc, x)
-             {
-               x$x1 <- x$x1 + abc[1]
-               x$x2 <- x$x2 + abc[2]
-               x$x3 <- x$x3 + abc[3]
-               return(x)
-             }, x)
+	
+	abc.ind = expand.grid(a.ind, b.ind, c.ind);
 	
 	nID = max(x$eleid);
-	eleid = rep(x$eleid, nrow(abc.ind)) + rep(1:nrow(abc.ind)-1, each=natom(x))*nID;
-	resid = rep(x$resid, nrow(abc.ind)) + rep(1:nrow(abc.ind)-1, each=natom(x))*max(x$resid);
+	# 1:nrow(abc.ind)-1
+	idABC = rep(seq(0, nrow(abc.ind)-1), each=natom(x));
+	eleid = rep(x$eleid, nrow(abc.ind)) + idABC * nID;
+	resid = rep(x$resid, nrow(abc.ind)) + idABC * max(x$resid);
   
-  x <- do.call(rbind, L)
-  x$resid <- resid
-  x$eleid <- eleid
-  
-  if(basis == "xyz") x <- abc2xyz(x, crystal);
-  
-  return(x)
+	x = add.abc(x, abc = abc.ind);
+	x$resid = resid;
+	x$eleid = eleid;
+	
+	if(basis == "xyz") x = abc2xyz(x, crystal);
+	
+	return(x);
 }
 
 #' @rdname replicate
@@ -152,4 +135,15 @@ replicate.pdb <- function(x, a.ind = 0, b.ind = 0, c.ind = 0, crystal = NULL, ..
 check.crystal = function(x) {
 	if(is.null(x))      stop("Please specify a 'crystal' object");
 	if(! is.crystal(x)) stop("'crystal' must be an object of class 'crystal'");
+}
+
+add.abc = function(x, abc) {
+	L = apply(abc, 1, function(abc, x) {
+			x$x1 = x$x1 + abc[1];
+			x$x2 = x$x2 + abc[2];
+			x$x3 = x$x3 + abc[3];
+			return(x);
+		}, x);
+	x = do.call(rbind, L);
+	return(x);
 }
