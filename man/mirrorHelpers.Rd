@@ -42,19 +42,19 @@ Mzx(...)
 
 Mab(...)
 
-\method{Mab}{coords}(x, crystal = NULL, mask = TRUE, ...)
+\method{Mab}{coords}(x, crystal, mask = TRUE, ...)
 
 \method{Mab}{pdb}(x, crystal = x$crystal, mask = TRUE, ...)
 
 Mbc(...)
 
-\method{Mbc}{coords}(x, crystal = NULL, mask = TRUE, ...)
+\method{Mbc}{coords}(x, crystal, mask = TRUE, ...)
 
 \method{Mbc}{pdb}(x, crystal = x$crystal, mask = TRUE, ...)
 
 Mca(...)
 
-\method{Mca}{coords}(x, crystal = NULL, mask = TRUE, ...)
+\method{Mca}{coords}(x, crystal, mask = TRUE, ...)
 
 \method{Mca}{pdb}(x, crystal = x$crystal, mask = TRUE, ...)
 }

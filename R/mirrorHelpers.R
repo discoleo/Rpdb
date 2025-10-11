@@ -87,8 +87,8 @@ Mab <- function(...)
 
 #' @rdname mirrorHelpers
 #' @export
-Mab.coords = function(x, crystal = NULL, mask = TRUE, ...) {
-	cell = get.cellMirror(x, crystal=crystal);
+Mab.coords = function(x, crystal, mask = TRUE, ...) {
+	cell = get.cellMirrorMiss(x, crystal=crystal);
 	mirror(x, c(0,0,0), cell[,"a"], cell[,"b"], mask=mask, crystal=crystal);
 }
   
@@ -106,8 +106,8 @@ Mbc <- function(...)
 
 #' @rdname mirrorHelpers
 #' @export
-Mbc.coords = function(x, crystal = NULL, mask = TRUE, ...) {
-	cell = get.cellMirror(x, crystal=crystal);
+Mbc.coords = function(x, crystal, mask = TRUE, ...) {
+	cell = get.cellMirrorMiss(x, crystal=crystal);
 	mirror(x, c(0,0,0), cell[,"b"], cell[,"c"], mask=mask, crystal=crystal);
 }
 
@@ -125,8 +125,8 @@ Mca <- function(...)
 
 #' @rdname mirrorHelpers
 #' @export
-Mca.coords = function(x, crystal = NULL, mask = TRUE, ...) {
-	cell = get.cellMirror(x, crystal=crystal);
+Mca.coords = function(x, crystal, mask = TRUE, ...) {
+	cell = get.cellMirrorMiss(x, crystal=crystal);
 	mirror(x, c(0,0,0), cell[,"c"], cell[,"a"], mask=mask, crystal=crystal);
 }
 
@@ -144,9 +144,17 @@ get.cellMirror = function(x, crystal) {
 	check.crystalMirror(crystal);
 	cell.coords(x, crystal=crystal);
 }
+get.cellMirrorMiss = function(x, crystal) {
+	check.crystalMirrorMiss(crystal);
+	cell.coords(x, crystal=crystal);
+}
 
 # Check:
 check.crystalMirror = function(x) {
 	if(is.null(x))
+		stop("'crystal' is required to define the mirror plane!");
+}
+check.crystalMirrorMiss = function(x) {
+	if(missing(x) || is.null(x))
 		stop("'crystal' is required to define the mirror plane!");
 }
