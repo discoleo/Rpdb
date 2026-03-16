@@ -45,6 +45,7 @@
 #' @param col a vector indicating the colors to use to plot each atom.
 #' @param bg the color of the background
 #' @param radii either a character string indicating the type of radii or a numeric vector specifying the radii of each atom to use to plot atoms as spheres (see details).
+#' @param scale.atoms scalar value by which to scale the radii.
 #' @param add a logical value indicating whether the plot has be to added to a existing scene (see \code{rgl.cur} and \code{open3d}).
 #' @param windowRect a vector of four integers indicating the left, top, right and bottom of the displayed window in pixels (see \code{par3d}).
 #' @param FOV the field of view. This controls the degree of parallax in the perspective view (see par3d).
@@ -62,8 +63,17 @@
 #' visualize(subset(x, resid != 1), type = "l", mode = NULL)
 #' visualize(subset(x, resid == 1), type = "s", add = TRUE, mode = NULL)
 #' 
+#' ### Protein BackBone + Surface
+#' # x = some protein (1 chain);
+#' # visualize(x, type="l", lwd=4)
+#' # visualize(x, type="s", alpha = 0.05, add = TRUE)
+
 #' @keywords dynamic
 #' 
+
+#' @name visualize
+windowRect0 = function() c(8,24,800,600);
+
 #' @name visualize
 #' @export
 visualize <- function(...)
@@ -75,7 +85,8 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, conect = NULL, m
 		type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
 		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
-		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		radii = "rvdw", scale.atoms = 1,
+		add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
 		userMatrix = diag(4), ...) {
   if(!is.coords(x)) stop("'x' must be an object of class coords.")
   
@@ -181,7 +192,8 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, conect = NULL, m
     if(is.character(radii[1])){
       if(! radii[1] %in% c("rcov", "rbo", "rvdw") )
         stop("'radii' must be one of 'rcov', 'rbo', 'rvdw' or a numerical vector")
-      radii <- Rpdb::elements[M, radii[1]]
+      radii = Rpdb::elements[M, radii[1]];
+	  radii = radii * scale.atoms;
     }
     if(all(radii == 0)){
       warning("All atoms are dummy atoms. 'radii' have been set to 1")
@@ -256,12 +268,14 @@ visualize.atoms <- function(x, crystal = NULL, conect = NULL,
 		mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
 		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2", 
-		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		radii = "rvdw", scale.atoms = 1,
+		add = FALSE, windowRect = NULL, FOV = 0,
 		userMatrix = diag(4), ...) {
-  
-  ids <- visualize(coords(x), x$elename, crystal, conect, mode=NULL, type,
+	if(is.null(windowRect)) windowRect = windowRect0();
+	ids = visualize(coords(x), x$elename, crystal, conect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
-            cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
+            cex.xyz, cex.abc, col, bg, radii, scale.atoms = scale.atoms,
+			add, windowRect, FOV, userMatrix, ...)
   
   if(!is.null(mode)){
     if(mode == "measure"){
@@ -284,13 +298,23 @@ visualize.pdb <- function(x, mode = NULL, type = "l",
 		xyz = NULL, abc = NULL, pbc.box = NULL,
 		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
-		radii = "rvdw", add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		radii = "rvdw", scale.atoms = 1,
+		add = FALSE, windowRect = NULL, FOV = 0,
 		userMatrix = diag(4), ...) {
-  
+	if(is.null(windowRect)) windowRect = windowRect0();
+	### Proteins:
+	connect = x$conect;
+	isPr = isProtein(x);
+	if(isPr) {
+		bb = asBackbone(x);
+		connect = rbind(connect, bb);
+		connect = connect.default(connect);
+	}
   # calls visualize.atoms;
-  ids <- visualize(x$atoms, crystal = x$crystal, conect = x$conect, mode=NULL, type,
+  ids <- visualize(x$atoms, crystal = x$crystal, conect = connect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
-            cex.xyz, cex.abc, col, bg, radii, add, windowRect, FOV, userMatrix, ...)
+            cex.xyz, cex.abc, col, bg, radii, scale.atoms = scale.atoms,
+			add, windowRect, FOV, userMatrix, ...)
   
   if(!is.null(mode)){
     if(mode == "measure"){
@@ -312,9 +336,10 @@ visualize.pdb <- function(x, mode = NULL, type = "l",
 visualize.character <- function(x, mode = NULL, type = "l", xyz = NULL, abc = NULL,
 		pbc.box = NULL, lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",  radii = "rvdw",
-		add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
+		add = FALSE, windowRect = NULL, FOV = 0,
 		userMatrix = diag(4), ...) {
-  x <- read.pdb(x)
+	if(is.null(windowRect)) windowRect = windowRect0();
+	x = read.pdb(x);
   visualize.pdb(x, mode = mode, type = type, xyz = xyz, abc = abc, pbc.box = pbc.box, lwd = lwd,
            lwd.xyz = lwd.xyz, lwd.abc = lwd.abc, lwd.pbc.box = lwd.pbc.box,
            cex.xyz = cex.xyz, cex.abc = cex.abc, col = col, bg = bg,  radii = radii,
