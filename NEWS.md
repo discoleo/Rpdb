@@ -1,4 +1,16 @@
 
+# Rpdb 2.4.4
+
+## Refactoring
+- [started] Renaming conect -> connect;
+
+## TODO
+
+- Extract all useful code and ideas from the discussion thread:
+  - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
+  - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
+
+
 # Rpdb 2.4.3
 
 - Improved visualization:
@@ -7,12 +19,6 @@
 ## Refactoring:
 - Rename: conect -> connect;
   - started some work;
-
-## TODO
-
-- Extract all useful code and ideas from the discussion thread:
-  - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
-  - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
 
 
 # Rpdb 2.4.1

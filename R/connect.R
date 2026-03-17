@@ -1,6 +1,6 @@
-#' Create \sQuote{conect} Object
+#' Create \sQuote{connect} Object
 #' 
-#' Creates an object of class \sQuote{conect} containing the IDs of bonded atoms
+#' Creates an object of class \sQuote{connect} containing the IDs of bonded atoms
 #' defining the connectivity of a molecular system.
 #' 
 #' \code{conect} is a generic function to create objects of class 
@@ -56,7 +56,7 @@
 #' @keywords classes
 #' 
 
-#' @name conect
+#' @name connect
 # TODO: rename all;
 connect.default = function(eleid.1, eleid.2, ...) {
 	if(missing(eleid.2)) {
@@ -71,12 +71,12 @@ connect.default = function(eleid.1, eleid.2, ...) {
 	conect.default(eleid.1, eleid.2, ...);
 }
 
-#' @name conect
+#' @name connect
 #' @export
 conect <- function(...)
   UseMethod("conect")
 
-#' @rdname conect
+#' @rdname connect
 #' @export
 conect.default <- function(eleid.1, eleid.2, ...)
 {
@@ -95,7 +95,7 @@ conect.default <- function(eleid.1, eleid.2, ...)
   return(con)
 }
 
-#' @rdname conect
+#' @rdname connect
 #' @export
 conect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) {
   if(!is.coords(x))
@@ -160,7 +160,7 @@ conect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) 
   return(con)
 }
 
-#' @rdname conect
+#' @rdname connect
 #' @export
 conect.pdb <- function(x, safety = 1.2, by.block = FALSE, ...) {
   symb <- toSymbols(x$atom$elename)
@@ -171,7 +171,7 @@ conect.pdb <- function(x, safety = 1.2, by.block = FALSE, ...) {
   return(con)
 }
 
-#' @rdname conect
+#' @rdname connect
 #' @export
 is.conect <- function(x)
 {
