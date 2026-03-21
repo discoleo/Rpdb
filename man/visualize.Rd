@@ -19,7 +19,7 @@ visualize(...)
   x,
   elename = NULL,
   crystal = NULL,
-  conect = NULL,
+  connect = NULL,
   mode = NULL,
   type = "l",
   xyz = NULL,
@@ -46,7 +46,7 @@ visualize(...)
   x,
   elename = NULL,
   crystal = NULL,
-  conect = NULL,
+  connect = NULL,
   mode = NULL,
   type = "l",
   xyz = NULL,
@@ -72,7 +72,7 @@ visualize(...)
   x,
   elename = NULL,
   crystal = NULL,
-  conect = NULL,
+  connect = NULL,
   mode = NULL,
   type = "l",
   xyz = NULL,
@@ -97,7 +97,7 @@ visualize(...)
 \method{visualize}{atoms}(
   x,
   crystal = NULL,
-  conect = NULL,
+  connect = NULL,
   mode = NULL,
   type = "l",
   xyz = NULL,
@@ -176,7 +176,7 @@ visualize(...)
 
 \item{crystal}{an object of class \sQuote{crystal}. See \code{\link{crystal}}}
 
-\item{conect}{an object of class \sQuote{conect}. See \code{\link{conect}}}
+\item{connect}{an object of class \sQuote{connect}. See \code{\link{connect}}}
 
 \item{mode}{a single element character vector indicating the visualization mode (See details).}
 

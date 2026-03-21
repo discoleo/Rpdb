@@ -2,7 +2,9 @@
 # Rpdb 2.4.4
 
 ## Refactoring
-- [started] Renaming conect -> connect;
+- [started] Renaming "conect" -> "connect";
+- Renamed class to "connect";
+- Renamed function arguments to "connect";
 
 ## TODO
 
@@ -10,6 +12,7 @@
   - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
   - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
 
+=====
 
 # Rpdb 2.4.3
 

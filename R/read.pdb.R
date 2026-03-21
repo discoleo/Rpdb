@@ -11,7 +11,7 @@
 #' When multiple models are specified, each of the models is actually stored
 #'   as a separate pdb molecule in a list of pdb molecules.
 #' If the \code{resolution} parameter is set, the function attempts to extract the resolution
-#'   from the REMARKS field. Note: The resolution is only meaningfull for X-ray crystallography.
+#'   from the REMARKS field. Note: The resolution is only meaningful for X-ray crystallography.
 #' 
 #' @return 
 #' When a single MODEL section is read, this function returns an object of class  \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:
@@ -19,27 +19,27 @@
 #' \item{remark}{a character vector containing the REMARK records found in the PDB file.}
 #' \item{crystal}{a list of class \sQuote{crystal} containing the first CRYSTAL record found in the PDB file. All others are ignored.}
 #' \item{atoms}{a data.frame of class \sQuote{atoms} containing the ATOM and HETATM records found in the PDB file.}
-#' \item{conect}{a data.frame of class \sQuote{conect} containing the CONECT records found in the PDB file.}
+#' \item{connect}{a data.frame of class \sQuote{connect} containing the CONNECT records found in the PDB file.}
 #' When multiple MODEL sections are read, a list of object of class \sQuote{pdb} is returned.
 #' 
 #' @param file a single element character vector containing the name of the PDB file to be read.
 #' @param ATOM a logical value indicating whether to read the ATOM records.
 #' @param HETATM a logical value indicating whether to read the HETATM records.
 #' @param CRYSTAL a logical value indicating whether to read the crystal cell parameters (from the CRYST1 pdb record).
-#' @param CONECT a logical value indicating whether to read the CONECT records.
+#' @param CONNECT a logical value indicating whether to read the CONNECT records.
 #' @param TITLE a logical value indicating whether to read the TITLE records.
 #' @param REMARK a logical value indicating whether to read the REMARK records.
 #' @param MODEL an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).
 #' @param CRYST1 will be replaced by the CRYSTAL argument; existing code should be migrated to use the CRYSTAL argument.
-#' @param resolution logical value indicating wheter to extract the resolution (see details).
-#' @param verbose logical value indicating wheter to print additional information, e.g. number of models.
+#' @param resolution logical value indicating whether to extract the resolution (see details).
+#' @param verbose logical value indicating whether to print additional information, e.g. number of models.
 #' 
 #' @references 
 #' PDB format has been taken from:
 #' http://www.wwpdb.org/documentation/format33/v3.3.html
 #' 
 #' @seealso
-#' \code{\link{write.pdb}}, \code{\link{pdb}}, \code{\link{crystal}}, \code{\link{atoms}}, \code{\link{conect}}
+#' \code{\link{write.pdb}}, \code{\link{pdb}}, \code{\link{crystal}}, \code{\link{atoms}}, \code{\link{connect}}
 #' 
 #' @examples 
 #' # Read a PDB file included with the package
@@ -59,7 +59,7 @@
 #' @name read.pdb
 #' @export
 read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
-                     CONECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
+                     CONNECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
 					 CRYST1 = NULL, resolution = TRUE, verbose = TRUE)
 {
 	if( ! is.null(CRYST1)) {
@@ -233,25 +233,25 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	}
   
   ### Connections:
-  conect = NULL
+  connect = NULL
   isConnect = grepl("^CONECT", lines);
-  if(CONECT && any(isConnect)) {
-    conect <- subset(lines, isConnect);
-    C0 <- as.integer(substr(conect,  7, 11))
-    C1 <- as.integer(substr(conect, 12, 16))
-    C2 <- as.integer(substr(conect, 17, 21))
-    C3 <- as.integer(substr(conect, 22, 26))
-    C4 <- as.integer(substr(conect, 27, 31))
+  if(CONNECT && any(isConnect)) {
+    connect <- subset(lines, isConnect);
+    C0 <- as.integer(substr(connect,  7, 11));
+    C1 <- as.integer(substr(connect, 12, 16));
+    C2 <- as.integer(substr(connect, 17, 21));
+    C3 <- as.integer(substr(connect, 22, 26));
+    C4 <- as.integer(substr(connect, 27, 31));
     C0 <- rep(C0, 4)
     C1 <- c(C1,C2,C3,C4)
     C0 <- subset(C0, !is.na(C1))
     C1 <- subset(C1, !is.na(C1))
-    conect <- conect.default(eleid.1 = C0, eleid.2 = C1)
-    tokeep <- conect$eleid.1 %in% atoms$eleid & conect$eleid.2 %in% atoms$eleid
-    conect <- subset(conect, tokeep)
+    connect = connect.default(eleid.1 = C0, eleid.2 = C1);
+    tokeep  = connect$eleid.1 %in% atoms$eleid & connect$eleid.2 %in% atoms$eleid;
+    connect  = subset(connect, tokeep);
   }
 
-  to.return <- pdb(atoms, crystal, conect, remark, title,
+  to.return = pdb(atoms, crystal, connect, remark, title,
     resolution = dfResolution);
   to.return <- split(to.return, model.factor)
   if(length(to.return) == 1) to.return <- to.return[[1]]
