@@ -42,7 +42,7 @@
 #'                resname = c("H2","H2"), chainid = "", resid = c(1,1), insert = "",
 #'                x1 = c(0,0), x2 = c(0,0), x3 = c(0,1), occ = c(0.0,0.0), temp = c(1.0,1.0),
 #'                segid = c("H2","H2"))
-#' connect <- conect(eleid.1 = c(1), eleid.2 = c(2))
+#' connect <- connect(eleid.1 = c(1), eleid.2 = c(2))
 #' x <- pdb(atoms = atoms, crystal = crystal, connect = connect, remark = remark, title = title)
 #' is.pdb(x)
 #' 

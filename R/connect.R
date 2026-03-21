@@ -5,21 +5,23 @@
 #' 
 #' \code{connect} is a generic function to create objects of class 
 #' \sQuote{connect}. The purpose of this class is to store CONNECT records from 
-#' PDB files, indicating the connectivity of a molecular system.\cr The default 
-#' method creates a \code{connect} object from its different components, i.e.: 
-#' \code{eleid.1} and \code{eleid.2}. Both arguments have to be specified.\cr 
-#' The S3 method for object of class \sQuote{coords} determine the connectivity 
-#' from atomic coordinates. A distance matrix is computed, then, for each pair 
-#' of atom the distance is compared to a bounding distance computed from atomic 
-#' radii. If this distance is lower than the bounding distance then the atoms 
-#' are assumed to be connected.\cr The S3 method for object of class 
-#' \sQuote{pdb} first use element names to search for atomic radii in the 
-#' \code{elements} data set. Then atomic coordinates and radii are passed to 
-#' \code{conect.coords}.\cr If \code{by.block == TRUE}, a grid is defined to 
-#' determined the connectivity by block. The method is slow but allow to deal 
-#' with very large systems. \cr \code{is.connect} tests if an object of class 
-#' \sQuote{connect}, i.e. if it has a \dQuote{class} attribute equal to 
-#' \code{connect}.
+#' PDB files, indicating the connectivity of a molecular system.\cr
+#' The default method creates a \code{connect} object from its different components, i.e.: 
+#'   \code{eleid.1} and \code{eleid.2}. Both arguments have to be specified.\cr 
+#' The S3 method for object of class \sQuote{coords} determines the connectivity 
+#'   from atomic coordinates. A distance matrix is computed, then, for each pair 
+#'   of atoms the distance is compared to a bounding distance computed from atomic 
+#'   radii. If this distance is lower than the bounding distance then the atoms 
+#'   are assumed to be connected.\cr
+#' The S3 method for object of class \sQuote{pdb} first uses the element names
+#'   to search for atomic radii in the \code{elements} data set.
+#'   Then atomic coordinates and radii are passed to \code{connect.coords}.\cr
+#'   If \code{by.block == TRUE}, a grid is defined to determined the connectivity by block.
+#'   The method is slow but allows to deal with very large systems.\cr
+#' The S3 method for object of class \sQuote{character} converts the raw string
+#'   from a pdb file into a \code{connect} object.
+#' \code{is.connect} tests if an object is of class \sQuote{connect},
+#'   i.e. if it has a \dQuote{class} attribute equal to \code{connect}.
 #' 
 #' @return \code{connect} returns a two-column data.frame of class
 #' \sQuote{connect} whose rows contain the IDs of bonded atoms. The columns of
@@ -32,33 +34,34 @@
 #' @param \dots arguments passed to methods.
 #' @param eleid.1 a integer vector containing the IDs of bonded atoms.
 #' @param eleid.2 a integer vector containing the IDs of bonded atoms.
-#' @param x an R object containing atomic coordinates.
+#' @param x,atoms an R object containing atomic coordinates.
 #' @param radii a numeric vector containing atomic radii used to find neigbours.
 #' @param safety a numeric value used to extend the atomic radii.
 #' @param by.block a logical value indicating whether the connectivity has to be
 #'   determine by block (see details).
+#' @param pdbRec the raw text lines from the pdb file.
 #'   
 #' @seealso \code{\link{pdb}}
 #' 
 #' @examples 
 #' # If atom 1 is connected to atom 2, 3, 4 and 5
 #' # then we can prepare the following 'connect' object:
-#' x <- conect(rep(1,4), 2:5)
+#' x <- connect(rep(1,4), 2:5)
 #' print(x)
 #' is.connect(x)
 #' 
 #' # Compute connectivity from coordinates
 #' x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"), CONNECT = FALSE)
 #' x$connect
-#' x$connect <- conect(x)
+#' x$connect <- connect(x)
 #' x$connect
 #' 
 #' @keywords classes
 #' 
 
 #' @name connect
-# TODO: rename all;
-connect.default = function(eleid.1, eleid.2, ...) {
+# TODO: remove
+conect.default = function(eleid.1, eleid.2, ...) {
 	if(missing(eleid.2)) {
 		if(inherits(eleid.1, c("connect", "conect"))) {
 			return(eleid.1);
@@ -68,17 +71,17 @@ connect.default = function(eleid.1, eleid.2, ...) {
 		} else
 			stop("Missing eleid2!");
 	}
-	conect.default(eleid.1, eleid.2, ...);
+	connect.default(eleid.1, eleid.2, ...);
 }
 
 #' @name connect
 #' @export
-conect <- function(...)
-  UseMethod("conect")
+connect <- function(...)
+  UseMethod("connect")
 
 #' @rdname connect
 #' @export
-conect.default <- function(eleid.1, eleid.2, ...)
+connect.default <- function(eleid.1, eleid.2, ...)
 {
   if(is.null(eleid.1) & is.null(eleid.2))
     return(NULL)
@@ -97,7 +100,7 @@ conect.default <- function(eleid.1, eleid.2, ...)
 
 #' @rdname connect
 #' @export
-conect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) {
+connect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) {
   if(!is.coords(x))
     stop("'x' must be an object of class 'coords'")
 
@@ -118,7 +121,7 @@ conect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) 
     eleid <- matrix(rownames(data), nrow = nat, ncol = nat)   
     eleid.1 <- as.integer(t(eleid)[M])
     eleid.2 <- as.integer(  eleid [M]) 
-    return(conect.default(eleid.1, eleid.2))
+    return(connect.default(eleid.1, eleid.2))
   }
 
   if(!by.block) {
@@ -154,7 +157,7 @@ conect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) 
 	# TODO: check of correct
     con = apply(shift, 1, get.con, x, radii, width)
     con = unique(do.call(rbind, con))
-    con = conect(con$eleid.1, con$eleid.2);
+    con = connect(con$eleid.1, con$eleid.2);
     rownames(con) = NULL;
   }
   
@@ -163,20 +166,38 @@ conect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) 
 
 #' @rdname connect
 #' @export
-conect.pdb <- function(x, safety = 1.2, by.block = FALSE, ...) {
+connect.pdb <- function(x, safety = 1.2, by.block = FALSE, ...) {
   symb <- toSymbols(x$atom$elename)
   symb[is.na(symb)] <- "Xx"
   rcov <- Rpdb::elements[match(symb, Rpdb::elements[,"symb"]), "rcov"]
-  con <- conect(coords(x), rcov, safety, by.block)
-  con <- conect(x$atoms$eleid[con$eleid.1], x$atoms$eleid[con$eleid.2])
+  con <- connect(coords(x), rcov, safety, by.block)
+  con <- connect(x$atoms$eleid[con$eleid.1], x$atoms$eleid[con$eleid.2])
   return(con)
+}
+
+
+#' @rdname connect
+#' @export
+connect.character = function(pdbRec, atoms, ...) {
+	C0 = as.integer(substr(pdbRec,  7, 11));
+	C1 = as.integer(substr(pdbRec, 12, 16));
+	C2 = as.integer(substr(pdbRec, 17, 21));
+	C3 = as.integer(substr(pdbRec, 22, 26));
+	C4 = as.integer(substr(pdbRec, 27, 31));
+	C0 = rep(C0, 4);
+	C1 = c(C1,C2,C3,C4);
+	C0 = subset(C0, !is.na(C1));
+	C1 = subset(C1, !is.na(C1));
+	connect = connect.default(eleid.1 = C0, eleid.2 = C1);
+	tokeep  = connect$eleid.1 %in% atoms$eleid & connect$eleid.2 %in% atoms$eleid;
+	connect = subset(connect, tokeep);
+	return(connect);
 }
 
 #' @rdname connect
 #' @export
 is.connect <- function(x)
 {
-  # to.return <- any(attr(x, which="class") == "conect")
   to.return = inherits(x, c("connect", "conect"));
   return(to.return)
 }

@@ -60,7 +60,7 @@ reindex.pdb <- function(x, eleid = TRUE, resid = TRUE, ...)
       x$atoms$eleid <- 1:natom(x)
       if(! is.null(x$connect)) {
         cat("Recalculating connectivity\n");
-        x$connect = conect(x);    
+        x$connect = connect(x);
       }
     } else {
       if(!is.null(x$connect)) {

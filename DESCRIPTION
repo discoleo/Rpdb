@@ -2,7 +2,7 @@ Package: Rpdb
 Type: Package
 Title: Read, Write, Visualize and Manipulate PDB Files
 Version: 2.4.4
-Date: 2026-03-16
+Date: 2026-03-21
 Authors@R:
 	c(
     person("Leonard", "Mada", email = "lmada@umft.ro", role = c("cre", "ctb")),

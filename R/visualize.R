@@ -167,7 +167,7 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
   if(type == "l") {
     if(is.null(connect)){
       warning("Undefined connectivity: Computing connectivity from coordinates...")
-      connect = conect(x);
+      connect = connect(x);
     }
     ind = t(connect);
     seg.id <- rgl::segments3d(

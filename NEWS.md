@@ -2,9 +2,10 @@
 # Rpdb 2.4.4
 
 ## Refactoring
-- [started] Renaming "conect" -> "connect";
-- Renamed class to "connect";
-- Renamed function arguments to "connect";
+- Renaming "conect" -> "connect";
+ -- Renamed class to "connect";
+ -- Renamed function arguments to "connect";
+ -- Renamed functions to "connect";
 
 ## TODO
 

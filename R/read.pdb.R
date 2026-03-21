@@ -199,25 +199,8 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
   levels(model.factor) <- model.ids
   model.factor <- model.factor[is.atom | is.hetatm]
   
-  ### Atoms:
-  recAtom <- trim(substr(atoms,  1,  6))
-  eleid   <- trim(substr(atoms,  7, 11))
-  elename <- trim(substr(atoms, 13, 16))
-  alt     <- trim(substr(atoms, 17, 17))
-  resname <- trim(substr(atoms, 18, 21))
-  chainid <- trim(substr(atoms, 22, 22))
-  resid   <- trim(substr(atoms, 23, 26))
-  insert  <- trim(substr(atoms, 27, 27))
-  x1      <-      substr(atoms, 31, 38)
-  x2      <-      substr(atoms, 39, 46)
-  x3      <-      substr(atoms, 47, 54)
-  occ     <-      substr(atoms, 55, 60)
-  temp    <-      substr(atoms, 61, 66)
-  segid   <- trim(substr(atoms, 73, 75))
-
-  atoms <- atoms.default(recAtom, eleid, elename, alt,
-                      resname, chainid, resid, insert,
-                      x1, x2, x3, occ, temp, segid, basis = "xyz")
+	### Atoms:
+	atoms = as.atoms.character(atoms);
   
 	### Crystal Cell:
 	crystal = NULL;
@@ -232,24 +215,13 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		crystal = NULL; # TODO
 	}
   
-  ### Connections:
-  connect = NULL
-  isConnect = grepl("^CONECT", lines);
-  if(CONNECT && any(isConnect)) {
-    connect <- subset(lines, isConnect);
-    C0 <- as.integer(substr(connect,  7, 11));
-    C1 <- as.integer(substr(connect, 12, 16));
-    C2 <- as.integer(substr(connect, 17, 21));
-    C3 <- as.integer(substr(connect, 22, 26));
-    C4 <- as.integer(substr(connect, 27, 31));
-    C0 <- rep(C0, 4)
-    C1 <- c(C1,C2,C3,C4)
-    C0 <- subset(C0, !is.na(C1))
-    C1 <- subset(C1, !is.na(C1))
-    connect = connect.default(eleid.1 = C0, eleid.2 = C1);
-    tokeep  = connect$eleid.1 %in% atoms$eleid & connect$eleid.2 %in% atoms$eleid;
-    connect  = subset(connect, tokeep);
-  }
+	### Connections:
+	connect = NULL
+	isConnect = grepl("^CONECT", lines);
+	if(CONNECT && any(isConnect)) {
+		connect = subset(lines, isConnect);
+		connect = connect.character(connect, atoms);
+	}
 
   to.return = pdb(atoms, crystal, connect, remark, title,
     resolution = dfResolution);

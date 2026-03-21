@@ -122,6 +122,30 @@ atoms.default <- function(recname, eleid, elename, alt,
   return(atoms)
 }
 
+# Read atoms from raw pdb text lines;
+as.atoms.character = function(atoms) {
+	### Atoms:
+	recAtom <- trim(substr(atoms,  1,  6))
+	eleid   <- trim(substr(atoms,  7, 11))
+	elename <- trim(substr(atoms, 13, 16))
+	alt     <- trim(substr(atoms, 17, 17))
+	resname <- trim(substr(atoms, 18, 21))
+	chainid <- trim(substr(atoms, 22, 22))
+	resid   <- trim(substr(atoms, 23, 26))
+	insert  <- trim(substr(atoms, 27, 27))
+	x1      <-      substr(atoms, 31, 38)
+	x2      <-      substr(atoms, 39, 46)
+	x3      <-      substr(atoms, 47, 54)
+	occ     <-      substr(atoms, 55, 60)
+	temp    <-      substr(atoms, 61, 66)
+	segid   <- trim(substr(atoms, 73, 75))
+	
+	atoms = atoms.default(recAtom, eleid, elename, alt,
+				resname, chainid, resid, insert,
+				x1, x2, x3, occ, temp, segid, basis = "xyz");
+	return(atoms);
+}
+
 #' @rdname atoms
 #' @export
 is.atoms <- function(x)
