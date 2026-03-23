@@ -108,18 +108,22 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	### Title:
 	title = NULL;
 	isTitle = (recname == "TITLE ");
-	if(TITLE & any(isTitle)) {
-		title = subset(lines, isTitle);
-		if(length(title) == 1) {
-		# Text starts actually at npos = 11 as well;
-		title = substr(title, 7, 80);
+	if(TITLE) {
+		if(any(isTitle)) {
+			title = subset(lines, isTitle);
 		} else {
-			title = substr(title, 11, 80);
+			# Only HEADER
+			isTitle = (recname == "HEADER");
+			title   = subset(lines, isTitle);
+			isTitle = FALSE; # actually NOT a Title;
 		}
+		nposE = if(isTitle) 70 else 59;
+		title = substr(title, 11, nposE);
 		title = trim(title);
 	}
 	
 	### Remarks:
+	# TODO: improved extraction;
 	remark = NULL;
 	isRemark  = (recname == "REMARK");
 	hasRemark = any(isRemark);
@@ -133,27 +137,28 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		dfResolution = extract.pdb.Resolution(tmp);
 	}
   
-  ### Atoms:
-  atom <- character(0)
-  is.hetatm <- rep(FALSE, length(recname))
-  is.atom   <- rep(FALSE, length(recname))
-  if(ATOM  ) is.atom   <- recname == "ATOM  "
-  if(HETATM) is.hetatm <- recname == "HETATM"
-  atoms <- subset(lines, is.atom | is.hetatm)
-  if(length(atoms) == 0) stop("No atoms have been selected")
+	### Atoms:
+	is.hetatm = rep(FALSE, length(recname));
+	is.atom   = rep(FALSE, length(recname));
+	if(ATOM  ) is.atom   = recname == "ATOM  ";
+	if(HETATM) is.hetatm = recname == "HETATM";
+	atoms = subset(lines, is.atom | is.hetatm);
+	if(length(atoms) == 0) stop("No atoms have been selected");
+	### Atoms:
+	atoms = as.atoms.character(atoms);
   
-  ### Models:
-  # NUMMDL: is optional;
-  isNModels = (recname == "NUMMDL");
-  if(any(isNModels)) {
-    txtModels = subset(lines, isNModels);
-    if(length(txtModels) > 1) {
-      warning("Malformed pdb file: incorrect number of models!");
-	  txtModels = txtModels[1];
-	}
-	nModels = as.integer(substr(txtModels, 7, 80)); # TODO: 7, 11?
-  } else nModels = 0;
-  if(verbose) cat("Number of models: ", nModels, "\n");
+	### Models:
+	# Field NUMMDL: is optional;
+	isNModels = (recname == "NUMMDL");
+	if(any(isNModels)) {
+		txtModels = subset(lines, isNModels);
+		if(length(txtModels) > 1) {
+			warning("Malformed pdb file: incorrect number of models!");
+			txtModels = txtModels[1];
+		}
+		nModels = as.integer(substr(txtModels, 7, 80)); # TODO: 7, 11?
+	} else nModels = 0;
+	if(verbose) cat("Number of models: ", nModels, "\n");
   #
   model.factor <- rep(0, length(recname))
   model.ids   <- "MODEL.1"
@@ -161,32 +166,40 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
   model.end   <- which(recname == "ENDMDL"); # grep("^ENDMDL", recname)
   if(length(model.start) != length(model.end))
     stop("'Unterminated MODEL section'");
+  #
   hasModel = ! (length(model.start) == 0);
   if(hasModel) {
-    if(any(model.start >= model.end))
-      stop("'Unterminated MODEL section'");
-	# All models:
-    if(is.null(MODEL)) {
-      model.ids <- as.integer(substr(lines[model.start], 11, 14))
-      MODEL <- model.ids 
-    }
-    if( ! is.na(MODEL[1])) {
-      model.ids <- as.integer(substr(lines[model.start], 11, 14));
-	  if(verbose) {
-        if(length(model.ids) > length(MODEL))
-		  cat("Note: loading only models: ",
-		    paste0(MODEL, collapse = ", "), ";\n", sep = "");
-	  }
-	  idModels = which(model.ids %in% MODEL);
+		if(any(model.start >= model.end))
+			stop("'Unterminated MODEL section'");
+		# All models:
+		if(is.null(MODEL)) {
+			model.ids = as.integer(substr(lines[model.start], 11, 14));
+			MODEL = model.ids;
+		}
+		# Only requested models:
+		MODEL = MODEL[! is.na(MODEL)];
+		if(length(MODEL) == 0) {
+			# TODO
+		} else {
+			model.ids = as.integer(substr(lines[model.start], 11, 14));
+			if(verbose) {
+				if(length(model.ids) > length(MODEL))
+					cat("Note: Loading only models: ",
+						paste0(MODEL, collapse = ", "), ";\n", sep = "");
+			}
+			idModels = match(model.ids, MODEL);
+			naModels = is.na(idModels);
+			if(any(naModels)) {
+				if(verbose) {
+					cat("Note: Some models not found: ",
+						paste(idModels[naModels], collapse = ", "), ";\n");
+				}
+				idModels = idModels[! naModels];
+			}
       model.start <- model.start[idModels]
       model.end   <- model.end  [idModels]
       model.ids   <- model.ids  [idModels]
       model.ids   <- paste("MODEL", model.ids, sep=".");
-      # model.factorE = model.factor; # just rep(0, ...)
-      # model.factor [model.start + 1] = model.start;
-      # model.factorE[model.end      ] = model.start;
-      # model.factor = cumsum(model.factor) - cumsum(model.factorE);
-	  # rm(model.factorE);
 		model.factor [model.start + 1] = model.start;
 		model.factor [model.end      ] = - model.start;
 		model.factor = cumsum(model.factor);
@@ -199,13 +212,9 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
   levels(model.factor) <- model.ids
   model.factor <- model.factor[is.atom | is.hetatm]
   
-	### Atoms:
-	atoms = as.atoms.character(atoms);
-  
 	### Crystal Cell:
 	crystal = NULL;
 	# Note: could also use recname;
-	# isCrystal = grepl("^CRYST1", lines);
 	isCrystal = (recname == "CRYST1");
 	if(CRYSTAL && any(isCrystal)) {
 		crystal = subset(lines, isCrystal);
@@ -222,13 +231,14 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		connect = subset(lines, isConnect);
 		connect = connect.character(connect, atoms);
 	}
-
-  to.return = pdb(atoms, crystal, connect, remark, title,
-    resolution = dfResolution);
-  to.return <- split(to.return, model.factor)
-  if(length(to.return) == 1) to.return <- to.return[[1]]
-
-  return(to.return)
+	
+	### PDB Object:
+	pdbObj = pdb(atoms, crystal, connect, remark, title,
+		resolution = dfResolution);
+	pdbObj = split(pdbObj, model.factor);
+	if(length(pdbObj) == 1) pdbObj = pdbObj[[1]];
+	
+	return(pdbObj)
 }
 
 ### Helper

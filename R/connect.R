@@ -63,7 +63,7 @@
 # TODO: remove
 conect.default = function(eleid.1, eleid.2, ...) {
 	if(missing(eleid.2)) {
-		if(inherits(eleid.1, c("connect", "conect"))) {
+		if(is.connect(eleid.1)) {
 			return(eleid.1);
 		} else if(inherits(eleid.1, "data.frame")) {
 			class(eleid.1) = c("connect", "data.frame");
@@ -83,6 +83,15 @@ connect <- function(...)
 #' @export
 connect.default <- function(eleid.1, eleid.2, ...)
 {
+	if(missing(eleid.2)) {
+		if(is.connect(eleid.1)) {
+			return(eleid.1);
+		} else if(inherits(eleid.1, "data.frame")) {
+			class(eleid.1) = c("connect", "data.frame");
+			return(eleid.1);
+		} else
+			stop("Missing eleid2!");
+	}
   if(is.null(eleid.1) & is.null(eleid.2))
     return(NULL)
   eleid.1 <- as.integer(eleid.1)
