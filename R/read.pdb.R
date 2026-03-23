@@ -111,6 +111,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	if(TITLE) {
 		if(any(isTitle)) {
 			title = subset(lines, isTitle);
+			isTitle = TRUE;
 		} else {
 			# Only HEADER
 			isTitle = (recname == "HEADER");
