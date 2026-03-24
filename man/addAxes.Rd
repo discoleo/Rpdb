@@ -25,8 +25,9 @@ to be drawn.}
 \item{cex}{a numeric value indicating the magnification used to draw the 
 labels of the axes.}
 
-\item{scale}{a scalar value, or a numeric vector of length 3 or a 3x3 matrix used to scale
-the PBC box; a length 3 vector is converted to a diagonal matrix;}
+\item{scale}{a scalar value, or a numeric vector of length 3 or of length 6, or a 3x3 matrix
+used to scale the PBC box; a length 3 vector is converted to a diagonal matrix,
+while a length 6 vector is converted to a diagonal matrix and a relative shift;}
 
 \item{col}{colour used for the PBC box;}
 

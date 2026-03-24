@@ -16,8 +16,9 @@
 #'   the PBC box.
 #' @param labels a logical value indicating whether the labels of the axes have 
 #'   to be drawn.
-#' @param scale a scalar value, or a numeric vector of length 3 or a 3x3 matrix used to scale
-#'   the PBC box; a length 3 vector is converted to a diagonal matrix;
+#' @param scale a scalar value, or a numeric vector of length 3 or of length 6, or a 3x3 matrix
+#'   used to scale the PBC box; a length 3 vector is converted to a diagonal matrix,
+#'   while a length 6 vector is converted to a diagonal matrix and a relative shift;
 #' @param cex a numeric value indicating the magnification used to draw the 
 #'   labels of the axes.
 #' @param col colour used for the PBC box;
@@ -122,31 +123,27 @@ addPBCBox = function(x, scale = NULL,
 		if(is.null(x)) stop("The PDB molecule does not contain crystal information!");
 	} else if(! is.crystal(x))
 		stop("'x' must be an object of class 'crystal'!");
-  
+	# Bounding Box:
 	cell = cell.coords(x);
-	cell_12 = cell[,1] + cell[,2];
-	cell_13 = cell[,1] + cell[,3];
-	cell_23 = cell[,2] + cell[,3];
-	cell_Sm = cell_12  + cell[,3]; # Opposite Point
-	mBox = rbind(
-		c(0,0,0), cell[,1],
-		c(0,0,0), cell[,2],
-		c(0,0,0), cell[,3],
-		cell_12,  cell[,1],
-		cell_12,  cell[,2],
-		cell_12,  cell_Sm,
-		cell_13,  cell[,1],
-		cell_13,  cell_Sm,
-		cell_13,  cell[,3],
-		cell_23,  cell_Sm,
-		cell_23,  cell[,2],
-		cell_23,  cell[,3]
-	);
+	mBox = box.coords(cell);
 	# Scale Box:
 	if(! is.null(scale)) {
 		len = length(scale);
 		if(len == 1) {
 			mBox = scale * mBox;
+		} else if(len == 4 || len == 6) {
+			# Diag & Relative Shift:
+			if(len == 6) {
+				m1 = diag(scale[1:3]);
+				m2 = scale[4:6];
+			} else {
+				m1 = diag(scale[1], 3);
+				m2 = scale[2:4];
+			}
+			mBox  = mBox %*% m1;
+			shift = cell %*% m2;
+			shift = rep(shift, each = 24);
+			mBox = mBox + shift;
 		} else {
 			if(len == 3) {
 				scale = diag(scale);
@@ -166,4 +163,27 @@ addPBCBox = function(x, scale = NULL,
 	#
 	seg.id = data.frame(id = seg.id, type = "pbc.box");
 	invisible(seg.id)
+}
+
+box.coords = function(x) {
+	cell_12 = x[,1] + x[,2];
+	cell_13 = x[,1] + x[,3];
+	cell_23 = x[,2] + x[,3];
+	cell_Sm = cell_12  + x[,3]; # Opposite Point
+	mBox = rbind(
+		c(0,0,0), x[,1],
+		c(0,0,0), x[,2],
+		c(0,0,0), x[,3],
+		cell_12,  x[,1],
+		cell_12,  x[,2],
+		cell_12,  cell_Sm,
+		cell_13,  x[,1],
+		cell_13,  cell_Sm,
+		cell_13,  x[,3],
+		cell_23,  cell_Sm,
+		cell_23,  x[,2],
+		cell_23,  x[,3]
+	);
+	rownames(mBox) = NULL;
+	return(mBox);
 }

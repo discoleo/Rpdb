@@ -10,7 +10,7 @@
 ## New Functionality
 - Function chains: extract chain-codes;
 - Function addPBCBox:
-  - new argument scale;
+  - new argument scale: includes also relative shift;
   - new argument col: set colour of box;
   - new argument alpha: set transparency;
   - x can be also a PDB molecule;
