@@ -11,7 +11,7 @@ addABC(x, lwd = 2, labels = TRUE, cex = 2)
 
 addXYZ(lwd = 2, labels = TRUE, cex = 2)
 
-addPBCBox(x, lwd = 2, alpha = 1)
+addPBCBox(x, scale = NULL, lwd = 2, col = "black", alpha = 0.25)
 }
 \arguments{
 \item{x}{an object of class \sQuote{crystal} containing unit cell parameters.}
@@ -25,6 +25,11 @@ to be drawn.}
 \item{cex}{a numeric value indicating the magnification used to draw the 
 labels of the axes.}
 
+\item{scale}{a scalar value, or a numeric vector of length 3 or a 3x3 matrix used to scale
+the PBC box; a length 3 vector is converted to a diagonal matrix;}
+
+\item{col}{colour used for the PBC box;}
+
 \item{alpha}{a numeric value specifying the transparency of the lines;}
 }
 \value{
@@ -36,10 +41,10 @@ Add lattice vectors, Cartesian axes or PBC box to the current \sQuote{rgl}
 scene.
 }
 \details{
-\code{addABC}: Add the lattice vectors a, b and c to the current rgl 
-device.\cr \code{addXYZ}: Add the Cartesian axes x, y and z to the current 
-rgl device.\cr \code{addPBCBox}: Add a box representing the Periodic Boundary
-Conditions of a molecular system.
+\code{addABC}: Add the lattice vectors a, b and c to the current rgl device.\cr
+\code{addXYZ}: Add the Cartesian axes x, y and z to the current rgl device.\cr
+\code{addPBCBox}: Add a box representing the Periodic Boundary Conditions
+  of a molecular system.
 }
 \examples{
 x <- read.pdb(system.file("examples/PCBM_ODCB.pdb", package="Rpdb"))

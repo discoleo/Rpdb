@@ -3,13 +3,18 @@
 
 ## Refactoring
 - Renaming "conect" -> "connect";
- -- Renamed class to "connect";
- -- Renamed function arguments to "connect";
- -- Renamed functions to "connect";
+  - Renamed class to "connect";
+  - Renamed function arguments to "connect";
+  - Renamed functions to "connect";
 
 ## New Functionality
 - Function chains: extract chain-codes;
-- Function addPBCBox: new argument alpha = 1 for setting transparency;
+- Function addPBCBox:
+  - new argument scale;
+  - new argument col: set colour of box;
+  - new argument alpha: set transparency;
+  - x can be also a PDB molecule;
+  
 
 ## TODO
 

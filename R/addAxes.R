@@ -3,10 +3,10 @@
 #' Add lattice vectors, Cartesian axes or PBC box to the current \sQuote{rgl} 
 #' scene.
 #' 
-#' \code{addABC}: Add the lattice vectors a, b and c to the current rgl 
-#' device.\cr \code{addXYZ}: Add the Cartesian axes x, y and z to the current 
-#' rgl device.\cr \code{addPBCBox}: Add a box representing the Periodic Boundary
-#' Conditions of a molecular system.
+#' \code{addABC}: Add the lattice vectors a, b and c to the current rgl device.\cr
+#' \code{addXYZ}: Add the Cartesian axes x, y and z to the current rgl device.\cr
+#' \code{addPBCBox}: Add a box representing the Periodic Boundary Conditions
+#'   of a molecular system.
 #' 
 #' @return Return (using invisible) a two-column data.frame containing the IDs 
 #'   and type indicators of the objects added to the scene.
@@ -16,8 +16,11 @@
 #'   the PBC box.
 #' @param labels a logical value indicating whether the labels of the axes have 
 #'   to be drawn.
+#' @param scale a scalar value, or a numeric vector of length 3 or a 3x3 matrix used to scale
+#'   the PBC box; a length 3 vector is converted to a diagonal matrix;
 #' @param cex a numeric value indicating the magnification used to draw the 
 #'   labels of the axes.
+#' @param col colour used for the PBC box;
 #' @param alpha a numeric value specifying the transparency of the lines;
 #'   
 #' @seealso \code{\link{visualize}}, \code{\link[rgl]{rgl.open}}, \code{\link[rgl]{par3d}},
@@ -111,36 +114,56 @@ addXYZ <- function(lwd = 2, labels= TRUE, cex = 2){
 
 #' @rdname addAxes
 #' @export
-addPBCBox <- function(x, lwd = 2, alpha = 1) {
-  if(missing(x)) stop("Please specify a 'crystal' object")
-  if(! is.crystal(x)) stop("'x' must be an object of class 'crystal'")
+addPBCBox = function(x, scale = NULL,
+		lwd = 2, col = "black", alpha = 0.25) {
+	if(missing(x)) stop("Please specify a 'crystal' object");
+	if(is.pdb(x)) {
+		x = x$crystal;
+		if(is.null(x)) stop("The PDB molecule does not contain crystal information!");
+	} else if(! is.crystal(x))
+		stop("'x' must be an object of class 'crystal'!");
   
 	cell = cell.coords(x);
 	cell_12 = cell[,1] + cell[,2];
 	cell_13 = cell[,1] + cell[,3];
 	cell_23 = cell[,2] + cell[,3];
-	cell_Sm = cell_12  + cell[,3];
-	#
+	cell_Sm = cell_12  + cell[,3]; # Opposite Point
+	mBox = rbind(
+		c(0,0,0), cell[,1],
+		c(0,0,0), cell[,2],
+		c(0,0,0), cell[,3],
+		cell_12,  cell[,1],
+		cell_12,  cell[,2],
+		cell_12,  cell_Sm,
+		cell_13,  cell[,1],
+		cell_13,  cell_Sm,
+		cell_13,  cell[,3],
+		cell_23,  cell_Sm,
+		cell_23,  cell[,2],
+		cell_23,  cell[,3]
+	);
+	# Scale Box:
+	if(! is.null(scale)) {
+		len = length(scale);
+		if(len == 1) {
+			mBox = scale * mBox;
+		} else {
+			if(len == 3) {
+				scale = diag(scale);
+			} else if(len == 9) {
+				# OK
+			} else stop("Invalid scale argument!");
+			mBox = mBox %*% scale;
+		}
+	}
+	# PBC Box:
 	seg.id = rgl::segments3d(
-		rbind(
-			c(0,0,0), cell[,1],
-			c(0,0,0), cell[,2],
-			c(0,0,0), cell[,3],
-			cell_12,  cell[,1],
-			cell_12,  cell[,2],
-			cell_12,  cell_Sm,
-			cell_13,  cell[,1],
-			cell_13,  cell_Sm,
-			cell_13,  cell[,3],
-			cell_23,  cell_Sm,
-			cell_23,  cell[,2],
-			cell_23,  cell[,3]
-		),
+		mBox,
 		lwd = lwd,
-		col = "black",
+		col = col,
 		alpha = alpha
 	);
-  seg.id <- data.frame(id = seg.id, type = "pbc.box")
-  
-  invisible(seg.id)
+	#
+	seg.id = data.frame(id = seg.id, type = "pbc.box");
+	invisible(seg.id)
 }
