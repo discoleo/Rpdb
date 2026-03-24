@@ -4,10 +4,10 @@
 \alias{chains}
 \alias{chains.atoms}
 \alias{chains.pdb}
-\title{Extract Chain-Codes from a PDB Object
+\title{Extract Chain-Codes from a PDB Molecule
 Extract the codes of all chains from a PDB object.
 \code{chains} is a generic function to extract the ids
-of the chains from a PDB object.}
+of the chains from a PDB molecule.}
 \usage{
 chains(x, ...)
 
@@ -18,14 +18,16 @@ chains(x, ...)
 \arguments{
 \item{x}{Object of class \code{pdb} or class \code{atoms};}
 
-\item{\dots}{arguments passed to methods.}
+\item{\dots}{arguments passed to other methods.}
+
+\item{sorted}{logical indicating if the returned chain-codes should be sorted;}
 }
 \value{
 \code{chains} returns the codes of the individual chains in the molecule.
 }
 \description{
-Extract Chain-Codes from a PDB Object
+Extract Chain-Codes from a PDB Molecule
 Extract the codes of all chains from a PDB object.
 \code{chains} is a generic function to extract the ids
-of the chains from a PDB object.
+of the chains from a PDB molecule.
 }

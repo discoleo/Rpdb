@@ -9,6 +9,7 @@
 
 ## New Functionality
 - Function chains: extract chain-codes;
+- Function addPBCBox: new argument alpha = 1 for setting transparency;
 
 ## TODO
 

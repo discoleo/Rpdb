@@ -35,7 +35,8 @@
 #' @param type a character string indicating the visualization style (See details).
 #' @param xyz a logical value indicating whether the x, y and z axes have to be added to the scene. See details.
 #' @param abc a logical value indicating whether the a, b and c axes have to be added to the scene. See details.
-#' @param pbc.box a logical value indicating whether the pbc box has to be added to the scene. See details
+#' @param pbc.box a logical value indicating whether the pbc box has to be added to the scene. See details.
+#' @param alpha.box a logical value specifying the transparency of the box-lines;
 #' @param lwd a numeric value indication the line width used to plot the axes, the pbc box and atomic bonds when \code{type = "l"} (see details).
 #' @param lwd.xyz a numeric value indicating the line width used to plot the x, y and z axes.
 #' @param lwd.abc a numeric value indicating the line width used to plot the a, b and c axes.
@@ -87,7 +88,7 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
 		radii = "rvdw", scale.atoms = 1,
 		add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
-		userMatrix = diag(4), ...) {
+		userMatrix = diag(4), alpha.box = 0.25, ...) {
   if(!is.coords(x)) stop("'x' must be an object of class coords.")
   
   if(basis(x) == "abc") x <- abc2xyz(x, crystal);
@@ -160,7 +161,7 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
   
   if(xyz) ids <- rbind(ids, addXYZ(lwd = lwd.xyz, cex = cex.xyz))
   if(abc) ids <- rbind(ids, addABC(crystal, lwd = lwd.abc, cex = cex.abc))
-  if(pbc.box) ids <- rbind(ids, addPBCBox(crystal, lwd = lwd.pbc.box))
+  if(pbc.box) ids <- rbind(ids, addPBCBox(crystal, lwd = lwd.pbc.box, alpha = alpha.box))
   # print(str(ids))
   
   ### Molecule
@@ -266,17 +267,18 @@ visualize.matrix <- function(x, elename = NULL, crystal = NULL, connect = NULL,
 #' @rdname visualize
 #' @export
 visualize.atoms <- function(x, crystal = NULL, connect = NULL,
-		mode = NULL, type = "l", xyz = NULL, abc = NULL, pbc.box = NULL,
+		mode = NULL, type = "l",
+		xyz = NULL, abc = NULL, pbc.box = NULL,
 		lwd = 2, lwd.xyz = lwd, lwd.abc = lwd, lwd.pbc.box = lwd,
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2", 
 		radii = "rvdw", scale.atoms = 1,
 		add = FALSE, windowRect = NULL, FOV = 0,
-		userMatrix = diag(4), ...) {
+		userMatrix = diag(4), alpha.box = 0.25, ...) {
 	if(is.null(windowRect)) windowRect = windowRect0();
 	ids = visualize(coords(x), x$elename, crystal, connect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg, radii, scale.atoms = scale.atoms,
-			add, windowRect, FOV, userMatrix, ...)
+			add, windowRect, FOV, userMatrix, alpha.box = 0.25, ...)
   
   if(!is.null(mode)){
     if(mode == "measure"){
@@ -313,9 +315,10 @@ visualize.pdb <- function(x, mode = NULL, type = "l",
 	}
   # calls visualize.atoms;
   ids <- visualize(x$atoms, crystal = x$crystal, connect = connect, mode=NULL, type,
-            xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
+            xyz, abc, pbc.box,
+			lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg, radii, scale.atoms = scale.atoms,
-			add, windowRect, FOV, userMatrix, ...)
+			add, windowRect, FOV, userMatrix, alpha.box = 0.25, ...)
   
   if(!is.null(mode)){
     if(mode == "measure"){

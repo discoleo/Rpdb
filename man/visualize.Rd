@@ -39,6 +39,7 @@ visualize(...)
   windowRect = c(0, 0, 800, 600),
   FOV = 0,
   userMatrix = diag(4),
+  alpha.box = 0.25,
   ...
 )
 
@@ -117,6 +118,7 @@ visualize(...)
   windowRect = NULL,
   FOV = 0,
   userMatrix = diag(4),
+  alpha.box = 0.25,
   ...
 )
 
@@ -186,7 +188,7 @@ visualize(...)
 
 \item{abc}{a logical value indicating whether the a, b and c axes have to be added to the scene. See details.}
 
-\item{pbc.box}{a logical value indicating whether the pbc box has to be added to the scene. See details}
+\item{pbc.box}{a logical value indicating whether the pbc box has to be added to the scene. See details.}
 
 \item{lwd}{a numeric value indication the line width used to plot the axes, the pbc box and atomic bonds when \code{type = "l"} (see details).}
 
@@ -215,6 +217,8 @@ visualize(...)
 \item{FOV}{the field of view. This controls the degree of parallax in the perspective view (see par3d).}
 
 \item{userMatrix}{a 4 by 4 matrix describing user actions to display the scene (see \code{par3d}).}
+
+\item{alpha.box}{a logical value specifying the transparency of the box-lines;}
 }
 \value{
 Return (using invisible) a two-column data.frame containing the IDs

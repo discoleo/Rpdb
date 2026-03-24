@@ -18,6 +18,7 @@
 #'   to be drawn.
 #' @param cex a numeric value indicating the magnification used to draw the 
 #'   labels of the axes.
+#' @param alpha a numeric value specifying the transparency of the lines;
 #'   
 #' @seealso \code{\link{visualize}}, \code{\link[rgl]{rgl.open}}, \code{\link[rgl]{par3d}},
 #'   \code{\link{addLabels}}
@@ -110,29 +111,35 @@ addXYZ <- function(lwd = 2, labels= TRUE, cex = 2){
 
 #' @rdname addAxes
 #' @export
-addPBCBox <- function(x, lwd = 2){
+addPBCBox <- function(x, lwd = 2, alpha = 1) {
   if(missing(x)) stop("Please specify a 'crystal' object")
   if(! is.crystal(x)) stop("'x' must be an object of class 'crystal'")
   
-  cell <- cell.coords(x)
-  
-  seg.id <- rgl::segments3d(
-    rbind(
-      c(0,0,0)                  , cell[,1],
-      c(0,0,0)                  , cell[,2],
-      c(0,0,0)                  , cell[,3],
-      cell[,1]+cell[,2]         , cell[,1],
-      cell[,1]+cell[,2]         , cell[,2],
-      cell[,1]+cell[,2]         , cell[,1]+cell[,2]+cell[,3],
-      cell[,1]+cell[,3]         , cell[,1],cell[,1]+cell[,3],
-      cell[,1]+cell[,3]+cell[,2], cell[,1]+cell[,3],cell[,3],
-      cell[,2]+cell[,3]         , cell[,2]+cell[,3]+cell[,1],
-      cell[,2]+cell[,3]         , cell[,2],
-      cell[,2]+cell[,3]         , cell[,3]
-    ),
-    col = "black",
-    lwd = lwd
-  )
+	cell = cell.coords(x);
+	cell_12 = cell[,1] + cell[,2];
+	cell_13 = cell[,1] + cell[,3];
+	cell_23 = cell[,2] + cell[,3];
+	cell_Sm = cell_12  + cell[,3];
+	#
+	seg.id = rgl::segments3d(
+		rbind(
+			c(0,0,0), cell[,1],
+			c(0,0,0), cell[,2],
+			c(0,0,0), cell[,3],
+			cell_12,  cell[,1],
+			cell_12,  cell[,2],
+			cell_12,  cell_Sm,
+			cell_13,  cell[,1],
+			cell_13,  cell_Sm,
+			cell_13,  cell[,3],
+			cell_23,  cell_Sm,
+			cell_23,  cell[,2],
+			cell_23,  cell[,3]
+		),
+		lwd = lwd,
+		col = "black",
+		alpha = alpha
+	);
   seg.id <- data.frame(id = seg.id, type = "pbc.box")
   
   invisible(seg.id)

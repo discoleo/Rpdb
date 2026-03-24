@@ -11,7 +11,7 @@ addABC(x, lwd = 2, labels = TRUE, cex = 2)
 
 addXYZ(lwd = 2, labels = TRUE, cex = 2)
 
-addPBCBox(x, lwd = 2)
+addPBCBox(x, lwd = 2, alpha = 1)
 }
 \arguments{
 \item{x}{an object of class \sQuote{crystal} containing unit cell parameters.}
@@ -24,6 +24,8 @@ to be drawn.}
 
 \item{cex}{a numeric value indicating the magnification used to draw the 
 labels of the axes.}
+
+\item{alpha}{a numeric value specifying the transparency of the lines;}
 }
 \value{
 Return (using invisible) a two-column data.frame containing the IDs 
