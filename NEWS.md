@@ -7,6 +7,9 @@
  -- Renamed function arguments to "connect";
  -- Renamed functions to "connect";
 
+## New Functionality
+- Function chains: extract chain-codes;
+
 ## TODO
 
 - Extract all useful code and ideas from the discussion thread:

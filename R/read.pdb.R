@@ -118,7 +118,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 			title   = subset(lines, isTitle);
 			isTitle = FALSE; # actually NOT a Title;
 		}
-		nposE = if(isTitle) 70 else 59;
+		nposE = if(isTitle) 80 else 59;
 		title = substr(title, 11, nposE);
 		title = trim(title);
 	}

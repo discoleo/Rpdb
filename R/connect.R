@@ -8,7 +8,7 @@
 #' PDB files, indicating the connectivity of a molecular system.\cr
 #' The default method creates a \code{connect} object from its different components, i.e.: 
 #'   \code{eleid.1} and \code{eleid.2}. Both arguments have to be specified.\cr 
-#' The S3 method for object of class \sQuote{coords} determines the connectivity 
+#' The S3 method for an object of class \sQuote{coords} determines the connectivity 
 #'   from atomic coordinates. A distance matrix is computed, then, for each pair 
 #'   of atoms the distance is compared to a bounding distance computed from atomic 
 #'   radii. If this distance is lower than the bounding distance then the atoms 
