@@ -121,6 +121,7 @@ atoms.default <- function(recname, eleid, elename, alt,
 	# Chemical Symbols:
 	if(! is.null(symbol)) atoms$symbol = symbol;
 	# Protein vs Non-Protein:
+	# Note: atoms$recname is this field!
 	if(! is.null(isHetero)) atoms$Hetero = isHetero;
 	attr(atoms, "basis") = basis;
 	class(atoms) = c("atoms", "coords", "data.frame");

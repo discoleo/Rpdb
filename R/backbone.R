@@ -17,16 +17,21 @@ asBackbone = function(x) {
 	FUN = function(tmp) {
 		id = match(c("N", "CA", "C", "O"), tmp$elename);
 		id = tmp$eleid[id];
-		id = c(id, id[3]);
+		id = c(id, NA, id[3]);
 	}
-	atoms = x$atoms;
+	if(inherits(x, "atoms")) {
+		atoms = x;
+	} else if(inherits(x, "pdb")) atoms = x$atoms;
 	ch = chains(x);
 	idBB = lapply(ch, function(ch) {
-		tmp = atoms[atoms$chainid == ch, c("resid", "eleid", "elename")];
-		if(! isProteinA(tmp)) return(NULL);
+		tmp = atoms[atoms$chainid == ch, c("resid", "eleid", "elename", "Hetero")];
+		tmp = tmp[tmp$Hetero == FALSE, c("resid", "eleid", "elename")];
+		if(nrow(tmp) == 0) return(NULL);
 		idBB = tapply(tmp, tmp$resid, FUN);
 		idBB = unlist(idBB);
 		idBB = data.frame(idBB[- length(idBB)], idBB[-1]);
+		isNA = is.na(idBB[,1]) | is.na(idBB[,2]);
+		idBB = idBB[! isNA, ];
 		names(idBB) = c("eleid.1", "eleid.2");
 		return(idBB);
 	});
