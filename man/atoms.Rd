@@ -24,6 +24,8 @@ atoms(...)
   temp,
   segid,
   basis = "xyz",
+  symbol = NULL,
+  isHetero = NULL,
   ...
 )
 
@@ -58,7 +60,11 @@ is.atoms(x)
 
 \item{basis}{a single element character vector indicating the type of basis vector used to express the atomic coordinates.}
 
-\item{x}{an R obecjt to be tested.}
+\item{symbol}{the chemical symbol of the atom.}
+
+\item{isHetero}{logical indicating if the record corresponds to the non-protein ligands.}
+
+\item{x}{an R object to be tested.}
 }
 \value{
 \code{atoms} returns a data.frame of class \sQuote{atoms} with the following components:

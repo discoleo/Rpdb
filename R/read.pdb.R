@@ -2,11 +2,14 @@
 #' 
 #' Reads a Protein Data Bank (PDB) coordinates file.
 #' 
-#' The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYST1 and CONECT records from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 
+#' The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYSTAL and CONECT records
+#'   from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 
 #' \itemize{
-#'   \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers match these integers are read.
+#'   \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers
+#'      match these integers are read.
 #'   \item When \code{MODEL == NULL}, all MODEL sections are read.
-#'   \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records are merged together to return a single object.
+#'   \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records
+#'     are merged together to return a single object.
 #' }
 #' When multiple models are specified, each of the models is actually stored
 #'   as a separate pdb molecule in a list of pdb molecules.
@@ -143,10 +146,11 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	is.atom   = rep(FALSE, length(recname));
 	if(ATOM  ) is.atom   = recname == "ATOM  ";
 	if(HETATM) is.hetatm = recname == "HETATM";
-	atoms = subset(lines, is.atom | is.hetatm);
+	isAtomField = is.atom | is.hetatm;
+	atoms = subset(lines, isAtomField);
 	if(length(atoms) == 0) stop("No atoms have been selected");
 	### Atoms:
-	atoms = as.atoms.character(atoms);
+	atoms = as.atoms.character(atoms, isHetero = is.hetatm[isAtomField]);
   
 	### Models:
 	# Field NUMMDL: is optional;

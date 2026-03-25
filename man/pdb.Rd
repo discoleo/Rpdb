@@ -44,8 +44,10 @@ is.pdb(x)
 \code{pdb} returns a list of class \sQuote{pdb} with the following components:
 \item{title}{a character vector containing the TITLE records found in a PDB file.}
 \item{remark}{a character vector containing the REMARK records found in a PDB file.}
-\item{crystal}{a list of class \sQuote{crystal} containing the first CRYST1 record found in a PDB file. All others are ignored.}
-\item{atoms}{a data.frame of class \sQuote{atoms} containing the ATOM and HETATM records found in a PDB file.}
+\item{crystal}{a list of class \sQuote{crystal} containing the first CRYSTAL record
+   found in a PDB file. All others are ignored.}
+\item{atoms}{a data.frame of class \sQuote{atoms} containing the ATOM and HETATM records
+   found in a PDB file.}
 \item{connect}{a data.frame of class \sQuote{connect} containing the CONECT records found in a PDB file.}
 \cr
 \code{is.pdb} returns TRUE if x is an object of class \sQuote{pdb} and FALSE otherwise.
@@ -54,14 +56,15 @@ is.pdb(x)
 Creates an object of class 'pdb'.
 }
 \details{
-This function is the generic function to create objects of class
-\sQuote{pdb}. The purpose of this class is to store the data of molecular
-systems contained in PDB files. The default method of the \code{pdb} function
-creates an object of class \sQuote{pdb} from its different components, i.e.:
-\code{title}, \code{remark}, \code{crystal}, \code{atoms} and \code{connect}. 
-At least an object of class \sQuote{atoms} has to be specified. \cr\cr 
-\code{is.pdb} tests if x is an object of class \sQuote{pdb}, i.e. if x has a
-\dQuote{class} attribute equal to \code{pdb}.
+This function is a generic function used to create objects of class \sQuote{pdb}.
+  The purpose of this class is to store the data of molecular systems contained in PDB files.
+The default method of the \code{pdb} function creates an object of class \sQuote{pdb}
+  from its different components, i.e.:
+  \code{title}, \code{remark}, \code{crystal}, \code{atoms} and \code{connect}. 
+  At least an object of class \sQuote{atoms} has to be specified.\cr\cr
+
+\code{is.pdb} tests if x is an object of class \sQuote{pdb},
+  i.e. if x has a \dQuote{class} attribute equal to \code{pdb}.
 }
 \examples{
 title  <- "This is just an example"

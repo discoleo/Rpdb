@@ -47,7 +47,9 @@
 #' @param temp a numeric vector containing the temperature factor for each element.
 #' @param segid a character vector containing the segment ID for each element.
 #' @param basis a single element character vector indicating the type of basis vector used to express the atomic coordinates.
-#' @param x an R obecjt to be tested.
+#' @param symbol the chemical symbol of the atom.
+#' @param isHetero logical indicating if the record corresponds to the non-protein ligands.
+#' @param x an R object to be tested.
 #' 
 #' @seealso \code{\link{basis}}, \code{\link{coords}}, \code{\link{pdb}}
 #' 
@@ -72,10 +74,10 @@ atoms <- function(...)
 #' @rdname atoms
 #' @export
 atoms.default <- function(recname, eleid, elename, alt,
-                                resname, chainid, resid, insert,
-                                x1, x2, x3, occ, temp, segid, basis = "xyz", ...)
+					resname, chainid, resid, insert,
+					x1, x2, x3, occ, temp, segid,
+					basis = "xyz", symbol = NULL, isHetero = NULL, ...)
 {
-  
   recname <- as.character(recname)
   eleid   <- suppressWarnings(as.integer(eleid))
   elename <- as.character(elename)
@@ -108,22 +110,25 @@ atoms.default <- function(recname, eleid, elename, alt,
     chainid = chainid,
     resid   = resid  ,
     insert  = insert ,
-    x1     = x1      ,
-    x2     = x2      ,
-    x3     = x3      ,
+    x1      = x1     ,
+    x2      = x2     ,
+    x3      = x3     ,
     occ     = occ    ,
     temp    = temp   ,
     segid   = segid  ,
     stringsAsFactors = FALSE
   )
-  attr(atoms, "basis") <- basis
-  
-  class(atoms) <- c("atoms","coords","data.frame")
-  return(atoms)
+	# Chemical Symbols:
+	if(! is.null(symbol)) atoms$symbol = symbol;
+	# Protein vs Non-Protein:
+	if(! is.null(isHetero)) atoms$Hetero = isHetero;
+	attr(atoms, "basis") = basis;
+	class(atoms) = c("atoms", "coords", "data.frame");
+	return(atoms);
 }
 
 # Read atoms from raw pdb text lines;
-as.atoms.character = function(atoms) {
+as.atoms.character = function(atoms, isHetero = NULL) {
 	### Atoms:
 	recAtom <- trim(substr(atoms,  1,  6))
 	eleid   <- trim(substr(atoms,  7, 11))
@@ -139,10 +144,16 @@ as.atoms.character = function(atoms) {
 	occ     <-      substr(atoms, 55, 60)
 	temp    <-      substr(atoms, 61, 66)
 	segid   <- trim(substr(atoms, 73, 75))
+	# Atomic Symbol:
+	symbol  = trim(substr(atoms, 77, 78));
+	symbol  = sub("\\d+", "", symbol); # Old PDB format;
+	# TODO: ugly extraction;
+	if(all(nchar(symbol) == 0)) symbol = NULL;
 	
 	atoms = atoms.default(recAtom, eleid, elename, alt,
 				resname, chainid, resid, insert,
-				x1, x2, x3, occ, temp, segid, basis = "xyz");
+				x1, x2, x3, occ, temp, segid,
+				basis = "xyz", symbol = symbol, isHetero = isHetero);
 	return(atoms);
 }
 

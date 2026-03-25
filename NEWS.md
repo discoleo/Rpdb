@@ -11,6 +11,8 @@
 - Function chains: extract chain-codes;
 
 ## Enhancement:
+- PDB:
+  - properly import chemical symbols of elements (newer PDB format);
 - Function addPBCBox:
   - new argument scale: includes also relative shift;
   - new argument col: set colour of box;

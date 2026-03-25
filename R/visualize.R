@@ -89,15 +89,17 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
 		radii = "rvdw", scale.atoms = 1,
 		add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
 		userMatrix = diag(4), alpha.box = 0.25, ...) {
-  if(!is.coords(x)) stop("'x' must be an object of class coords.")
-  
-  if(basis(x) == "abc") x <- abc2xyz(x, crystal);
-
-  # Unrecognized elements are considered as dummy atoms
-  if(is.null(elename)){
-    warning("'elename' was not specifyed. All atom have been considered as dummy atoms.")
-    elename <- rep("Xx", natom(x))
-  }
+	# Checks:
+	if(! is.coords(x)) stop("'x' must be an object of class 'coords'.")
+	
+	if(basis(x) == "abc") x = abc2xyz(x, crystal);
+	
+	# Unrecognized elements are considered as dummy atoms
+	if(is.null(elename)) {
+		warning("'elename' was not specified.",
+			"All atom have been considered as dummy atoms.")
+		elename = rep("Xx", natom(x));
+	}
   
   # symb <- toSymbols(elename, na = "Xx");
   # symb[is.na(symb)] <- "Xx"
@@ -170,6 +172,7 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
       warning("Undefined connectivity: Computing connectivity from coordinates...")
       connect = connect(x);
     }
+	# TODO: proper colour of Bonds?
     ind = t(connect);
     seg.id <- rgl::segments3d(
       x$x1[ind],
@@ -275,7 +278,14 @@ visualize.atoms <- function(x, crystal = NULL, connect = NULL,
 		add = FALSE, windowRect = NULL, FOV = 0,
 		userMatrix = diag(4), alpha.box = 0.25, ...) {
 	if(is.null(windowRect)) windowRect = windowRect0();
-	ids = visualize(coords(x), x$elename, crystal, connect, mode=NULL, type,
+	# Atomic Symbols:
+	atoms = x$symbol;
+	if(is.null(atoms)) {
+		atoms = x$elename;
+	} else {
+		attr(atoms, "isSymbol") = TRUE;
+	}
+	ids = visualize(coords(x), atoms, crystal, connect, mode=NULL, type,
             xyz, abc, pbc.box, lwd, lwd.xyz, lwd.abc, lwd.pbc.box,
             cex.xyz, cex.abc, col, bg, radii, scale.atoms = scale.atoms,
 			add, windowRect, FOV, userMatrix, alpha.box = 0.25, ...)

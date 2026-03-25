@@ -54,11 +54,14 @@ When multiple MODEL sections are read, a list of object of class \sQuote{pdb} is
 Reads a Protein Data Bank (PDB) coordinates file.
 }
 \details{
-The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYST1 and CONECT records from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 
+The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYSTAL and CONECT records
+  from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 
 \itemize{
-  \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers match these integers are read.
+  \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers
+     match these integers are read.
   \item When \code{MODEL == NULL}, all MODEL sections are read.
-  \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records are merged together to return a single object.
+  \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records
+    are merged together to return a single object.
 }
 When multiple models are specified, each of the models is actually stored
   as a separate pdb molecule in a list of pdb molecules.
