@@ -195,8 +195,9 @@ connect.character = function(pdbRec, atoms, ...) {
 	C4 = as.integer(substr(pdbRec, 27, 31));
 	C0 = rep(C0, 4);
 	C1 = c(C1,C2,C3,C4);
-	C0 = subset(C0, !is.na(C1));
-	C1 = subset(C1, !is.na(C1));
+	CN =  ! is.na(C1);
+	C0 = subset(C0, CN);
+	C1 = subset(C1, CN);
 	connect = connect.default(eleid.1 = C0, eleid.2 = C1);
 	tokeep  = connect$eleid.1 %in% atoms$eleid & connect$eleid.2 %in% atoms$eleid;
 	connect = subset(connect, tokeep);

@@ -235,6 +235,11 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	if(CONNECT && any(isConnect)) {
 		connect = subset(lines, isConnect);
 		connect = connect.character(connect, atoms);
+		# Re-index: because of TER-record;
+		idA = atoms$eleid;
+		atoms$eleid = seq_along(idA);
+		connect$eleid.1 = match(connect$eleid.1, idA);
+		connect$eleid.2 = match(connect$eleid.2, idA);
 	}
 	
 	### PDB Object:

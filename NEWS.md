@@ -9,6 +9,7 @@
 
 ## New Functionality
 - Function chains: extract chain-codes;
+- S3 method: distances.connect;
 
 ## Enhancement:
 - PDB:
