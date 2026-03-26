@@ -21,11 +21,12 @@
 #' The method for the \sQuote{dist.point} function computes the inter-atomic distances
 #' between the atoms and a specified point.
 #' 
-#' The method of the \code{norm} function for 
-#' objects of class \sQuote{distances} computes the norm of the distances vectors.
+#' The method of the \code{norm} function for objects of class \sQuote{distances}
+#'   computes the norm of the distances vectors.
 #' \code{type} specify how to project the distance vectors before 
-#' computing the norms. By default no projection is perform. The three dx, dy, 
-#' and dz components of the distance vectors are used to compute the norm. 
+#'   computing the norms. By default no projection is perform.
+#'   The three dx, dy, and dz components of the distance vectors
+#'   are used to compute the norm. 
 #' \code{type} can take the following values:
 #'    \itemize{
 #'    \item   x: The distance vectors are projected over x.
@@ -40,10 +41,10 @@
 #' the test is limited to the class attribute.
 #' 
 #' @return The \code{distances} and \code{dist.point} functions return an object
-#' of class \sQuote{distances} containing inter-atomic distance vectors.
-#' The \code{norm} function return an array, with the same dimensions as the \code{dx1},
-#' \code{dx2}, \code{dx3} components of the \sQuote{distances} object for which
-#' the norms have to be computed, containing the norm of the distance vectors. 
+#'   of class \sQuote{distances} containing inter-atomic distance vectors.
+#' The \code{norm} function return an array, with the same dimensions as
+#'   the \code{dx1}, \code{dx2}, \code{dx3} components of the \sQuote{distances} object
+#'   for which the norms have been computed, containing the norm of the distance vectors. 
 #' \cr\cr
 #' \code{is.distances} returns TRUE if x is an object of class \sQuote{distances}
 #' and FALSE otherwise.
@@ -151,6 +152,8 @@ distances.connect = function(x, data, ...) {
 	coords = coords(data);
 	d = coords[sel1,] - coords[sel2,];
 	d = data.frame(dx1 = d[,1], dx2 = d[,2], dx3 = d[,3]);
+	attr(d, "basis")   = basis(data);
+	class(d) = c("distances", "data.frame");
 	return(d);
 }
 
@@ -215,8 +218,7 @@ norm.distances <- function(x, type = "xyz", ...){
 
 #' @rdname distances
 #' @export
-norm.connect = function(x, data, ...) {
-	d = distances(x, data = data, ...);
-	attr(d, "basis") = basis(data);
-	norm.distances(d);
+norm.connect = function(x, data, type = "xyz", ...) {
+	d = distances(x, data = data);
+	norm.distances(d, type = type, ...);
 }

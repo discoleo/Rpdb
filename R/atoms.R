@@ -5,7 +5,7 @@
 #' 
 #' \code{atoms} is a generic function to create objects of class \sQuote{atoms}.
 #' The purpose of this class is to store ATOM and HETATM records from PDB files.
-#' The default method creates a \code{atoms} object from its different
+#' The default method creates an \code{atoms} object from its different
 #' components, i.e.: \code{recname}, \code{eleid}, \code{elename}, \code{alt},
 #' \code{resname}, \code{chainid}, \code{resid}, \code{insert}, \code{x1},
 #' \code{x2}, \code{x3}, \code{occ}, \code{temp}, \code{segid} and \code{basis}.
@@ -49,7 +49,7 @@
 #' @param basis a single element character vector indicating the type of basis vector used to express the atomic coordinates.
 #' @param symbol the chemical symbol of the atom.
 #' @param isHetero logical indicating if the record corresponds to the non-protein ligands.
-#' @param x an R object to be tested.
+#' @param x an R object to be tested or from whom to extract the \code{atoms} component.
 #' 
 #' @seealso \code{\link{basis}}, \code{\link{coords}}, \code{\link{pdb}}
 #' 
@@ -70,6 +70,12 @@
 #' @export
 atoms <- function(...)
   UseMethod("atoms")
+
+#' @rdname atoms
+#' @export
+atoms.pdb = function(x, ...) {
+	return(x$atoms);
+}
 
 #' @rdname atoms
 #' @export

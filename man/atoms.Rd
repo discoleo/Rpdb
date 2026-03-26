@@ -2,11 +2,14 @@
 % Please edit documentation in R/atoms.R
 \name{atoms}
 \alias{atoms}
+\alias{atoms.pdb}
 \alias{atoms.default}
 \alias{is.atoms}
 \title{Create \sQuote{atoms} Object}
 \usage{
 atoms(...)
+
+\method{atoms}{pdb}(x, ...)
 
 \method{atoms}{default}(
   recname,
@@ -33,6 +36,8 @@ is.atoms(x)
 }
 \arguments{
 \item{\dots}{arguments passed to methods.}
+
+\item{x}{an R object to be tested or from whom to extract the \code{atoms} component.}
 
 \item{recname}{a character vector containing the record name for each element.}
 
@@ -63,8 +68,6 @@ is.atoms(x)
 \item{symbol}{the chemical symbol of the atom.}
 
 \item{isHetero}{logical indicating if the record corresponds to the non-protein ligands.}
-
-\item{x}{an R object to be tested.}
 }
 \value{
 \code{atoms} returns a data.frame of class \sQuote{atoms} with the following components:
@@ -92,7 +95,7 @@ and HETATM records of a PDB file.
 \details{
 \code{atoms} is a generic function to create objects of class \sQuote{atoms}.
 The purpose of this class is to store ATOM and HETATM records from PDB files.
-The default method creates a \code{atoms} object from its different
+The default method creates an \code{atoms} object from its different
 components, i.e.: \code{recname}, \code{eleid}, \code{elename}, \code{alt},
 \code{resname}, \code{chainid}, \code{resid}, \code{insert}, \code{x1},
 \code{x2}, \code{x3}, \code{occ}, \code{temp}, \code{segid} and \code{basis}.

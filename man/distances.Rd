@@ -43,7 +43,7 @@ norm(...)
 
 \method{norm}{distances}(x, type = "xyz", ...)
 
-\method{norm}{connect}(x, data, ...)
+\method{norm}{connect}(x, data, type = "xyz", ...)
 }
 \arguments{
 \item{\dots}{further arguments passed to or from other methods.}
@@ -64,10 +64,10 @@ norm(...)
 }
 \value{
 The \code{distances} and \code{dist.point} functions return an object
-of class \sQuote{distances} containing inter-atomic distance vectors.
-The \code{norm} function return an array, with the same dimensions as the \code{dx1},
-\code{dx2}, \code{dx3} components of the \sQuote{distances} object for which
-the norms have to be computed, containing the norm of the distance vectors. 
+  of class \sQuote{distances} containing inter-atomic distance vectors.
+The \code{norm} function return an array, with the same dimensions as
+  the \code{dx1}, \code{dx2}, \code{dx3} components of the \sQuote{distances} object
+  for which the norms have been computed, containing the norm of the distance vectors. 
 \cr\cr
 \code{is.distances} returns TRUE if x is an object of class \sQuote{distances}
 and FALSE otherwise.
@@ -95,11 +95,12 @@ For objects of class \sQuote{connect}, distances are computed for the atoms
 The method for the \sQuote{dist.point} function computes the inter-atomic distances
 between the atoms and a specified point.
 
-The method of the \code{norm} function for 
-objects of class \sQuote{distances} computes the norm of the distances vectors.
+The method of the \code{norm} function for objects of class \sQuote{distances}
+  computes the norm of the distances vectors.
 \code{type} specify how to project the distance vectors before 
-computing the norms. By default no projection is perform. The three dx, dy, 
-and dz components of the distance vectors are used to compute the norm. 
+  computing the norms. By default no projection is perform.
+  The three dx, dy, and dz components of the distance vectors
+  are used to compute the norm. 
 \code{type} can take the following values:
    \itemize{
    \item   x: The distance vectors are projected over x.
