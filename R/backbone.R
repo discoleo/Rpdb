@@ -40,3 +40,11 @@ asBackbone = function(x) {
 	idBB = do.call(rbind, idBB);
 	connect.default(idBB);
 }
+
+# Water
+which.water = function(x) {
+	if(inherits(x, "pdb")) x = x$atoms;
+	isHOH = x$Hetero & x$resname == "HOH";
+	ids = x$eleid[isHOH];
+	return(ids)
+}

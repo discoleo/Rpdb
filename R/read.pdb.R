@@ -240,6 +240,9 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		atoms$eleid = seq_along(idA);
 		connect$eleid.1 = match(connect$eleid.1, idA);
 		connect$eleid.2 = match(connect$eleid.2, idA);
+	} else {
+		# match(atoms$eleid, atoms$eleid);
+		atoms$eleid = seq_along(atoms$eleid);
 	}
 	
 	### PDB Object:

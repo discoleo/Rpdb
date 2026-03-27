@@ -13,7 +13,8 @@
 
 ## Enhancement:
 - PDB:
-  - properly import chemical symbols of elements (newer PDB format);
+  - Properly import chemical symbols of elements (for newer PDB format);
+  - Re-index ElementID (always);
 - Function addPBCBox:
   - new argument scale: includes also relative shift;
   - new argument col: set colour of box;
