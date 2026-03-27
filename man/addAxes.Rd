@@ -7,27 +7,31 @@
 \alias{addPBCBox}
 \title{Add Axes or PBC Box to the \sQuote{rgl} Scene}
 \usage{
-addABC(x, lwd = 2, labels = TRUE, cex = 2)
+addABC(x, lwd = 2, scale = NULL, labels = TRUE, cex = 2, adj.lab = 1.2)
 
-addXYZ(lwd = 2, labels = TRUE, cex = 2)
+addXYZ(lwd = 2, scale = NULL, labels = TRUE, cex = 2, dx = 5)
 
 addPBCBox(x, scale = NULL, lwd = 2, col = "black", alpha = 0.25)
 }
 \arguments{
-\item{x}{an object of class \sQuote{crystal} containing unit cell parameters.}
+\item{x}{an object of class \sQuote{crystal} containing the unit cell parameters.}
 
 \item{lwd}{a numeric value indicating the line width used to draw the axes or
 the PBC box.}
 
-\item{labels}{a logical value indicating whether the labels of the axes have 
-to be drawn.}
+\item{scale}{a scalar value, or a numeric vector of length 2 or 3 or 6, or a 3x3 matrix
+used to scale the PBC box or the axes; a length 3 vector is converted to a diagonal matrix,
+while vectors of length 2 or 4 or 6 are converted to a diagonal matrix for scaling
+and a relative shift;}
+
+\item{labels}{a logical value indicating whether to draw the labels of the axes.}
 
 \item{cex}{a numeric value indicating the magnification used to draw the 
 labels of the axes.}
 
-\item{scale}{a scalar value, or a numeric vector of length 3 or of length 6, or a 3x3 matrix
-used to scale the PBC box; a length 3 vector is converted to a diagonal matrix,
-while a length 6 vector is converted to a diagonal matrix and a relative shift;}
+\item{adj.lab}{numeric value performing relative adjustment of label position;}
+
+\item{dx}{a numeric value specifying the absolute length of the xyz axes-vectors;}
 
 \item{col}{colour used for the PBC box;}
 

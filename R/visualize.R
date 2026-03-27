@@ -51,6 +51,8 @@
 #' @param windowRect a vector of four integers indicating the left, top, right and bottom of the displayed window in pixels (see \code{par3d}).
 #' @param FOV the field of view. This controls the degree of parallax in the perspective view (see par3d).
 #' @param userMatrix a 4 by 4 matrix describing user actions to display the scene (see \code{par3d}).
+#' @param scale.box scalar value or numeric vector used to scale the PBC box.
+#' @param scale.axis scalar value or numeric vector used to scale the axis-vectors.
 #' @param \dots further arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{addXYZ}}, \code{\link{addABC}}, \code{\link{addPBCBox}}, \code{par3d}, \code{select3d}, \code{measure}, \code{info3d}
@@ -88,7 +90,8 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
 		cex.xyz = 2, cex.abc = 2, col = NULL, bg = "#FAFAD2",
 		radii = "rvdw", scale.atoms = 1,
 		add = FALSE, windowRect = c(0,0,800,600), FOV = 0,
-		userMatrix = diag(4), alpha.box = 0.25, ...) {
+		userMatrix = diag(4), scale.box = 1, scale.axis = scale.box,
+		alpha.box = 0.25, ...) {
 	# Checks:
 	if(! is.coords(x)) stop("'x' must be an object of class 'coords'.")
 	
@@ -161,10 +164,12 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
     pbc.box <- FALSE
   }
   
-  if(xyz) ids <- rbind(ids, addXYZ(lwd = lwd.xyz, cex = cex.xyz))
-  if(abc) ids <- rbind(ids, addABC(crystal, lwd = lwd.abc, cex = cex.abc))
-  if(pbc.box) ids <- rbind(ids, addPBCBox(crystal, lwd = lwd.pbc.box, alpha = alpha.box))
-  # print(str(ids))
+	if(xyz) ids = rbind(ids, addXYZ(lwd = lwd.xyz,
+		scale = scale.axis, cex = cex.xyz));
+	if(abc) ids = rbind(ids, addABC(crystal, lwd = lwd.abc,
+		scale = scale.axis, cex = cex.abc));
+	if(pbc.box) ids = rbind(ids, addPBCBox(crystal, lwd = lwd.pbc.box,
+		scale = scale.box, alpha = alpha.box));
   
   ### Molecule
   if(type == "l") {

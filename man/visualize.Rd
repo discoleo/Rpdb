@@ -39,6 +39,8 @@ visualize(...)
   windowRect = c(0, 0, 800, 600),
   FOV = 0,
   userMatrix = diag(4),
+  scale.box = 1,
+  scale.axis = scale.box,
   alpha.box = 0.25,
   ...
 )
@@ -217,6 +219,10 @@ visualize(...)
 \item{FOV}{the field of view. This controls the degree of parallax in the perspective view (see par3d).}
 
 \item{userMatrix}{a 4 by 4 matrix describing user actions to display the scene (see \code{par3d}).}
+
+\item{scale.box}{scalar value or numeric vector used to scale the PBC box.}
+
+\item{scale.axis}{scalar value or numeric vector used to scale the axis-vectors.}
 
 \item{alpha.box}{a logical value specifying the transparency of the box-lines;}
 }
