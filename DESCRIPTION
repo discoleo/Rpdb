@@ -8,7 +8,7 @@ Authors@R:
     person("Leonard", "Mada", email = "lmada@umft.ro", role = c("cre", "ctb")),
     person("Julien", "Idé", email = "julien.ide.fr@gmail.com", role = c("aut"))
 	)
-Depends: rgl (>= 1.3.18), stats
+Depends: rgl (>= 1.3.36), stats
 Description: Provides tools to read, write, visualize Protein Data Bank (PDB) files and
     perform some structural manipulations.
 License: GPL (>= 3)

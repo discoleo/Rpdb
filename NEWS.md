@@ -24,7 +24,8 @@
   - new argument alpha: set transparency;
   - x can be also a PDB molecule;
 - Visualization:
-  - Improved backbone;
+  - Improved: Protein backbone;
+  - Improved: Nucleic acid backbone;
 
 
 ## TODO

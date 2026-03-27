@@ -11,8 +11,13 @@ isProteinA = function(x) {
 	return(isPr);
 }
 # TODO
-isNucleicAcid = function(x) {
+isNucleicAcid.atoms = function(x) {
 	nc = unique(x$resname);
+	isNc = any(nc %in% c("A","C","G", "T", "U"));
+	return(isNc);
+}
+isNucleicAcid.character = function(x) {
+	nc = unique(x);
 	isNc = any(nc %in% c("A","C","G", "T", "U"));
 	return(isNc);
 }
@@ -25,16 +30,20 @@ asBackbone = function(x) {
 		id = tmp$eleid[id];
 		id = c(id, NA, id[3]);
 	}
+	FUN.Nc = backbone.nucleic();
 	if(inherits(x, "atoms")) {
 		atoms = x;
 	} else if(inherits(x, "pdb")) atoms = x$atoms;
 	# Process each chain:
 	ch = chains(x);
 	idBB = lapply(ch, function(ch) {
-		tmp = atoms[atoms$chainid == ch, c("resid", "eleid", "elename", "Hetero")];
-		tmp = tmp[tmp$Hetero == FALSE, c("resid", "eleid", "elename")];
+		isCh = atoms$chainid == ch & (atoms$Hetero == FALSE);
+		tmp = atoms[isCh, c("resid", "eleid", "elename")];
 		if(nrow(tmp) == 0) return(NULL);
 		#
+		if(isNucleicAcid.character(atoms$resname[isCh])) {
+			FUN = FUN.Nc;
+		}
 		idBB = tapply(tmp, tmp$resid, FUN);
 		idBB = unlist(idBB);
 		idBB = data.frame(idBB[- length(idBB)], idBB[-1]);
@@ -72,4 +81,19 @@ residues = function(x, chain = NULL, hetero = NULL) {
 	})
 	tmp = do.call(rbind, tmp);
 	return(tmp);
+}
+
+# 5' O-CH2-C4-C3-O-PO2-O-> 3'
+backbone.nucleic = function(x) {
+	FUN = function(x) {
+		id = match(
+			c("O5*", "C5*", "C4*", "C3*", "O3*",
+			"P", "O1P", "O2P",  "C2*", "C1*", "O4*"), x$elename);
+		id = x$eleid[id];
+		id = c(id[6:7], NA, id[6], id[8], NA, # PO4
+			id[6], id[-(6:11)], NA,
+			id[4], id[9:11], id[3], NA, # Pentose-Ring
+			id[5]);
+		return(id);
+	}
 }
