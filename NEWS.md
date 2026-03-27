@@ -16,6 +16,7 @@
 ## Enhancement:
 - PDB:
   - Properly import chemical symbols of elements (for newer PDB format);
+  - Improved handling of atom names (older versions of PDB format);
   - Re-index ElementID (always);
 - Function addPBCBox:
   - new argument scale: includes also relative shift;
