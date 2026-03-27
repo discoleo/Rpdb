@@ -9,6 +9,8 @@
 
 ## New Functionality
 - Function chains: extract chain-codes;
+- Function select: Select groups of atoms;
+- Function residues: hidden/undocumented;
 - S3 method: distances.connect;
 
 ## Enhancement:

@@ -79,6 +79,15 @@ atoms.pdb = function(x, ...) {
 
 #' @rdname atoms
 #' @export
+atoms.atoms = function(x, ...) {
+	if(! inherits(x, "atoms")) {
+		stop("x must be an object of class 'atoms'!");
+	}
+	return(x);
+}
+
+#' @rdname atoms
+#' @export
 atoms.default <- function(recname, eleid, elename, alt,
 					resname, chainid, resid, insert,
 					x1, x2, x3, occ, temp, segid,

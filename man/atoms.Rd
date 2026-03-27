@@ -3,6 +3,7 @@
 \name{atoms}
 \alias{atoms}
 \alias{atoms.pdb}
+\alias{atoms.atoms}
 \alias{atoms.default}
 \alias{is.atoms}
 \title{Create \sQuote{atoms} Object}
@@ -10,6 +11,8 @@
 atoms(...)
 
 \method{atoms}{pdb}(x, ...)
+
+\method{atoms}{atoms}(x, ...)
 
 \method{atoms}{default}(
   recname,

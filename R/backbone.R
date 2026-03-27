@@ -10,6 +10,12 @@ isProteinA = function(x) {
 	isPr = "CA" %in% x$elename;
 	return(isPr);
 }
+# TODO
+isNucleicAcid = function(x) {
+	nc = unique(x$resname);
+	isNc = any(nc %in% c("A","C","G", "T", "U"));
+	return(isNc);
+}
 
 ### Backbone:
 asBackbone = function(x) {
@@ -41,10 +47,29 @@ asBackbone = function(x) {
 	connect.default(idBB);
 }
 
-# Water
-which.water = function(x) {
+residues = function(x, chain = NULL, hetero = NULL) {
 	if(inherits(x, "pdb")) x = x$atoms;
-	isHOH = x$Hetero & x$resname == "HOH";
-	ids = x$eleid[isHOH];
-	return(ids)
+	ch = chains(x);
+	if(! is.null(chains)) {
+		idCh = match(chain, ch);
+		isNA = is.na(idCh);
+		if(any(isNA)) {
+			warning("The chains: ",
+				paste(chain[isNA], collapse = ", "), " do NOT exist!");
+			idCh = idCh[! isNA];
+		}
+		ch = ch[idCh];
+		if(length(ch) == 0) return();
+	}
+	doHetero = ! is.null(hetero);
+	tmp = lapply(ch, function(ch) {
+		isCh = x$chainid == ch;
+		if(doHetero) isCh = isCh & (x$Hetero == hetero);
+		tmp = x[isCh, c("resname", "resid"), drop = FALSE];
+		tmp = unique(tmp);
+		if(nrow(tmp) > 0) tmp$chainid = ch;
+		return(tmp);
+	})
+	tmp = do.call(rbind, tmp);
+	return(tmp);
 }
