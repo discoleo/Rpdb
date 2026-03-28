@@ -3,9 +3,9 @@
 #' Creates an object of class \sQuote{connect} containing the IDs of bonded atoms
 #' defining the connectivity of a molecular system.
 #' 
-#' \code{connect} is a generic function to create objects of class 
-#' \sQuote{connect}. The purpose of this class is to store CONNECT records from 
-#' PDB files, indicating the connectivity of a molecular system.\cr
+#' \code{connect} is a generic function to create objects of class \sQuote{connect}.
+#'   The purpose of this class is to store CONNECT records from PDB files,
+#'   indicating the connectivity of a molecular system.\cr
 #' The default method creates a \code{connect} object from its different components, i.e.: 
 #'   \code{eleid.1} and \code{eleid.2}. Both arguments have to be specified.\cr 
 #' The S3 method for an object of class \sQuote{coords} determines the connectivity 
@@ -20,16 +20,20 @@
 #'   The method is slow but allows to deal with very large systems.\cr
 #' The S3 method for object of class \sQuote{character} converts the raw string
 #'   from a pdb file into a \code{connect} object.
+#'
 #' \code{is.connect} tests if an object is of class \sQuote{connect},
 #'   i.e. if it has a \dQuote{class} attribute equal to \code{connect}.
 #' 
-#' @return \code{connect} returns a two-column data.frame of class
-#' \sQuote{connect} whose rows contain the IDs of bonded atoms. The columns of
-#' this data.frame are described below: \item{eleid.1}{a integer vector
-#' containing the elements IDs defining the connectivity of the system.} 
-#' \item{eleid.2}{a integer vector containing the elements IDs defining the
-#' connectivity of the system.} \cr\cr \code{is.connect} returns TRUE if \code{x}
-#' is an object of class \sQuote{coords} and FALSE otherwise.
+#' @return \code{connect} returns a two-column data.frame of class \sQuote{connect}
+#'   whose rows contain the IDs of bonded atoms. The columns of this data.frame
+#'   are described below:
+#' \item{eleid.1}{an integer vector containing the elements IDs
+#'    defining the connectivity of the system.} 
+#' \item{eleid.2}{an integer vector containing the elements IDs
+#'    defining the connectivity of the system.}\cr\cr
+#'
+#' \code{is.connect} returns TRUE if \code{x} is an object of class \sQuote{coords}
+#'   and FALSE otherwise.
 #' 
 #' @param \dots arguments passed to methods.
 #' @param eleid.1 a integer vector containing the IDs of bonded atoms.
@@ -39,6 +43,8 @@
 #' @param safety a numeric value used to extend the atomic radii.
 #' @param by.block a logical value indicating whether the connectivity has to be
 #'   determine by block (see details).
+#' @param maxLimit integer value specifying the maximum number of atoms permitted
+#'   to try connecting by distance.
 #' @param pdbRec the raw text lines from the pdb file.
 #'   
 #' @seealso \code{\link{pdb}}
@@ -92,29 +98,40 @@ connect.default <- function(eleid.1, eleid.2, ...)
 		} else
 			stop("Missing eleid2!");
 	}
-  if(is.null(eleid.1) & is.null(eleid.2))
-    return(NULL)
-  eleid.1 <- as.integer(eleid.1)
-  eleid.2 <- as.integer(eleid.2)
-  con <- data.frame(eleid.1, eleid.2)
-#   con[con$eleid.1 > con$eleid.2,] <- rev(con[con$eleid.1 > con$eleid.2,])
-  con <- con[order(con$eleid.2),]
-  con <- con[order(con$eleid.1),]
-  rownames(con) <- NULL
-  class(con) = c("connect", "data.frame");
-  if(nrow(con) == 0)
-    con <- NULL
-  return(con)
+	if(is.null(eleid.1) & is.null(eleid.2))
+		return(NULL);
+	#
+	eleid.1 = as.integer(eleid.1);
+	eleid.2 = as.integer(eleid.2);
+	con = data.frame(eleid.1, eleid.2);
+	if(nrow(con) == 0) return(NULL);
+	### Order:
+	# Swap ?
+	# con[con$eleid.1 > con$eleid.2,] <- rev(con[con$eleid.1 > con$eleid.2,])
+	id  = do.call(order, con);
+	con = con[id,];
+	rownames(con) = NULL;
+	class(con) = c("connect", "data.frame");
+	return(con)
 }
 
+### Determine Connectivity by Distance
+# Note:
+# - Brute force connectivity: slow & NOT very robust;
 #' @rdname connect
 #' @export
-connect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...) {
-  if(!is.coords(x))
-    stop("'x' must be an object of class 'coords'")
+connect.coords <- function(x, radii = 0.75, safety = 1.2,
+		by.block = FALSE, maxLimit = 3200, ...) {
+	if(! is.coords(x))
+		stop("'x' must be an object of class 'coords'");
+	if(nrow(x) > maxLimit) {
+		warning("Molecule is bigger than maxLimit!",
+			"Increase the value for maxLimit or subset only certain atoms.");
+		return(NULL);
+	}
 
-  radii <- radii*safety
-  data <- cbind(x, radii)
+	radii = radii * safety;
+	data  = cbind(x, radii);
 
   findCon <- function(data) {
     nat <- nrow(data)
@@ -175,13 +192,37 @@ connect.coords <- function(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...)
 
 #' @rdname connect
 #' @export
-connect.pdb <- function(x, safety = 1.2, by.block = FALSE, ...) {
-  symb <- toSymbols(x$atom$elename)
-  symb[is.na(symb)] <- "Xx"
-  rcov <- Rpdb::elements[match(symb, Rpdb::elements[,"symb"]), "rcov"]
-  con <- connect(coords(x), rcov, safety, by.block)
-  con <- connect(x$atoms$eleid[con$eleid.1], x$atoms$eleid[con$eleid.2])
-  return(con)
+connect.atoms = function(x, safety = 1.2, by.block = FALSE, ...) {
+	symbE = x$symbol;
+	if(is.null(symbE)) {
+		symbE = toSymbols(x$elename);
+	}
+	symbE[is.na(symbE)] = "Xx";
+	idAt = match(symbE, Rpdb::elements[,"symb"]);
+	rcov = Rpdb::elements[idAt, "rcov"];
+	xyz  = coords(x);
+	# Connect within Chains
+	ch = chains(x);
+	con = lapply(ch, function(ch) {
+		isCh = x$chainid == ch;
+		xyzj = xyz[isCh, , drop = FALSE];
+		if(nrow(xyzj) == 0) return(NULL);
+		rj  = rcov[isCh];
+		con = connect(xyzj, rj, safety, by.block, ...);
+		con = connect(
+			x$eleid[con$eleid.1],
+			x$eleid[con$eleid.2]);
+	})
+	con = do.call(rbind, con);
+	return(con);
+}
+
+#' @rdname connect
+#' @export
+connect.pdb = function(x, safety = 1.2, by.block = FALSE, ...) {
+	con = connect.atoms(x$atoms,
+		safety = safety, by.block = by.block, ...);
+	return(con);
 }
 
 

@@ -26,6 +26,7 @@
 - Visualization:
   - Improved: Protein backbone;
   - Improved: Nucleic acid backbone;
+  - Improved: Brute force connectivity;
 
 
 ## TODO

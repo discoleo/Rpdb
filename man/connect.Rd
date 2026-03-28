@@ -5,6 +5,7 @@
 \alias{conect.default}
 \alias{connect.default}
 \alias{connect.coords}
+\alias{connect.atoms}
 \alias{connect.pdb}
 \alias{connect.character}
 \alias{is.connect}
@@ -16,7 +17,9 @@ connect(...)
 
 \method{connect}{default}(eleid.1, eleid.2, ...)
 
-\method{connect}{coords}(x, radii = 0.75, safety = 1.2, by.block = FALSE, ...)
+\method{connect}{coords}(x, radii = 0.75, safety = 1.2, by.block = FALSE, maxLimit = 3200, ...)
+
+\method{connect}{atoms}(x, safety = 1.2, by.block = FALSE, ...)
 
 \method{connect}{pdb}(x, safety = 1.2, by.block = FALSE, ...)
 
@@ -40,25 +43,31 @@ is.connect(x)
 \item{by.block}{a logical value indicating whether the connectivity has to be
 determine by block (see details).}
 
+\item{maxLimit}{integer value specifying the maximum number of atoms permitted
+to try connecting by distance.}
+
 \item{pdbRec}{the raw text lines from the pdb file.}
 }
 \value{
-\code{connect} returns a two-column data.frame of class
-\sQuote{connect} whose rows contain the IDs of bonded atoms. The columns of
-this data.frame are described below: \item{eleid.1}{a integer vector
-containing the elements IDs defining the connectivity of the system.} 
-\item{eleid.2}{a integer vector containing the elements IDs defining the
-connectivity of the system.} \cr\cr \code{is.connect} returns TRUE if \code{x}
-is an object of class \sQuote{coords} and FALSE otherwise.
+\code{connect} returns a two-column data.frame of class \sQuote{connect}
+  whose rows contain the IDs of bonded atoms. The columns of this data.frame
+  are described below:
+\item{eleid.1}{an integer vector containing the elements IDs
+   defining the connectivity of the system.} 
+\item{eleid.2}{an integer vector containing the elements IDs
+   defining the connectivity of the system.}\cr\cr
+
+\code{is.connect} returns TRUE if \code{x} is an object of class \sQuote{coords}
+  and FALSE otherwise.
 }
 \description{
 Creates an object of class \sQuote{connect} containing the IDs of bonded atoms
 defining the connectivity of a molecular system.
 }
 \details{
-\code{connect} is a generic function to create objects of class 
-\sQuote{connect}. The purpose of this class is to store CONNECT records from 
-PDB files, indicating the connectivity of a molecular system.\cr
+\code{connect} is a generic function to create objects of class \sQuote{connect}.
+  The purpose of this class is to store CONNECT records from PDB files,
+  indicating the connectivity of a molecular system.\cr
 The default method creates a \code{connect} object from its different components, i.e.: 
   \code{eleid.1} and \code{eleid.2}. Both arguments have to be specified.\cr 
 The S3 method for an object of class \sQuote{coords} determines the connectivity 
@@ -73,6 +82,7 @@ The S3 method for object of class \sQuote{pdb} first uses the element names
   The method is slow but allows to deal with very large systems.\cr
 The S3 method for object of class \sQuote{character} converts the raw string
   from a pdb file into a \code{connect} object.
+
 \code{is.connect} tests if an object is of class \sQuote{connect},
   i.e. if it has a \dQuote{class} attribute equal to \code{connect}.
 }
