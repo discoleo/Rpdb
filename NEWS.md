@@ -12,6 +12,7 @@
 - Function select: Select groups of atoms;
 - Function residues: hidden/undocumented;
 - Function translate: shift observer;
+- Function addBBox: tight bounding box;
 - S3 method: distances.connect;
 
 ## Enhancement:

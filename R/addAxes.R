@@ -1,16 +1,21 @@
 #' Add Axes or PBC Box to the \sQuote{rgl} Scene
 #' 
-#' Add lattice vectors, Cartesian axes or PBC box to the current \sQuote{rgl} 
-#' scene.
+#' Add lattice vectors, Cartesian axes or PBC box to the current \sQuote{rgl} scene.
 #' 
 #' \code{addABC}: Add the lattice vectors a, b and c to the current rgl device.\cr
 #' \code{addXYZ}: Add the Cartesian axes x, y and z to the current rgl device.\cr
 #' \code{addPBCBox}: Add a box representing the Periodic Boundary Conditions
-#'   of a molecular system.
+#'   of a molecular system.\cr
+#' \code{addBBox}: Add a bounding box around the PDB molecule
+#'   constructed using the lattice vectors.\cr
+#' \code{bbox.pdb}: Computes the bounding box around the PDB molecule.\cr
 #' 
-#' @return Return (using invisible) a two-column data.frame containing the IDs 
+#' @return Returns invisibly a two-column data.frame containing the IDs 
 #'   and type indicators of the objects added to the scene.
-#'   
+#'
+#' \code{bbox.pdb}: Returns the coordinates of the bounding box.\cr
+#'
+#'
 #' @param x an object of class \sQuote{crystal} containing the unit cell parameters.
 #' @param lwd a numeric value indicating the line width used to draw the axes or
 #'   the PBC box.
@@ -101,7 +106,7 @@ addXYZ <- function(lwd = 2, scale = NULL, labels = TRUE, cex = 2, dx = 5) {
     );
 	# Scale Axes:
 	if(! is.null(scale)) {
-		# Note: use for cell value = 1 or dx?
+		# Note: What cell value to use: = 1 or dx?
 		mAxes = scaleBox(scale, mAxes, cell = diag(1, 3));
 	}
 	seg.id = rgl::segments3d(
@@ -133,11 +138,7 @@ addXYZ <- function(lwd = 2, scale = NULL, labels = TRUE, cex = 2, dx = 5) {
 addPBCBox = function(x, scale = NULL,
 		lwd = 2, col = "black", alpha = 0.25) {
 	if(missing(x)) stop("Please specify a 'crystal' object");
-	if(is.pdb(x)) {
-		x = x$crystal;
-		if(is.null(x)) stop("The PDB molecule does not contain crystal information!");
-	} else if(! is.crystal(x))
-		stop("'x' must be an object of class 'crystal'!");
+	x = get.PDBCrystal(x);
 	# Bounding Box:
 	cell = cell.coords(x);
 	mBox = box.coords(cell);
@@ -157,7 +158,57 @@ addPBCBox = function(x, scale = NULL,
 	invisible(seg.id)
 }
 
+
+#' @rdname addAxes
+#' @export
+addBBox = function(x, lwd = 2, col = "black", alpha = 0.25) {
+	mBox = bbox.pdb(x);
+	# BBox:
+	seg.id = rgl::segments3d(
+		mBox,
+		lwd = lwd,
+		col = col,
+		alpha = alpha
+	);
+	#
+	seg.id = data.frame(id = seg.id, type = "pbc.box");
+	invisible(seg.id)
+}
+#' @rdname addAxes
+#' @export
+bbox.pdb = function(x) {
+	xyzB = range.coords.pdb(x);
+	xyzB = t(xyzB);
+	dBox = xyzB[,2] - xyzB[,1];
+	cell = cell.coords(x$crystal);
+	origin = as.vector(cell %*% xyzB[, 1, drop = FALSE]);
+	cell = cell %*% diag(dBox);
+	bb = box.coords(cell, origin = origin);
+	return(bb);
+}
+
+range.coords.pdb = function(x, xyz = NULL, ..., na.rm = TRUE) {
+	cell = get.PDBCrystal(x);
+	xyzV = if(is.null(xyz)) cell.coords(cell) else xyz;
+	xyzE = coords(x$atoms);
+	tt  = solve(xyzV, t(xyzE));
+	tt  = apply(tt, 1, range);
+	# xyz = xyzV %*% t(tt);
+	return(tt);
+}
+
 ### Helper:
+
+get.PDBCrystal = function(x) {
+	if(is.pdb(x)) {
+		x = x$crystal;
+		if(is.null(x))
+			stop("The PDB molecule does not contain crystal information!");
+	} else if(! is.crystal(x)) {
+		stop("'x' must be an object of class 'crystal'!");
+	}
+	return(x);
+}
 
 scaleBox = function(scale, mBox, cell) {
 	len = length(scale);
@@ -190,15 +241,17 @@ scaleBox = function(scale, mBox, cell) {
 	return(mBox);
 }
 
-box.coords = function(x) {
-	cell_12 = x[,1] + x[,2];
-	cell_13 = x[,1] + x[,3];
-	cell_23 = x[,2] + x[,3];
+box.coords = function(x, origin = c(0,0,0)) {
+	cell_12 = x[,1] + x[,2] + origin;
+	cell_13 = x[,1] + x[,3] + origin;
+	cell_23 = x[,2] + x[,3] + origin;
 	cell_Sm = cell_12  + x[,3]; # Opposite Point
+	# Shift Cell:
+	x = x + rep(origin, 3);
 	mBox = rbind(
-		c(0,0,0), x[,1],
-		c(0,0,0), x[,2],
-		c(0,0,0), x[,3],
+		origin,   x[,1],
+		origin,   x[,2],
+		origin,   x[,3],
 		cell_12,  x[,1],
 		cell_12,  x[,2],
 		cell_12,  cell_Sm,
