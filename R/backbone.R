@@ -86,9 +86,11 @@ residues = function(x, chain = NULL, hetero = NULL) {
 # 5' O-CH2-C4-C3-O-PO2-O-> 3'
 backbone.nucleic = function(x) {
 	FUN = function(x) {
+		atom = x$elename;
+		atom = sub("\\*", "'", atom);
 		id = match(
-			c("O5*", "C5*", "C4*", "C3*", "O3*",
-			"P", "O1P", "O2P",  "C2*", "C1*", "O4*"), x$elename);
+			c("O5'", "C5'", "C4'", "C3'", "O3'",
+			"P", "O1P", "O2P",  "C2'", "C1'", "O4'"), atom);
 		id = x$eleid[id];
 		id = c(id[6:7], NA, id[6], id[8], NA, # PO4
 			id[6], id[-(6:11)], NA,

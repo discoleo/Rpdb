@@ -11,6 +11,7 @@
 - Function chains: extract chain-codes;
 - Function select: Select groups of atoms;
 - Function residues: hidden/undocumented;
+- Function translate: shift observer;
 - S3 method: distances.connect;
 
 ## Enhancement:
@@ -26,6 +27,7 @@
 - Visualization:
   - Improved: Protein backbone;
   - Improved: Nucleic acid backbone;
+  - [fix] Nucleic acids: Detect both "X\*" and "X'" codes;
   - Improved: Brute force connectivity;
 
 

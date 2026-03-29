@@ -173,20 +173,21 @@ visualize.coords <- function(x, elename = NULL, crystal = NULL, connect = NULL, 
   
   ### Molecule
   if(type == "l") {
-    if(is.null(connect)){
-      warning("Undefined connectivity: Computing connectivity from coordinates...")
-      connect = connect(x);
-    }
-	# TODO: proper colour of Bonds?
-    ind = t(connect);
-    seg.id <- rgl::segments3d(
-      x$x1[ind],
-      x$x2[ind],
-      x$x3[ind],
-      color = col[ind], lwd=lwd, ...
-    )
-    seg.id <- data.frame(id = seg.id, type = "atom.seg")
-    ids <- rbind(ids, seg.id)
+		if(is.null(connect)) {
+			warning("Undefined connectivity: Computing connectivity from coordinates...")
+			connect = connect(x);
+		}
+		ind = t(connect);
+		seg.id = rgl::segments3d(
+			x$x1[ind],
+			x$x2[ind],
+			x$x3[ind],
+			color = col[ind], lwd=lwd, ...
+		)
+		# TODO: store separate ids for each component/chain of the molecule;
+		# => pop3d(id = id...);
+		seg.id = data.frame(id = seg.id, type = "atom.seg")
+		ids    = rbind(ids, seg.id)
   } else if(type == "p") {
     pts.id <- rgl::points3d(
       x$x1,
