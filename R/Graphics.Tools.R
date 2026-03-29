@@ -1,6 +1,6 @@
 #' Graphics Tools
 #' 
-#' Tools to modify or set \cod{rgl} objects, scenes and the observer.
+#' Tools to modify or set \code{rgl} objects, scenes and the observer.
 
 
 #' \code{translate} performs a translation of the observer to a new position

@@ -20,7 +20,7 @@ Unfortunately, it may fail, as it seems there are some bugs in rgl.}
 \code{translate} returns invisibly the old position of the observer.
 }
 \description{
-Tools to modify or set \cod{rgl} objects, scenes and the observer.
+Tools to modify or set \code{rgl} objects, scenes and the observer.
 \code{translate} performs a translation of the observer to a new position
   specified using relative shifts.
 \code{trans} is an abbreviated alias to function \code{translate}.
