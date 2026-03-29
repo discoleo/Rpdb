@@ -21,6 +21,10 @@ isNucleicAcid.character = function(x) {
 	isNc = any(nc %in% c("A","C","G", "T", "U"));
 	return(isNc);
 }
+# Special AA:
+isAASpecial = function(x) {
+	x %in% c("HZP", "PTR", "TYS");
+}
 
 ### Backbone:
 asBackbone = function(x) {
@@ -37,8 +41,12 @@ asBackbone = function(x) {
 	# Process each chain:
 	ch = chains(x);
 	idBB = lapply(ch, function(ch) {
-		isCh = atoms$chainid == ch & (atoms$Hetero == FALSE);
-		tmp = atoms[isCh, c("resid", "eleid", "elename")];
+		# Modified AA: may require better checking if true AA;
+		isAA = atoms$Hetero == FALSE;
+		isAS = isAASpecial(atoms$resname[atoms$Hetero]);
+		isAA[atoms$Hetero] = isAS;
+		isCh = atoms$chainid == ch & isAA;
+		tmp  = atoms[isCh, c("resid", "eleid", "elename")];
 		if(nrow(tmp) == 0) return(NULL);
 		#
 		if(isNucleicAcid.character(atoms$resname[isCh])) {
