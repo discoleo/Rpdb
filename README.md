@@ -5,20 +5,22 @@
 
 ## Changes
 
-- [fixed] deprecated rgl functions;
-- [fixed] some Roxygen bugs in centre.R;
+- see [News.md] for all changes;
 
 ## Usage
 
-	library(Rpdb)
-	# or: devtools::load_all(_path_)
-	
-	x = read.pdb(file.choose())
-	visualize(x, type="p")
+```
+library(Rpdb)
+# or: devtools::load_all(_path_)
+
+# Download some legacy PDB files:
+x = read.pdb(file.choose())
+visualize(x, type="l")
+```
 
 Note:
-- the default visualize is broken;
-- the protein is NOT centered in the bounding box;
+- Visualize is incomplete;
+- Started redesigning the Bounding box vs PBC box;
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/discoleo/Rpdb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/discoleo/Rpdb/actions/workflows/R-CMD-check.yaml)

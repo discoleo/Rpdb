@@ -177,22 +177,22 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		if(any(model.start >= model.end))
 			stop("'Unterminated MODEL section'");
 		# All models:
+		model.ids = as.integer(substr(lines[model.start], 11, 14));
 		if(is.null(MODEL)) {
-			model.ids = as.integer(substr(lines[model.start], 11, 14));
 			MODEL = model.ids;
 		}
 		# Only requested models:
 		MODEL = MODEL[! is.na(MODEL)];
 		if(length(MODEL) == 0) {
+			cat("No models specified!\n");
 			# TODO
 		} else {
-			model.ids = as.integer(substr(lines[model.start], 11, 14));
 			if(verbose) {
 				if(length(model.ids) > length(MODEL))
 					cat("Note: Loading only models: ",
 						paste0(MODEL, collapse = ", "), ";\n", sep = "");
 			}
-			idModels = match(model.ids, MODEL);
+			idModels = match(MODEL, model.ids);
 			naModels = is.na(idModels);
 			if(any(naModels)) {
 				if(verbose) {
@@ -208,14 +208,15 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		model.factor [model.start + 1] = model.start;
 		model.factor [model.end      ] = - model.start;
 		model.factor = cumsum(model.factor);
-		model.factor[model.factor == 0] <- NA
+		model.factor[model.factor == 0] = NA;
     }
   } else if(verbose && nModels > 0) {
     cat("Number of actual models: 0\n");
   }
-  model.factor <- as.factor(model.factor)
-  levels(model.factor) <- model.ids
-  model.factor <- model.factor[is.atom | is.hetatm]
+	model.factor = as.factor(model.factor);
+	levels(model.factor) = model.ids;
+	model.factor = model.factor[is.atom | is.hetatm];
+	nModels = length(levels(model.factor));
   
 	### Crystal Cell:
 	crystal = NULL;
@@ -242,14 +243,25 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		connect$eleid.2 = match(connect$eleid.2, idA);
 	} else {
 		# match(atoms$eleid, atoms$eleid);
-		atoms$eleid = seq_along(atoms$eleid);
+		if(nModels == 1) {
+			atoms$eleid = seq_along(atoms$eleid);
+		} else {
+			# TODO: cleanup/refactor;
+			factM = model.factor[! is.na(model.factor)];
+			for(idM in levels(factM)) {
+				atoms$eleid[factM == idM] =
+					seq_along(atoms$eleid[factM == idM]);
+			}
+		}
 	}
 	
 	### PDB Object:
 	pdbObj = pdb(atoms, crystal, connect, remark, title,
 		resolution = dfResolution);
-	pdbObj = split(pdbObj, model.factor);
-	if(length(pdbObj) == 1) pdbObj = pdbObj[[1]];
+	if(nModels > 1) {
+		pdbObj = split(pdbObj, model.factor);
+	}
+	# if(length(pdbObj) == 1) pdbObj = pdbObj[[1]];
 	
 	return(pdbObj)
 }

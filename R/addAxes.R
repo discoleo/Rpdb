@@ -96,6 +96,7 @@ addXYZ <- function(lwd = 2, scale = NULL, labels = TRUE, cex = 2, dx = 5) {
 	if(length(dx) == 1) dx = c(dx,dx,dx);
 	if(length(dx) != 3) stop("Invalid value for dx!");
 	dy = dx[2]; dz = dx[3]; dx = dx[1];
+	# Note: (-dx, dx): BUT alpha = 0 ???
 	mAxes = rbind(
 		c(0,0,0), c( dx,  0,  0),
 		c(0,0,0), c(  0, dy,  0),
@@ -110,27 +111,32 @@ addXYZ <- function(lwd = 2, scale = NULL, labels = TRUE, cex = 2, dx = 5) {
 		mAxes = scaleBox(scale, mAxes, cell = diag(1, 3));
 	}
 	seg.id = rgl::segments3d(
-		mAxes, lwd = lwd, alpha=c(rep(1, 6), rep(0, 6))
+		mAxes, lwd = lwd, alpha = c(rep(1, 6), rep(0, 6))
 	)
 	seg.id = data.frame(id = seg.id, type = "xyz.seg");
 	# Labels:
-	dx = dx + 1.0; dy = dy + 1.0; dz = dz + 1.0;
 	lab.id = NULL;
 	if(labels){
-		mLab = rbind(
-			c(0,0,0) + c( dx, 0.0, 0.0),
-			c(0,0,0) + c(0.0,  dy, 0.0),
-			c(0,0,0) + c(0.0, 0.0,  dz));
-		lab.id = rgl::text3d(
-			mLab,
-			texts = c("x","y","z"),
-			cex   = cex
-		)
-		lab.id = data.frame(id = lab.id, type = "xyz.lab");
+		lab.id = addLabelsXYZ(cex=cex, dx=dx);
 	}
 	ids = rbind(seg.id, lab.id);
   
   invisible(ids)
+}
+
+addLabelsXYZ = function(labels = c("x","y","z"), cex = 2, dx = c(5,5,5)) {
+	dy = dx[2]; dz = dx[3]; dx = dx[1];
+	dx = dx + 1.0; dy = dy + 1.0; dz = dz + 1.0;
+	mLab = rbind(
+		c(0,0,0) + c( dx, 0.0, 0.0),
+		c(0,0,0) + c(0.0,  dy, 0.0),
+		c(0,0,0) + c(0.0, 0.0,  dz));
+	lab.id = rgl::text3d(
+		mLab,
+		texts = labels,
+		cex   = cex
+	)
+	lab.id = data.frame(id = lab.id, type = "xyz.lab");
 }
 
 #' @rdname addAxes

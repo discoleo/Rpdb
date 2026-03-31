@@ -1,4 +1,26 @@
 
+# Rpdb 2.4.5
+
+- started work;
+
+## Refactoring
+- Fully removed deprecated code based on "cryst1";
+
+## New Functionality
+- S3 method: crystal.pdb;
+
+## Enhancement:
+- [fix] Model extraction;
+
+## TODO
+
+- Extract all useful code and ideas from the discussion thread:
+  - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
+  - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
+
+
+====
+
 # Rpdb 2.4.4
 
 ## Refactoring
@@ -31,12 +53,6 @@
   - [fix] Nucleic acids: Detect both "X\*" and "X'" codes;
   - Improved: Brute force connectivity;
 
-
-## TODO
-
-- Extract all useful code and ideas from the discussion thread:
-  - Root: https://stat.ethz.ch/pipermail/r-help/2023-October/478359.html
-  - Example: https://stat.ethz.ch/pipermail/r-help/2023-October/478372.html
 
 =====
 

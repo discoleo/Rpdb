@@ -15,8 +15,7 @@ pdb(...)
   remark = NULL,
   title = NULL,
   resolution = NULL,
-  ...,
-  cryst1 = NULL
+  ...
 )
 
 is.pdb(x)
@@ -35,8 +34,6 @@ is.pdb(x)
 \item{title}{a character vector containing some TITLE records to be added to the \code{pdb} object.}
 
 \item{resolution}{numeric value specifying the resolution; the unit should be specified as an attribute.}
-
-\item{cryst1}{will be deprecated and replaced by argument crystal.}
 
 \item{x}{an R object to be tested.}
 }

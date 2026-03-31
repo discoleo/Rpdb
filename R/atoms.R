@@ -180,6 +180,7 @@ as.atoms.character = function(atoms, isHetero = NULL) {
 	segid   <- trim(substr(atoms, 73, 75))
 	# Atomic Symbol:
 	symbol  = trim(substr(atoms, 77, 78));
+	symbol  = sub("[-+]", "", symbol); # Charges;
 	symbol  = sub("\\d+", "", symbol); # Old PDB format;
 	# TODO: ugly extraction;
 	if(all(nchar(symbol) == 0)) symbol = NULL;

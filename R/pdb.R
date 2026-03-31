@@ -32,7 +32,6 @@
 #' @param resolution numeric value specifying the resolution; the unit should be specified as an attribute.
 #' @param x an R object to be tested.
 #' @param \dots further arguments passed to or from other methods.
-#' @param cryst1 will be deprecated and replaced by argument crystal.
 #' 
 #' @seealso 
 #' \code{\link{atoms}}, \code{\link{coords}}, \code{\link{crystal}}, \code{\link{connect}} and \code{\link{read.pdb}}
@@ -59,13 +58,12 @@ pdb <- function(...)
 #' @rdname pdb
 #' @export
 pdb.default <- function(atoms, crystal = NULL, connect = NULL, remark = NULL, title = NULL,
-		resolution = NULL, ..., cryst1 = NULL)
+		resolution = NULL, ...)
 {
 	if(missing(atoms)) stop("Please specify at least an 'atoms' object")
 	if( ! is.atoms(atoms)) stop("'atoms' must be an object of class 'atoms'")
 	
 	# Crystal cell:
-	crystal = checkArgCrystal(crystal, cryst1);
 	if( ! is.null(crystal) & ! is.crystal(crystal))
 		stop("'crystal' must be an object of class 'crystal'");
 	if( ! is.null(connect) & ! is.connect(connect))
