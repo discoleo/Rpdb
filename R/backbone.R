@@ -64,11 +64,11 @@ asBackbone = function(x) {
 	connect.default(idBB);
 }
 
-residues = function(x, chain = NULL, hetero = NULL) {
+residues = function(x, chains = NULL, hetero = NULL) {
 	if(inherits(x, "pdb")) x = x$atoms;
 	ch = chains(x);
 	if(! is.null(chains)) {
-		idCh = match(chain, ch);
+		idCh = match(chains, ch);
 		isNA = is.na(idCh);
 		if(any(isNA)) {
 			warning("The chains: ",

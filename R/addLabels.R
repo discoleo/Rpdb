@@ -42,7 +42,24 @@
 #' addEleLab(x)
 #' 
 #' @keywords dynamic
-#'       
+
+
+### Mark Residues
+
+# x = read.pdn("8U1T.pdb") # see also: 7K3G.pdb;
+# visualize(x, type="l", pbc = F); addBBox(x)
+# res = residues(x, "A")
+# cols = rep("black", nrow(res))
+# cols[res$resname %in% c("SER", "THR", "ASN")] = "red"
+# mark.pdb(x, ch = "A", col = cols, lwd = 2)
+
+#' @name addLabels
+mark.pdb = function(x, chains = NULL, col = 1, ...) {
+	tmp = ccResidues.pdb(x, chains = chains);
+	text3d(tmp, texts = attr(tmp, "res.names"), col = col, ...);
+}
+
+
 #' @name addLabels
 #' @export
 addResLab <- function(x, ...)

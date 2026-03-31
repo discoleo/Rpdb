@@ -336,7 +336,7 @@ visualize.pdb <- function(x, mode = NULL, type = "l",
             cex.xyz, cex.abc, col, bg, radii, scale.atoms = scale.atoms,
 			add = add,
 			windowRect = windowRect, FOV = FOV, userMatrix = userMatrix,
-			alpha.box = 0.25, ...)
+			alpha.box = 0.25, ...);
   
   if(!is.null(mode)){
     if(mode == "measure"){
