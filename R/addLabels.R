@@ -44,6 +44,12 @@
 #' @keywords dynamic
 
 
+#' @name addLabels
+#' @export
+addResLab <- function(x, ...)
+	UseMethod("addResLab")
+
+
 ### Mark Residues
 
 # x = read.pdn("8U1T.pdb") # see also: 7K3G.pdb;
@@ -53,17 +59,11 @@
 # cols[res$resname %in% c("SER", "THR", "ASN")] = "red"
 # mark.pdb(x, ch = "A", col = cols, lwd = 2)
 
-#' @name addLabels
 mark.pdb = function(x, chains = NULL, col = 1, ...) {
 	tmp = ccResidues.pdb(x, chains = chains);
 	text3d(tmp, texts = attr(tmp, "res.names"), col = col, ...);
 }
 
-
-#' @name addLabels
-#' @export
-addResLab <- function(x, ...)
-  UseMethod("addResLab")
 
 #' @rdname addLabels
 #' @export

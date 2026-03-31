@@ -72,7 +72,7 @@ residues = function(x, chains = NULL, hetero = NULL) {
 		isNA = is.na(idCh);
 		if(any(isNA)) {
 			warning("The chains: ",
-				paste(chain[isNA], collapse = ", "), " do NOT exist!");
+				paste(chains[isNA], collapse = ", "), " do NOT exist!");
 			idCh = idCh[! isNA];
 		}
 		ch = ch[idCh];

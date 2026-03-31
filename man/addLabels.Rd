@@ -2,7 +2,6 @@
 % Please edit documentation in R/addLabels.R
 \name{addLabels}
 \alias{addLabels}
-\alias{mark.pdb}
 \alias{addResLab}
 \alias{addResLab.atoms}
 \alias{addResLab.pdb}
@@ -14,8 +13,6 @@
 \alias{info3d.pdb}
 \title{Add Labels to the \sQuote{rgl} Scene}
 \usage{
-mark.pdb(x, chains = NULL, col = 1, ...)
-
 addResLab(x, ...)
 
 \method{addResLab}{atoms}(x, at.centre = TRUE, col = "black", ...)
@@ -37,13 +34,13 @@ info3d(...)
 \arguments{
 \item{x}{an R object containing atomic coordinates.}
 
-\item{col}{the colors used to display the labels.}
-
 \item{\dots}{further arguments passed to or from other methods.}
 
 \item{at.centre}{a single element logical vector indicating if residue labels
 have to be added only at the position of the residue's centre-of-mass 
 instead of at each atomic position.}
+
+\item{col}{the colors used to display the labels.}
 
 \item{eleid}{a single element logical vector indicating if the element ids 
 have to be concatenated with the element names to prepare the labels.}
