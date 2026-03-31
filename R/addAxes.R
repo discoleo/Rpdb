@@ -42,14 +42,16 @@
 #' addPBCBox(x$crystal)
 #' 
 #' @keywords dynamic
-#'     
+
+
 #' @name addAxes
 #' @export
 addABC <- function(x, lwd = 2, scale = NULL, labels = TRUE,
 		cex = 2, adj.lab = 1.2) {
-  if(missing(x)) stop("Please specify a 'crystal' object")
-  if(! is.crystal(x)) stop("'x' must be an object of class 'crystal")
-  
+	if(missing(x)) stop("Please specify a 'crystal' object");
+	if(is.pdb(x)) x = crystal(x);
+	if(! is.crystal(x)) stop("'x' must be an object of class 'crystal");
+	
 	cell = cell.coords(x);
 	# Scale Axes:
 	mAxes = rbind(
@@ -183,7 +185,7 @@ addBBox = function(x, lwd = 2, col = "black", alpha = 0.25) {
 #' @rdname addAxes
 #' @export
 bbox.pdb = function(x) {
-	xyzB = range.coords.pdb(x);
+	xyzB = range.lattice.pdb(x);
 	xyzB = t(xyzB);
 	dBox = xyzB[,2] - xyzB[,1];
 	cell = cell.coords(x$crystal);
@@ -193,28 +195,8 @@ bbox.pdb = function(x) {
 	return(bb);
 }
 
-range.coords.pdb = function(x, xyz = NULL, ..., na.rm = TRUE) {
-	cell = get.PDBCrystal(x);
-	xyzV = if(is.null(xyz)) cell.coords(cell) else xyz;
-	xyzE = coords(x$atoms);
-	tt  = solve(xyzV, t(xyzE));
-	tt  = apply(tt, 1, range);
-	# xyz = xyzV %*% t(tt);
-	return(tt);
-}
 
 ### Helper:
-
-get.PDBCrystal = function(x) {
-	if(is.pdb(x)) {
-		x = x$crystal;
-		if(is.null(x))
-			stop("The PDB molecule does not contain crystal information!");
-	} else if(! is.crystal(x)) {
-		stop("'x' must be an object of class 'crystal'!");
-	}
-	return(x);
-}
 
 scaleBox = function(scale, mBox, cell) {
 	len = length(scale);

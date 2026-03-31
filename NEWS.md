@@ -8,6 +8,7 @@
 
 ## New Functionality
 - S3 method: crystal.pdb;
+- lattice.range (as alias for range.lattice.pdb);
 
 ## Enhancement:
 - [fix] Model extraction;

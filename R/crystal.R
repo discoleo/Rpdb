@@ -45,7 +45,8 @@
 #' is.crystal(x)
 #'  
 #' @keywords classes
-#'  
+
+
 #' @name crystal
 #' @export
 crystal <- function(...)
@@ -54,8 +55,20 @@ crystal <- function(...)
 
 #' @rdname crystal
 #' @export
-crystal.pdb <- function(x, ...) {
+crystal.pdb = function(x, ...) {
 	return(x$crystal);
+}
+
+# Helper:
+get.PDBCrystal = function(x) {
+	if(is.pdb(x)) {
+		x = x$crystal;
+		if(is.null(x))
+			stop("The PDB molecule does not contain crystal information!");
+	} else if(! is.crystal(x)) {
+		stop("'x' must be an object of class 'crystal'!");
+	}
+	return(x);
 }
 
 #' @rdname crystal
