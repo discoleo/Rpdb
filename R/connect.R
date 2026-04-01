@@ -252,3 +252,30 @@ is.connect <- function(x)
   to.return = inherits(x, c("connect", "conect"));
   return(to.return)
 }
+
+### Remove Hydrogen
+# - for NMR structures;
+rm.h = function(x, verbose = TRUE) {
+	tmp = x$atoms;
+	isH = tmp$symbol == "H";
+	idH = tmp$eleid[isH];
+	tmp = tmp[! isH, , drop = FALSE];
+	if(verbose) {
+		cat("Removed ", length(idH), " hydrogens.\n");
+	}
+	# Connections:
+	con = connect(x);
+	hasCon = ! is.null(con);
+	if(hasCon) {
+		isHCon = (con$eleid.1 %in% idH) | (con$eleid.2 %in% idH);
+		con = con[! isHCon, , drop = FALSE];
+		hasCon = nrow(con) > 0;
+		if(hasCon) {
+			# TODO
+			x$connect = con;
+		} else x$connect = NULL;
+	}
+	tmp$eleid = seq_along(tmp$eleid);
+	x$atoms = tmp;
+	return(x);
+}

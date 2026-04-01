@@ -169,15 +169,18 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
   model.ids   <- "MODEL.1"
   model.start <- which(recname == "MODEL "); # grep("^MODEL ", recname)
   model.end   <- which(recname == "ENDMDL"); # grep("^ENDMDL", recname)
-  if(length(model.start) != length(model.end))
-    stop("'Unterminated MODEL section'");
-  #
-  hasModel = ! (length(model.start) == 0);
-  if(hasModel) {
+	if(length(model.start) != length(model.end)) {
+		stop("'Unterminated MODEL section'");
+		# TODO: consider last ATOM field;
+	}
+	#
+	hasModel = ! (length(model.start) == 0);
+	if(hasModel) {
 		if(any(model.start >= model.end))
 			stop("'Unterminated MODEL section'");
 		# All models:
 		model.ids = as.integer(substr(lines[model.start], 11, 14));
+		nModels0  = length(model.ids); # Total n of models;
 		if(is.null(MODEL)) {
 			MODEL = model.ids;
 		}
@@ -201,22 +204,21 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 				}
 				idModels = idModels[! naModels];
 			}
-      model.start <- model.start[idModels]
-      model.end   <- model.end  [idModels]
-      model.ids   <- model.ids  [idModels]
-      model.ids   <- paste("MODEL", model.ids, sep=".");
-		model.factor [model.start + 1] = model.start;
-		model.factor [model.end      ] = - model.start;
-		model.factor = cumsum(model.factor);
-		model.factor[model.factor == 0] = NA;
-    }
-  } else if(verbose && nModels > 0) {
-    cat("Number of actual models: 0\n");
-  }
+			model.start = model.start[idModels];
+			model.end   = model.end  [idModels];
+			model.ids   = model.ids  [idModels];
+			model.ids   = paste("MODEL", model.ids, sep=".");
+			model.factor [model.start + 1] = model.start;
+			model.factor [model.end      ] = - model.start;
+			model.factor = cumsum(model.factor);
+			model.factor[model.factor == 0] = NA;
+		}
+	} else if(verbose && nModels > 0) {
+		cat("Number of actual models: 0\n");
+	}
 	model.factor = as.factor(model.factor);
 	levels(model.factor) = model.ids;
 	model.factor = model.factor[is.atom | is.hetatm];
-	nModels = length(levels(model.factor));
   
 	### Crystal Cell:
 	crystal = NULL;
@@ -258,10 +260,10 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	### PDB Object:
 	pdbObj = pdb(atoms, crystal, connect, remark, title,
 		resolution = dfResolution);
-	if(nModels > 1) {
+	if(nModels0 > 1) {
 		pdbObj = split(pdbObj, model.factor);
+		if(length(pdbObj) == 1) pdbObj = pdbObj[[1]];
 	}
-	# if(length(pdbObj) == 1) pdbObj = pdbObj[[1]];
 	
 	return(pdbObj)
 }
