@@ -164,16 +164,17 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		nModels = as.integer(substr(txtModels, 7, 80)); # TODO: 7, 11?
 	} else nModels = 0;
 	if(verbose) cat("Number of models: ", nModels, "\n");
-  #
-  model.factor <- rep(0, length(recname))
-  model.ids   <- "MODEL.1"
-  model.start <- which(recname == "MODEL "); # grep("^MODEL ", recname)
-  model.end   <- which(recname == "ENDMDL"); # grep("^ENDMDL", recname)
+	#
+	model.factor = rep(0, length(recname))
+	model.ids    = "MODEL.1"
+	model.start  = which(recname == "MODEL ");
+	model.end    = which(recname == "ENDMDL");
 	if(length(model.start) != length(model.end)) {
 		stop("'Unterminated MODEL section'");
 		# TODO: consider last ATOM field;
 	}
 	#
+	nModels0 = 0;
 	hasModel = ! (length(model.start) == 0);
 	if(hasModel) {
 		if(any(model.start >= model.end))
