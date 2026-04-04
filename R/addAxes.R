@@ -29,7 +29,9 @@
 #' @param col colour used for the PBC box;
 #' @param alpha a numeric value specifying the transparency of the lines;
 #' @param dx a numeric value specifying the absolute length of the xyz axes-vectors;
+#' @param bidir logical indicating to draw the XYZ-axes in both directions;
 #' @param adj.lab numeric value performing relative adjustment of label position;
+#' @param \dots further arguments passed to the \code{rgl} methods;
 #'   
 #' @seealso \code{\link{visualize}}, \code{\link[rgl]{rgl.open}}, \code{\link[rgl]{par3d}},
 #'   \code{\link{addLabels}}
@@ -47,7 +49,7 @@
 #' @name addAxes
 #' @export
 addABC <- function(x, lwd = 2, scale = NULL, labels = TRUE,
-		cex = 2, adj.lab = 4) {
+		cex = 2, adj.lab = 4, ...) {
 	if(missing(x)) stop("Please specify a 'crystal' object");
 	if(is.pdb(x)) x = crystal(x);
 	if(! is.crystal(x)) stop("'x' must be an object of class 'crystal");
@@ -64,7 +66,7 @@ addABC <- function(x, lwd = 2, scale = NULL, labels = TRUE,
 	seg.id = rgl::segments3d(
 		mAxes,
 		col = c("red","red","green","green","blue","blue"),
-		lwd = lwd);
+		lwd = lwd, ...);
 	seg.id = data.frame(id = seg.id, type = "abc.seg");
 	### Labels:
 	lab.id = NULL;
@@ -92,48 +94,49 @@ addABC <- function(x, lwd = 2, scale = NULL, labels = TRUE,
 #' @rdname addAxes
 #' @export
 addXYZ <- function(lwd = 2, scale = NULL, labels = TRUE,
-		cex = 2, col = "black", dx = 5) {
+		cex = 2, col = "black", alpha = NULL, ..., dx = 5, bidir = FALSE) {
 	if(length(dx) == 1) dx = c(dx,dx,dx);
 	if(length(dx) != 3) stop("Invalid value for dx!");
 	dy = dx[2]; dz = dx[3]; dx = dx[1];
-	# Note: (-dx, dx): BUT alpha = 0 ???
+	# bi-directional: (-dx, dx);
 	mAxes = rbind(
 		c(0,0,0), c( dx,  0,  0),
 		c(0,0,0), c(  0, dy,  0),
-		c(0,0,0), c(  0,  0, dz),
-		c(0,0,0), c(-dx,  0,  0),
-		c(0,0,0), c(  0,-dy,  0),
-		c(0,0,0), c(  0,  0,-dz)
-    );
+		c(0,0,0), c(  0,  0, dz));
+	if(bidir) mAxes = rbind(mAxes, - mAxes);
 	# Scale Axes:
 	if(! is.null(scale)) {
 		# Note: What cell value to use: = 1 or dx?
 		mAxes = scaleBox(scale, mAxes, cell = diag(1, 3));
 	}
 	seg.id = rgl::segments3d(
-		mAxes, lwd = lwd, col = col, alpha = c(rep(1, 6), rep(0, 6))
-	)
+		mAxes, lwd = lwd, col = col, alpha = alpha, ...);
 	seg.id = data.frame(id = seg.id, type = "xyz.seg");
 	# Labels:
 	lab.id = NULL;
 	if(labels) {
-		# TODO: scale;
+		dx = mAxes[c(2,4,6),]; # scaling is included;
 		lab.id = addLabelsXYZ(cex=cex, col=col, dx=dx);
 	}
+	#
 	ids = rbind(seg.id, lab.id);
-  
-  invisible(ids)
+	invisible(ids)
 }
 
 addLabelsXYZ = function(labels = c("x","y","z"), cex = 2, col = "black",
-		dx = c(5,5,5)) {
-	if(length(dx) == 1) dx = rep(dx, 3);
-	dy = dx[2]; dz = dx[3]; dx = dx[1];
-	dx = dx + 1.0; dy = dy + 1.0; dz = dz + 1.0;
-	mLab = rbind(
-		c(0,0,0) + c( dx, 0.0, 0.0),
-		c(0,0,0) + c(0.0,  dy, 0.0),
-		c(0,0,0) + c(0.0, 0.0,  dz));
+		dx = c(5,5,5), adj.lab = 0.2) {
+	if(is.matrix(dx)) {
+		mLab = dx %*% diag(1 + adj.lab, 3);
+	} else {
+		if(length(dx) == 1) dx = rep(dx, 3);
+		dy = dx[2]; dz = dx[3]; dx = dx[1];
+		dd = 1.0 + adj.lab;
+		dx = dx + dd; dy = dy + dd; dz = dz + dd;
+		mLab = rbind(
+			c(0,0,0) + c( dx, 0.0, 0.0),
+			c(0,0,0) + c(0.0,  dy, 0.0),
+			c(0,0,0) + c(0.0, 0.0,  dz));
+	}
 	lab.id = rgl::text3d(
 		mLab,
 		texts = labels,
