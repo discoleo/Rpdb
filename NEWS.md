@@ -14,6 +14,7 @@
 
 ## Enhancement:
 - [fix] Model extraction;
+- Improvements to addAxes;
 
 ## TODO
 
