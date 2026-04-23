@@ -31,7 +31,7 @@ the space group.}
 }
 \value{
 Function \code{crystal} returns a list of class \sQuote{crystal}
-with the following components:
+  with the following components:
 \item{abc}{a numeric vector of length 3 containing the norms of the lattice
   vectors a, b and c.}
 \item{abg}{a numeric vector of length 3 containing the angles between the

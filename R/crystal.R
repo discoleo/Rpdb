@@ -17,8 +17,9 @@
 #' \code{is.crystal} tests if an object is of class \sQuote{crystal},
 #'   i.e. if it has a \dQuote{class} attribute equal to \code{crystal}.
 #' 
-#' @return Function \code{crystal} returns a list of class \sQuote{crystal}
-#' with the following components:
+#' @return
+#' Function \code{crystal} returns a list of class \sQuote{crystal}
+#'   with the following components:
 #' \item{abc}{a numeric vector of length 3 containing the norms of the lattice
 #'   vectors a, b and c.}
 #' \item{abg}{a numeric vector of length 3 containing the angles between the

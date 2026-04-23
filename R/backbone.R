@@ -11,6 +11,11 @@ isProteinA = function(x) {
 	return(isPr);
 }
 # TODO
+isNucleicAcid.pdb = function(x) {
+	nc = unique(x$atoms$resname);
+	isNc = any(nc %in% c("A","C","G", "T", "U"));
+	return(isNc);
+}
 isNucleicAcid.atoms = function(x) {
 	nc = unique(x$resname);
 	isNc = any(nc %in% c("A","C","G", "T", "U"));
@@ -38,21 +43,33 @@ asBackbone = function(x) {
 	if(inherits(x, "atoms")) {
 		atoms = x;
 	} else if(inherits(x, "pdb")) atoms = x$atoms;
+	# Modified AA: may require better checking if true AA;
+	isAA = atoms$Hetero == FALSE;
+	isAS = isAASpecial(atoms$resname[atoms$Hetero]);
+	isAA[atoms$Hetero] = isAS;
+	# Duplicate resid:
+	lvl = unique(atoms$insert);
+	lvl = sort(lvl[nchar(lvl) > 0]);
+	if(length(lvl) == 0) {
+		hasDuplicates = FALSE;
+	} else {
+		hasDuplicates = TRUE;
+		lvl = c("", lvl);
+		atoms$insert = ordered(atoms$insert, levels = lvl);
+	}
 	# Process each chain:
 	ch = chains(x);
 	idBB = lapply(ch, function(ch) {
-		# Modified AA: may require better checking if true AA;
-		isAA = atoms$Hetero == FALSE;
-		isAS = isAASpecial(atoms$resname[atoms$Hetero]);
-		isAA[atoms$Hetero] = isAS;
 		isCh = atoms$chainid == ch & isAA;
-		tmp  = atoms[isCh, c("resid", "eleid", "elename")];
+		tmp  = atoms[isCh, c("resid", "insert", "eleid", "elename")];
 		if(nrow(tmp) == 0) return(NULL);
 		#
 		if(isNucleicAcid.character(atoms$resname[isCh])) {
 			FUN = FUN.Nc;
 		}
-		idBB = tapply(tmp, tmp$resid, FUN);
+		#
+		idGroup = if(hasDuplicates) list(tmp$insert, tmp$resid) else tmp$resid;
+		idBB = tapply(tmp, idGroup, FUN);
 		idBB = unlist(idBB);
 		idBB = data.frame(idBB[- length(idBB)], idBB[-1]);
 		isNA = is.na(idBB[,1]) | is.na(idBB[,2]);
@@ -94,6 +111,7 @@ residues = function(x, chains = NULL, hetero = NULL) {
 # 5' O-CH2-C4-C3-O-PO2-O-> 3'
 backbone.nucleic = function(x) {
 	FUN = function(x) {
+		if(nrow(x) == 0) return(NULL);
 		atom = x$elename;
 		atom = sub("\\*", "'", atom);
 		id = match(

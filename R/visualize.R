@@ -16,9 +16,9 @@
 #'   }
 #' }
 #' When \code{xyz}, \code{abc} or \code{pbc.box} are \code{NULL}, the axis or pbc box are are added depending if a \sQuote{crystal} object can be found.\cr
-#' Two different interactive visualization modes are avalable:
+#' Two different interactive visualization modes are available:
 #'   \itemize{
-#'     \item When \code{mode="measure"}: bond lengths, angles and dihedrals can be measured by \bold{right-clicing} on the atoms.
+#'     \item When \code{mode="measure"}: bond lengths, angles and dihedrals can be measured by \bold{right-clicking} on the atoms.
 #'     \item When \code{mode="info"}: atomic labels can be added to the scene by \bold{right-clicing} on the atoms. The labels are as follow: "ResidResname:EleidElename"
 #'   }
 #' When \code{mode=NULL} the interactive mode is disabled. To escape the interactive mode press the ESC key.
@@ -323,7 +323,7 @@ visualize.pdb <- function(x, mode = NULL, type = "l",
 	if(is.null(windowRect)) windowRect = windowRect0();
 	### Proteins:
 	connect = x$connect;
-	isPr = isProtein(x);
+	isPr = isProtein(x) || isNucleicAcid.pdb(x);
 	if(isPr) {
 		bb = asBackbone(x);
 		connect = rbind(connect, bb);

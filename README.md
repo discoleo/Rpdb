@@ -25,7 +25,8 @@ visualize(x, type="l")
 x = read.pdb("7K3G.pdb")
 
 # NMR Structure:
-x0H = rm.h(x)
+# Name of function drop.h: not yet stable;
+x0H = drop.h(x)
 con = connect(x0H) # Brute-force connectivity;
 # Visualisation:
 visualize(atoms(x0H), connect = con, type="l", pbc = F); addBBox(x)
@@ -39,9 +40,9 @@ mark.pdb(x0H, ch = "A", col = cols, lwd = 2)
 ```
 
 Note:
-- Visualize is incomplete;
+- Visualisation is incomplete;
 - Started redesigning the Bounding box vs PBC box;
-- Some functions are not yet visible in Rpdb,  but can be accessed using: Rpdb:::__function__(...);
+- Some functions are not yet visible in Rpdb, but can be accessed using: Rpdb:::__function__(...);
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/discoleo/Rpdb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/discoleo/Rpdb/actions/workflows/R-CMD-check.yaml)

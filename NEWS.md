@@ -17,9 +17,11 @@
 - Functions to merge Hetero-Molecules & Secondary Structures;
 
 ## Enhancement:
-- [fix] Model extraction;
+- [fix] Model extraction in read.pdb;
+- Handle duplicate residues when connecting atoms/backbone;
 - Improvements to addAxes;
-- Keep fields Structure & Resolution during split.pdb;
+- Keep the pdb fields Structure & Resolution after split;
+- Clever "\[" for atoms object (potentially introducing very hard bugs);
 
 ## TODO
 

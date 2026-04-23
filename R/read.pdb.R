@@ -128,7 +128,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	if(resolution && hasRemark) {
 		tmp = if(is.null(remark)) subset(lines, isRemark) else remark;
 		# can start both at +11 & + 12;
-		dfResolution = extract.pdb.Resolution(tmp);
+		dfResolution = read.pdb.Resolution(tmp);
 	}
   
 	### Atoms:
@@ -250,15 +250,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	structMol = extract.pdb.structure(lines, recname);
 	
 	### Hetero-Molecules:
-	idHeteroMol = which(recname == "HETNAM");
-	heteroMol   = NULL;
-	if(length(idHeteroMol) > 0) {
-		hetero  = lines[idHeteroMol];
-		abbrHet = trim(substr(hetero,  7, 14));
-		nmsHet  = trim(substr(hetero, 15, 60));
-		# TODO: nposEND == 60?
-		heteroMol = data.frame(Abbr = abbrHet, Name = nmsHet);
-	}
+	heteroMol = read.pdb.HeteroMol(lines, recname);
 	
 	### PDB Object:
 	pdbObj = pdb(atoms, crystal, connect,
@@ -307,7 +299,7 @@ extract.regex = function(x, pattern, gr=0, perl=TRUE, simplify=TRUE, verbose=FAL
 	return(s)
 }
 
-extract.pdb.Resolution = function(x) {
+read.pdb.Resolution = function(x) {
 	# can start both at +11 & + 12;
 	strRes = trim(substr(x, 11, 22));
 	isRes  = (strRes == "RESOLUTION.");
@@ -322,4 +314,15 @@ extract.pdb.Resolution = function(x) {
 			attr(res, "Unit") = unit;
 	} else res = NULL;
 	return(res);
+}
+
+read.pdb.HeteroMol = function(x, recname) {
+	idHeteroMol = which(recname == "HETNAM");
+	if(length(idHeteroMol) == 0) return(NULL);
+	hetero  = x[idHeteroMol];
+	abbrHet = trim(substr(hetero, 11, 14));
+	nmsHet  = trim(substr(hetero, 15, 70));
+	# TODO: nposEND == 70?
+	heteroMol = data.frame(Abbr = abbrHet, Name = nmsHet);
+	return(heteroMol);
 }
