@@ -79,7 +79,17 @@ lattice.range.pdb = function(x, xyz = NULL, ..., na.rm = TRUE) {
 	range.lattice.pdb(x, xyz=xyz, ..., na.rm=na.rm);
 }
 
-# Cannot be exported nicely: CRAN Check complains!
+
+#' @rdname range.coords
+#' @method range lattice
+#' @export range.lattice
+range.lattice = function(x, ...) {
+	UseMethod("range.lattice");
+}
+
+#' @rdname range.coords
+#' @method range.lattice pdb
+#' @exportS3Method range.lattice pdb
 range.lattice.pdb = function(x, xyz = NULL, ..., na.rm = TRUE) {
 	if(is.null(xyz)) {
 		cell = get.PDBCrystal(x);

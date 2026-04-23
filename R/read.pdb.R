@@ -248,12 +248,22 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 	}
 	### Protein Structure:
 	structMol = extract.pdb.structure(lines, recname);
-	# print(structMol);
-	# TODO
+	
+	### Hetero-Molecules:
+	idHeteroMol = which(recname == "HETNAM");
+	heteroMol   = NULL;
+	if(length(idHeteroMol) > 0) {
+		hetero  = lines[idHeteroMol];
+		abbrHet = trim(substr(hetero,  7, 14));
+		nmsHet  = trim(substr(hetero, 15, 60));
+		# TODO: nposEND == 60?
+		heteroMol = data.frame(Abbr = abbrHet, Name = nmsHet);
+	}
 	
 	### PDB Object:
-	pdbObj = pdb(atoms, crystal, connect, remark, title,
-		resolution = dfResolution);
+	pdbObj = pdb(atoms, crystal, connect,
+		title = title, remark = remark, hetero = heteroMol,
+		structure = structMol, resolution = dfResolution);
 	if(nModels0 > 1) {
 		pdbObj = split(pdbObj, model.factor);
 		if(length(pdbObj) == 1) pdbObj = pdbObj[[1]];

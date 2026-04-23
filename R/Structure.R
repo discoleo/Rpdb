@@ -2,7 +2,19 @@
 ### Molecular Structure
 
 
+is.structure = function(x) {
+	if(inherits(x, "structure")) return(TRUE);
+	return(FALSE);
+}
+
+as.pdb.structure = function(helix = NULL, sheet = NULL, ...) {
+	x = list(Helix = helix, Sheet = sheet);
+	class(x) = c("structure", "list");
+	return(x);
+}
+
 extract.pdb.structure = function(x, recname) {
+	### Helix:
 	idHelix = which(recname == "HELIX ");
 	isHelix = length(idHelix) > 0;
 	helix   = NULL;
@@ -21,6 +33,29 @@ extract.pdb.structure = function(x, recname) {
 			AAS = hAAS, idAAS = as.integer(hAA1),
 			AAE = hAAE, idAAE = as.integer(hAA2));
 	}
-	structMol = list(Helix = helix);
+	### Sheet:
+	idSheet = which(recname == "SHEET ");
+	isSheet = length(idSheet) > 0;
+	sheet   = NULL;
+	if(isSheet) {
+		sSh = x[idSheet];
+		sID   = trim(substr(sSh,  7, 10));
+		sName = trim(substr(sSh, 11, 16));
+		sAAS  = trim(substr(sSh, 17, 20));
+		sChS  = trim(substr(sSh, 21, 22));
+		sAA1  = trim(substr(sSh, 23, 26));
+		sAAE  = trim(substr(sSh, 28, 31)); # 1 Space before?
+		sChE  = trim(substr(sSh, 32, 33));
+		sAA2  = trim(substr(sSh, 34, 37)); # 1 Space after?
+		sType = trim(substr(sSh, 38, 40));
+		# TODO: remaining fields;
+		sheet = data.frame(ID = as.integer(sID), Name  = sName,
+			Type = as.integer(sType),
+			chS = sChS, chE = sChE,
+			AAS = sAAS, idAAS = as.integer(sAA1),
+			AAE = sAAE, idAAE = as.integer(sAA2));
+	}
+	#
+	structMol = as.pdb.structure(helix, sheet);
 	return(structMol);
 }

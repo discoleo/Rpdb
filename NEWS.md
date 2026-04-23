@@ -1,21 +1,25 @@
 
 # Rpdb 2.4.5
 
-- started work;
-
 ## Refactoring
 - Fully removed deprecated code based on "cryst1";
+- Changed order of arguments in the pdb-constructor;
 
 ## New Functionality
+- Extract names of Hetero-Molecules;
+- Read secondary structure: Helix & Sheet;
+  - Helper functions & Class (still hidden);
 - S3 method: crystal.pdb;
-- Function lattice.range (as alias for range.lattice.pdb);
-- Helper functions to read molecular structure - still hidden;
+- Function lattice.range: as alias for range.lattice.pdb;
+- Function range.lattice is exported as well: finally found way to export it;
 - Function mark.pdb: but still hidden;
 - Function drop.h: remove hydrogen (for NMR structures) - still hidden;
+- Functions to merge Hetero-Molecules & Secondary Structures;
 
 ## Enhancement:
 - [fix] Model extraction;
 - Improvements to addAxes;
+- Keep fields Structure & Resolution during split.pdb;
 
 ## TODO
 

@@ -6,6 +6,8 @@
 \alias{range.pdb}
 \alias{lattice.range}
 \alias{lattice.range.pdb}
+\alias{range.lattice}
+\alias{range.lattice.pdb}
 \title{Range of Atomic Coordinates}
 \usage{
 \method{range}{coords}(x, na.rm = FALSE, finite = FALSE, ...)
@@ -17,6 +19,10 @@
 lattice.range(x, xyz = NULL, ..., na.rm = TRUE)
 
 \method{lattice.range}{pdb}(x, xyz = NULL, ..., na.rm = TRUE)
+
+\method{range}{lattice}(x, ...)
+
+\method{range.lattice}{pdb}(x, xyz = NULL, ..., na.rm = TRUE)
 }
 \arguments{
 \item{x}{an R object containing atomic coordinates.}
