@@ -255,7 +255,8 @@ is.connect <- function(x)
 
 ### Remove Hydrogen
 # - for NMR structures;
-rm.h = function(x, verbose = TRUE) {
+# TODO: Name: drop.h vs rm.h;
+drop.h = function(x, verbose = TRUE) {
 	tmp = x$atoms;
 	isH = tmp$symbol == "H";
 	idH = tmp$eleid[isH];

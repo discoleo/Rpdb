@@ -9,8 +9,9 @@
 ## New Functionality
 - S3 method: crystal.pdb;
 - Function lattice.range (as alias for range.lattice.pdb);
+- Helper functions to read molecular structure - still hidden;
 - Function mark.pdb: but still hidden;
-- Function rm.h: remove hydrogen (for NMR structures) - still hidden;
+- Function drop.h: remove hydrogen (for NMR structures) - still hidden;
 
 ## Enhancement:
 - [fix] Model extraction;

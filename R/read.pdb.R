@@ -33,7 +33,6 @@
 #' @param TITLE a logical value indicating whether to read the TITLE records.
 #' @param REMARK a logical value indicating whether to read the REMARK records.
 #' @param MODEL an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).
-#' @param CRYST1 will be replaced by the CRYSTAL argument; existing code should be migrated to use the CRYSTAL argument.
 #' @param resolution logical value indicating whether to extract the resolution (see details).
 #' @param verbose logical value indicating whether to print additional information, e.g. number of models.
 #' 
@@ -63,17 +62,8 @@
 #' @export
 read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
                      CONNECT = TRUE, TITLE = TRUE, REMARK = TRUE, MODEL = 1,
-					 CRYST1 = NULL, resolution = TRUE, verbose = TRUE)
+					 resolution = TRUE, verbose = TRUE)
 {
-	if( ! is.null(CRYST1)) {
-		if(CRYSTAL) {
-			# Temporary:
-			CRYSTAL = CRYST1;
-		} else {
-			stop("Please provide only a logical value for CRYSTAL!",
-			"Argument CRYST1 will be deprecated!");
-		}
-	}
 	if(!file.exists(file))
 		stop("File '", file, "' is missing!");
 	
@@ -223,7 +213,6 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
   
 	### Crystal Cell:
 	crystal = NULL;
-	# Note: could also use recname;
 	isCrystal = (recname == "CRYST1");
 	if(CRYSTAL && any(isCrystal)) {
 		crystal = subset(lines, isCrystal);
@@ -257,6 +246,10 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 			}
 		}
 	}
+	### Protein Structure:
+	structMol = extract.pdb.structure(lines, recname);
+	# print(structMol);
+	# TODO
 	
 	### PDB Object:
 	pdbObj = pdb(atoms, crystal, connect, remark, title,

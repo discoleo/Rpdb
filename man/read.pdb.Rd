@@ -13,7 +13,6 @@ read.pdb(
   TITLE = TRUE,
   REMARK = TRUE,
   MODEL = 1,
-  CRYST1 = NULL,
   resolution = TRUE,
   verbose = TRUE
 )
@@ -34,8 +33,6 @@ read.pdb(
 \item{REMARK}{a logical value indicating whether to read the REMARK records.}
 
 \item{MODEL}{an integer vector containing the serial number of the MODEL sections to be read. Can also be equal to NULL to read all the MODEL sections or to NA to ignore MODEL records (see details).}
-
-\item{CRYST1}{will be replaced by the CRYSTAL argument; existing code should be migrated to use the CRYSTAL argument.}
 
 \item{resolution}{logical value indicating whether to extract the resolution (see details).}
 
