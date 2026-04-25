@@ -2,28 +2,37 @@
 #' 
 #' Reads a Protein Data Bank (PDB) coordinates file.
 #' 
-#' The \code{read.pdb} function reads the TITLE, REMARK, ATOM, HETATM, CRYSTAL and CONECT records
-#'   from a PDB file. Three different reading modes can be used depending on the value of \code{MODEL}: 
+#' The \code{read.pdb} function reads the most important records from the PDB file,
+#'   including TITLE, REMARK, ATOM, HETATM, Heterogen Names (HETNAM),
+#'   CRYSTAL, CONNECT, HELIX and SHEET records.
+#'
+#' Three different reading modes can be used depending on the value of \code{MODEL}: 
 #' \itemize{
-#'   \item When \code{MODEL} is a vector of integers, MODEL sections whose serial numbers
+#'   \item When \code{MODEL} is a vector of integers, only the models which
 #'      match these integers are read.
-#'   \item When \code{MODEL == NULL}, all MODEL sections are read.
+#'   \item When \code{MODEL == NULL}, all models are read.
 #'   \item When \code{MODEL == NA}, MODEL records are ignored and all ATOM and/or HETATM records
 #'     are merged together to return a single object.
 #' }
 #' When multiple models are specified, each of the models is actually stored
 #'   as a separate pdb molecule in a list of pdb molecules.
+#'   Note: The handling of models may change in a future version of Rpdb.
+#' \cr
 #' If the \code{resolution} parameter is set, the function attempts to extract the resolution
 #'   from the REMARKS field. Note: The resolution is only meaningful for X-ray crystallography.
 #' 
 #' @return 
-#' When a single MODEL section is read, this function returns an object of class  \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:
+#' When a single MODEL section is read, this function returns an object of class \sQuote{pdb} (a list with a \code{class} attribute equal to \code{pdb}) with the following components:
 #' \item{title}{a character vector containing the TITLE records found in the PDB file.}
 #' \item{remark}{a character vector containing the REMARK records found in the PDB file.}
 #' \item{crystal}{a list of class \sQuote{crystal} containing the first CRYSTAL record found in the PDB file. All others are ignored.}
 #' \item{atoms}{a data.frame of class \sQuote{atoms} containing the ATOM and HETATM records found in the PDB file.}
 #' \item{connect}{a data.frame of class \sQuote{connect} containing the CONNECT records found in the PDB file.}
+#' \item{Structure}{a list with components\code{Helix} and \code{Sheet}}
+#' \item{Resolution}{a numeric value with the resolution.}
+#'
 #' When multiple MODEL sections are read, a list of object of class \sQuote{pdb} is returned.
+#' Note: this may change in the future.
 #' 
 #' @param file a single element character vector containing the name of the PDB file to be read.
 #' @param ATOM a logical value indicating whether to read the ATOM records.
@@ -41,7 +50,8 @@
 #' http://www.wwpdb.org/documentation/format33/v3.3.html
 #' 
 #' @seealso
-#' \code{\link{write.pdb}}, \code{\link{pdb}}, \code{\link{crystal}}, \code{\link{atoms}}, \code{\link{connect}}
+#' \code{\link{write.pdb}}, \code{\link{pdb}}, \code{\link{crystal}},
+#' \code{\link{atoms}}, \code{\link{connect}}
 #' 
 #' @examples 
 #' # Read a PDB file included with the package
@@ -247,7 +257,7 @@ read.pdb <- function(file, ATOM = TRUE, HETATM = TRUE, CRYSTAL = TRUE,
 		}
 	}
 	### Protein Structure:
-	structMol = extract.pdb.structure(lines, recname);
+	structMol = read.pdb.structure(lines);
 	
 	### Hetero-Molecules:
 	heteroMol = read.pdb.HeteroMol(lines, recname);
