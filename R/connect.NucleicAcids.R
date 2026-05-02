@@ -47,20 +47,33 @@ connect.nucleic.atoms = function(x, ...) {
 	idBB = do.call(rbind, idBB);
 }
 
-# TODO: RNA vs DNA
+
 connectNc = function(x) {
 		if(nrow(x) == 0) return(NULL);
-		# BackBone:
+		### BackBone:
 		id = match(
 			c("C1'", "C2'", "C3'", "C4'", "C5'",
 			"O5'", "O4'", "O3'",
-			"P", "O1P", "O2P"), x$elename);
+			"P", "O1P", "O2P", "O3P"), x$elename);
+		if(is.na(id[10])) {
+			idOP = match(c("OP1", "OP2", "OP3"), x$elename);
+			id[10:12] = idOP;
+		}
 		id = x$eleid[id];
 		idJ = id[1]; Jb = c(id[9], id[8]);
+		# RNA: O2
+		idO2 = match("O2'", x$elename);
+		if(! is.na(idO2)) {
+			id = c(id, x$eleid[idO2]);
+			idO2_1 = 2; idO2_2 = length(id);
+		} else {
+			idO2_1 = NULL; idO2_2 = NULL;
+		}
+		# TODO: OP3 on Terminal PO4;
 		idB = data.frame(
-			E1 = id[c(9, 9, 9, 1,2,3,4,4,7, 5, 3)],
-			E2 = id[c(6,10,11, 2,3,4,5,7,1, 6, 8)]);
-		# N-Base:
+			E1 = id[c(9, 9, 9, 1,2,3,4,4,7, 5, 3, idO2_1)],
+			E2 = id[c(6,10,11, 2,3,4,5,7,1, 6, 8, idO2_2)]);
+		### N-Base:
 		nc  = x$resname[1];
 		nmN = switch(nc,
 			"A" = c("N1", "C2", "N3", "C4", "C5", "C6", # Cycle 1
@@ -68,7 +81,7 @@ connectNc = function(x) {
 			"G" = c("N1", "C2", "N3", "C4", "C5", "C6",
 				"N7", "C8", "N9",    "C2", "N2",  "C6", "O6"),
 			"T" = c("N1", "C2", "N3", "C4", "C5", "C6",
-				"C2", "O2",  "C4", "O4",  "C5", "C7"), # Subst
+				"C2", "O2",  "C4", "O4",  "C5", "C7"), # Ring-Substitutions
 			"U" = c("N1", "C2", "N3", "C4", "C5", "C6",
 				"C2", "O2",  "C4", "O4"),
 			"C" = c("N1", "C2", "N3", "C4", "C5", "C6",
@@ -95,6 +108,7 @@ connectNc = function(x) {
 		cyc2  = data.frame(E1 = idN[id1], E2 = idN[id2]);
 		cycNc = rbind(cycNc, cyc2);
 		idJnc = if(isAG) 9 else 1;
+		# Nucleotide Skeleton:
 		lst = list(BB = idB, N = cycNc,
 			Jb = Jb,
 			Jn = data.frame(E1 = idJ, E2 = idN[idJnc]));
