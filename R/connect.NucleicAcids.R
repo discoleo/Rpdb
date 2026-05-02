@@ -1,9 +1,48 @@
+#' Connects atoms in Nucleic acids
+#' 
+#' Builds the skeleton for a nucleic acid, by connecting the individual atoms
+#' for each nucleotide.
+#'
+#' \code{connect.nucleic} is a generic function with methods for
+#'   \code{pdb} and \code{atoms} objects.
+#' It creates object of class \sQuote{connect} with the skeleton of each nucleotide.
+
+#' @return
+#' \code{connect.nucleic} returns an object of class \code{connect} containing
+#'   the explicit connections between all nucleotide atoms.
+#' Note: the detailed format of the returned value may change in the future.
+
+#' @param x a \code{pdb} of \code{atoms} object containing atomic identifiers.
+#' @param \dots arguments passed to methods.
+
+#' 
+#' @seealso \code{\link{pdb}}, \code{\link{connect}}
+#' 
+#' @examples
+#' # Download some pdb files:
+#  #   9J4O = tRNA Leu;
+#' #   7EQJ = tRNA Val;
+#' # x = read.pdb("9J4O.pdb")
+#' # visualize(atoms(x), connect = connect.nucleic(x), type="l", pbc = FALSE);
 
 
+#' @name connect.nucleic
+#' @method connect nucleic
+#' @exportS3Method connect nucleic
+#' @export connect.nucleic
+connect.nucleic = function(x, ...)
+  UseMethod("connect.nucleic");
+
+#' @rdname connect.nucleic
+#' @method connect.nucleic pdb
+#' @exportS3Method connect.nucleic pdb
 connect.nucleic.pdb = function(x, ...) {
 	connect.nucleic.atoms(atoms(x), ...);
 }
 
+#' @rdname connect.nucleic
+#' @method connect.nucleic atoms
+#' @exportS3Method connect.nucleic atoms
 connect.nucleic.atoms = function(x, ...) {
 	atoms = x;
 	# Older variants:
@@ -47,7 +86,7 @@ connect.nucleic.atoms = function(x, ...) {
 	idBB = do.call(rbind, idBB);
 }
 
-
+# Helper:
 connectNc = function(x) {
 		if(nrow(x) == 0) return(NULL);
 		### BackBone:

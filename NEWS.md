@@ -6,12 +6,13 @@
 - Changed order of arguments in the pdb-constructor;
 
 ## New Functionality
-- Extract names of Hetero-Molecules;
+- Function connect.nucleic: Connect all atoms in nucleic acids;
 - Read secondary structure: Helix & Sheet;
   - Helper functions & Class (still hidden);
+- Extract names of Hetero-Molecules;
 - S3 method: crystal.pdb;
-- Function lattice.range: as alias for range.lattice.pdb;
 - Function range.lattice is exported as well: finally found way to export it;
+- Function lattice.range: as alias for range.lattice.pdb;
 - Function mark.pdb: but still hidden;
 - Function drop.h: remove hydrogen (for NMR structures) - still hidden;
 - Functions to merge Hetero-Molecules & Secondary Structures;
@@ -21,7 +22,7 @@
 - Handle duplicate residues when connecting atoms/backbone;
 - Improvements to addAxes;
 - Keep the pdb fields Structure & Resolution after split;
-- Clever "\[" for atoms object (potentially introducing very hard bugs);
+- Clever "\[" for atoms object (potentially introducing very hard-to-debug bugs);
 
 ## TODO
 

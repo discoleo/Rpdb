@@ -24,7 +24,8 @@
 #' \code{is.connect} tests if an object is of class \sQuote{connect},
 #'   i.e. if it has a \dQuote{class} attribute equal to \code{connect}.
 #' 
-#' @return \code{connect} returns a two-column data.frame of class \sQuote{connect}
+#' @return
+#' \code{connect} returns a two-column data.frame of class \sQuote{connect}
 #'   whose rows contain the IDs of bonded atoms. The columns of this data.frame
 #'   are described below:
 #' \item{eleid.1}{an integer vector containing the elements IDs
