@@ -68,6 +68,7 @@
 #' @name connect
 # TODO: remove
 conect.default = function(eleid.1, eleid.2, ...) {
+	warning("Function is deprecated!");
 	if(missing(eleid.2)) {
 		if(is.connect(eleid.1)) {
 			return(eleid.1);
